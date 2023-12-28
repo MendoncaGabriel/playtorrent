@@ -1,0 +1,9 @@
+<ul class="border-black p-4 bg-red-300 grid grid-cols-5 gap-5">
+  <% for (let i = 0; i < data.length; i++) { %>
+    <li class="w-56 h-80 bg-black m-auto rounded-md overflow-hidden hover:scale-105 duration-300">
+      <a href="/game/<%= data[i].name %>">
+        <img src="<%= data[i].img %>" alt="" class="h-full w-full object-cover">
+      </a>
+    </li>
+  <% } %>
+</ul>
