@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title>PLAYTORRENT</title>
     <link rel="stylesheet" href="/styles.css">
+
 </head>
-<body>
+<body class="bg-gray-900">
     <%- include('../components/navbar.ejs') %>
+    <h2 class="text-white">ESTAMOS EM REFORMA....</h2>
     
     <%- include('../components/grid.ejs', {data: data}) %>
 
     <h2 >Home</h2>
-    <a href="nome-game">game</a>
-
+    
+    <%- include('../components/footer.ejs') %>
   
 </body>
 </html>

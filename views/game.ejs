@@ -3,11 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h2>game</h2>
+    <title>Download  <%= data.name %> torrent</title>
+    <meta name="description" content="Download grátis via torrent do jogo <%= data.name %>, baixe na playtorrent, game para <%= data.platform %> do genero <% data.class.forEach(element => { %><%= element %>, <% }) %>" >
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
-    <h2>Game: <%= name %></h2>
+</head>
+<body class="bg-gray-900 text-white">
+    <%- include('../components/navbar.ejs') %>
+
+    <main>
+        <h2>ESTAMOS EM REFORMA....</h2>
+        <section class="p-4  flex items-center justify-around m-auto max-w-screen-xl mt-10">
+            <a href="javascript:void(0);" onclick="history.back();">Voltar</a><br><br>
+            <h1 class="text-5xl text-center">Game: <%= data.name %></h1>
+        </section>
+
+        <section class="p-4  flex items-center justify-around m-auto max-w-screen-xl">
+            <img src="<%= data.img %>" alt="" class="w-52 h-72 rounded-md">
+            
+            <iframe
+                title="<%="Trailer video do jogo: " + data.name %>""
+                src="<%= data.video %>"
+                frame="0"
+                class="bg-gray-600 h-72   object-cover aspect-video  rounded-md"
+            ></iframe>
+        </section>
+    </main>
+
+    <article>
+        <section class="p-4  m-auto max-w-screen-xl">
+            <p><%= data.description %></p>
+        </section>
+
+        <section class="p-4  m-auto max-w-screen-xl">
+            <p><%= data.information %></p>
+        </section>
+        <% if (data.class && data.class.length !== 0) { %>
+            <section class="p-4 m-auto max-w-screen-xl flex space-x-3">
+                <% data.class.forEach(element => { %>
+                    <p><%= element %></p>
+                <% }) %>
+            </section>
+        <% } %>
+    </article>
+
+
+    
+    
+    <section class="p-4  m-auto max-w-screen-xl">
+        <!-- tipo: jogo <p><%= data.type %></p> <br> --> 
+        <p>Plataforma: <%= data.platform %></p>
+    </section>
+    
+    <% if (data.download) { %>
+        <section class="p-4  m-auto max-w-screen-xl">
+            <p>DOWNLOADS: <%= data.download %></p>
+        </section>
+    <% } %>
+    
+    <section class="p-4  m-auto max-w-screen-xl">
+        <a href="<%= data.link %>" target="_blank" class="m-auto px-4 py-2 block bg-blue-600 hover:bg-blue-700 hover:shadow-lg duration-300 text-white w-72 text-center rounded-md">DOWNLOAD MAGNETLINK</a>
+    </section>
+
+    <%- include('../components/footer.ejs') %>
+
+
 </body>
 </html>
