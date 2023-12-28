@@ -1,6 +1,7 @@
 const express = require('express')
 const path = require('path')
 const app = express()
+const injectSpeedInsights = require("@vercel/speed-insights")
 
 require("dotenv").config(); 
 require('./connect/MongoDB.js')
