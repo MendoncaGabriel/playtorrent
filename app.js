@@ -11,6 +11,7 @@ const routes = require(__dirname + '/router/index.js')
 app.use('/', routes);
 app.use(express.static(path.join(__dirname, 'public')));
 
+console.log('Caminho das visualizações:', path.join(process.cwd(), 'views'));
 
 // Configurar Content Security Policy (CSP)
 app.use((req, res, next) => {
