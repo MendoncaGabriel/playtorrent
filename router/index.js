@@ -1,117 +1,73 @@
-const express = require('express')
+const express = require('express');
 const router = express.Router();
-const Game = require('../model/Game.js')
+const Game = require('../model/Game.js');
 const cache = require('memory-cache');
 
+const CACHE_TTL = 2 * 60 * 60 * 1000; // 2 horas de tempo de vida do cache em milissegundos
 
-router.get('/page/:pg', async (req, res) => {
-    const pg = req.params.pg
-    const pageSize = 20; 
-    const cacheKey = req.originalUrl || req.url;
-
-    // Verificar se os dados estão em cache
+function renderCachedPageOrFetch(req, res, cacheKey, queryFn) {
     const cachedData = cache.get(cacheKey);
 
     if (cachedData) {
-        // Se estiver em cache, renderizar a partir do cache
-        console.log('----------------------------');
-
-        console.log('Página principal cacheada!');
-        console.log('----------------------------');
-        res.render('home', { title: 'Home', data: cachedData, page: pg });
+        console.log('Página cacheada!');
+        res.render('home', { title: 'Home', data: cachedData, page: req.params.pg || req.query.page || 0 });
     } else {
         try {
-            // Se não estiver em cache, buscar dados no banco de dados
-            const data = await Game.find().skip(pg * pageSize).limit(pageSize).exec();
-            console.log('-------------------------------------');
-            console.log('Cacheando página principal!');
-            console.log('-------------------------------------');
-
-            // Colocar os dados em cache por 2 horas
-            cache.put(cacheKey, data, 2 * 60 * 60 * 1000);
-
-            // Renderizar a página com os dados recém-obtidos
-            res.render('home', { title: 'Home', data: data, page: pg });
+            const data = queryFn();
+            cache.put(cacheKey, data, CACHE_TTL);
+            console.log('Cacheando página!');
+            res.render('home', { title: 'Home', data, page: req.params.pg || req.query.page || 0 });
         } catch (error) {
             console.error(error);
             res.status(500).send('Erro interno do servidor');
         }
     }
+}
+
+router.get('/page/:pg', async (req, res) => {
+    const pg = parseInt(req.params.pg) || 0;
+    const pageSize = 20;
+    const cacheKey = req.originalUrl || req.url;
+
+    renderCachedPageOrFetch(req, res, cacheKey, () => Game.find().skip(pg * pageSize).limit(pageSize).lean().exec());
 });
 
 router.get('/', async (req, res) => {
-    const pg = 0; // Página atual (se você quiser implementar paginação)
-    const pageSize = 20; // Número de documentos a serem recuperados
-    const cacheKey = req.originalUrl || req.url;
+    const pg = parseInt(req.query.page) || 0;
+    const pageSize = 20;
+    const cacheKey = `home:${pg}`;
 
-    // Verificar se os dados estão em cache
-    const cachedData = cache.get(cacheKey);
-
-    if (cachedData) {
-        // Se estiver em cache, renderizar a partir do cache
-        console.log('----------------------------');
-        console.log('Página principal cacheada!');
-        console.log('----------------------------');
-        res.render('home', { title: 'Home', data: cachedData, page: pg });
-    } else {
-        try {
-            // Se não estiver em cache, buscar dados no banco de dados
-            const data = await Game.find().skip(pg * pageSize).limit(pageSize).exec();
-            console.log('-------------------------------------');
-            console.log('Cacheando página principal!');
-            console.log('-------------------------------------');
-
-            // Colocar os dados em cache por 2 horas
-            cache.put(cacheKey, data, 2 * 60 * 60 * 1000);
-
-            // Renderizar a página com os dados recém-obtidos
-            res.render('home', { title: 'Home', data: data, page: pg });
-        } catch (error) {
-            console.error(error);
-            res.status(500).send('Erro interno do servidor');
-        }
-    }
+    renderCachedPageOrFetch(req, res, cacheKey, () => Game.find().skip(pg * pageSize).limit(pageSize).lean().exec());
 });
+
 router.get('/download/:name', async (req, res) => {
-    try{
-        const name = req.params.name
-        const nameTratad = name.replace(/-/g, ' ')
-        if(!name){
-            return res.status(422).json({msg: "Não encontrado!"})
+    try {
+        const nameTratado = req.params.name.replace(/-/g, ' ');
+        if (!nameTratado) {
+            return res.status(422).json({ msg: 'Não encontrado!' });
         }
 
-        // Verifique se os dados estão no cache
-        const cachedData = cache.get(nameTratad);
+        const cacheKey = nameTratado;
+        const cachedData = cache.get(cacheKey);
 
         if (cachedData) {
-            // Se estiver no cache, retorne os dados do cache
-            console.log('----------------------------')
-            console.log('Pagina cacheada!')
-            console.log('----------------------------')
+            console.log('Página cacheada!');
             return res.render('game', { data: cachedData });
         }
 
-
-        // Se não estiver no cache, consulte o banco de dados
-        const data = await Game.findOne({ name: { $regex: new RegExp(`^${nameTratad}$`, 'i') } });
+        const data = await Game.findOne({ name: { $regex: new RegExp(`^${nameTratado}$`, 'i') } });
 
         if (data) {
-            // Se os dados foram encontrados no banco de dados, armazene no cache por 10 minutos
-            cache.put(nameTratad, data, 2 * 60 * 60 * 1000); //2h de cache
-            console.log('------------------------------------------')
-            console.log('Consultado database e salvo em cache!')
-            console.log('------------------------------------------')
-            res.render('game', { data: data });
+            cache.put(cacheKey, data, CACHE_TTL);
+            console.log('Consultado database e salvo em cache!');
+            res.render('game', { data });
         } else {
-            res.status(404).json({ msg: "Não encontrado!" });
+            res.status(404).json({ msg: 'Não encontrado!' });
         }
-
-
-    }catch(err){
-        res.status(500).send('Erro ao carregar a pagina!')
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Erro ao carregar a página!');
     }
 });
-
-
 
 module.exports = router;
