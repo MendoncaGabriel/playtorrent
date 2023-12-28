@@ -27,8 +27,8 @@ router.get('/page/:pg', async (req, res) => {
             console.log('Cacheando página principal!');
             console.log('-------------------------------------');
 
-            // Colocar os dados em cache por 24 horas
-            cache.put(cacheKey, data, 24 * 60 * 60 * 1000);
+            // Colocar os dados em cache por 2 horas
+            cache.put(cacheKey, data, 2 * 60 * 60 * 1000);
 
             // Renderizar a página com os dados recém-obtidos
             res.render('home', { title: 'Home', data: data, page: pg });
@@ -61,8 +61,8 @@ router.get('/', async (req, res) => {
             console.log('Cacheando página principal!');
             console.log('-------------------------------------');
 
-            // Colocar os dados em cache por 24 horas
-            cache.put(cacheKey, data, 24 * 60 * 60 * 1000);
+            // Colocar os dados em cache por 2 horas
+            cache.put(cacheKey, data, 2 * 60 * 60 * 1000);
 
             // Renderizar a página com os dados recém-obtidos
             res.render('home', { title: 'Home', data: data, page: pg });
@@ -97,7 +97,7 @@ router.get('/download/:name', async (req, res) => {
 
         if (data) {
             // Se os dados foram encontrados no banco de dados, armazene no cache por 10 minutos
-            cache.put(nameTratad, data, 24 * 60 * 60 * 1000); //24h de cache
+            cache.put(nameTratad, data, 2 * 60 * 60 * 1000); //2h de cache
             console.log('------------------------------------------')
             console.log('Consultado database e salvo em cache!')
             console.log('------------------------------------------')
