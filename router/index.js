@@ -57,13 +57,13 @@ router.get('/download/:name', async (req, res) => {
         if (!nameTratado) {
             return res.status(422).json({ msg: 'Não encontrado!' });
         }
-        const cachedData = cache.get(nameTratad);
+        const cachedData = cache.get(nameTratado);
         if (cachedData) {
             return res.render('game', { data: cachedData });
         }
-        const data = await Game.findOne({ name: { $regex: new RegExp(`^${nameTratad}$`, 'i') } });
+        const data = await Game.findOne({ name: { $regex: new RegExp(`^${nameTratado}$`, 'i') } });
         if (data) {
-            cache.put(nameTratad, data, cacheTime); 
+            cache.put(nameTratado, data, cacheTime); 
             res.render('game', { data: data });
         } else {
             res.status(404).json({ msg: 'Não encontrado!' });
