@@ -23,6 +23,23 @@ app.use((req, res) => {
     res.status(404).render('404')
 });
 
+
+// Rota para o sitemap.xml
+const sitemapPath = path.join(__dirname, 'public', 'sitemap.xml');
+app.get('/sitemap.xml', (req, res) => {
+    res.header('Content-Type', 'application/xml');
+    res.sendFile(sitemapPath);
+});
+
+
+// Rota para o robots.txt
+const robotsPath = path.join(__dirname, 'public', 'robots.txt');
+app.get('/robots.txt', (req, res) => {
+    res.header('Content-Type', 'text/plain');
+    res.sendFile(robotsPath);
+});
+
+
 app.listen(3000, ()=>{
     console.log('http://localhost:3000')
 })
