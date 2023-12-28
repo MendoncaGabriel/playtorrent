@@ -7,16 +7,32 @@ const cache = require('memory-cache');
 router.get('/', async (req, res) => {
     const pg = 0; // Página atual (se você quiser implementar paginação)
     const pageSize = 20; // Número de documentos a serem recuperados
-
-    try {
+    const cacheKey = req.originalUrl || req.url;
+  
+    // Verificar se os dados estão em cache
+    const cachedData = cache.get(cacheKey);
+  
+    if (cachedData) {
+      // Se estiver em cache, renderizar a partir do cache
+      res.render('home', { title: 'Home', data: cachedData });
+      console.log('home com cache!')
+    } else {
+      try {
+        // Se não estiver em cache, buscar dados no banco de dados
         const data = await Game.find().skip(pg * pageSize).limit(pageSize).exec();
+        console.log('cacheando home!')
+  
+        // Colocar os dados em cache por 10 minutos
+        cache.put(cacheKey, data, 24 * 60 * 60 * 1000);
+  
+        // Renderizar a página com os dados recém-obtidos
         res.render('home', { title: 'Home', data: data });
-    } catch (error) {
+      } catch (error) {
         console.error(error);
         res.status(500).send('Erro interno do servidor');
+      }
     }
-});
-
+  });
 router.get('/download/:name', async (req, res) => {
     try{
         const name = req.params.name
