@@ -1,14 +1,41 @@
-<nav class="w-full bg-blue-950 border-black p-4 flex items-center justify-between">
+<nav class="w-full bg-gray-800 border-black px-10 py-2 flex items-center justify-between">
     <a href="/" class="flex items-center space-x-4">
-        <img src="/LOGO.png" alt="" class=" h-16">
-        <h2 class="text-4xl text-white font-semibold">PLAYTORRENT</h2>
+        <img src="/LOGO.png" alt="" class=" h-14">
+        <h2 class="text-2xl text-white font-semibold">PLAYTORRENT</h2>
     </a>
 
-    <div class="w-1/3 bg-white overflow-hidden rounded-md">
-        <input type="text" placeholder="Pesquisar" class="px-4 py-2 w-full border border-black focus:outline-none">
-    </div>
+    <div class="flex items-center space-x-4 justify-between">
 
-    <ul class="flex borde p-4 space-x-2 text-white">
-        <li><a href="/">Home</a></li>
-    </ul>
+        <div class=" bg-white overflow-hidden rounded-md flex items-center justify-center px-2 w-96">
+            <input id="inputPesquisa" type="text" placeholder="Pesquisar" class="px-4 py-2 w-full  focus:outline-none text-gray-600">
+            <button class="pt-1" onclick="search()">
+                <span class="material-symbols-outlined text-gray-600  px-2 text-2xl duration-300 hover:scale-125">search</span>
+            </button>
+        </div>
+        
+            <ul class="flex borde p-4 space-x-2 text-white">
+                <li><a href="/">
+                    <span class="material-symbols-outlined text-gray-white text-2xl duration-300 hover:scale-125">
+                        home
+                    </span>
+                </a></li>
+            </ul>
+    </div>
 </nav>
+
+<script>
+function search() {
+    const inputPesquisa = document.getElementById('inputPesquisa');
+    const valorDoInput = inputPesquisa.value;
+
+    // Verifica se o valor do input não está vazio
+    if (valorDoInput.trim() !== "") {
+        // Redireciona para a página desejada
+        window.location.href = "/search/" + encodeURIComponent(valorDoInput);
+    } else {
+        // Lida com o caso em que o valor do input está vazio
+        alert("Por favor, insira um termo de pesquisa válido.");
+    }
+}
+
+</script>
