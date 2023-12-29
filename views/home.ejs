@@ -11,9 +11,11 @@
 <body class="bg-gray-900">
     
     <%- include('./components/navbar.ejs') %>
-    <h2 class="text-white">ESTAMOS EM REFORMA....</h2>
+   
+    <%- include('./components/carousel.ejs', {title: 'Mais baixados', dataCarousel: dataCarouselDownloads})%>
+ 
+    <%- include('./components/carousel.ejs', {title: 'Mais Visitadas', dataCarousel: dataCarouselViews})%>
 
-    <%- include('./components/carousel.ejs'), {title: 'Mais baixados', dataCarousel: [1,2,3]} %>
   
     <%- include('./components/grid.ejs', {data: data}) %>
     <%- include('./components/pagination.ejs', { page: page, totalPages: 150 }) %>
