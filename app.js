@@ -20,10 +20,9 @@ console.log('Caminho das visualizações:', path.join(process.cwd(), 'views'));
 
 // Configuração da política de permissões
 app.use((req, res, next) => {
-  res.setHeader('Permissions-Policy', 'feature-policy-name none');
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), ...');
   next();
 });
-
 
 // Middleware para redirecionamento
 app.use((req, res, next) => {
