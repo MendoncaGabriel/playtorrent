@@ -24,12 +24,6 @@ router.get('/page/:pg', async (req, res) => {
     }
 })
 
-router.get('/page/:pg', async (req, res) => {
-    const pg = parseInt(req.params.pg) || 0;
-    const pageSize = 20;
-    const cacheKey = req.originalUrl || req.url;
-    renderCachedPageOrFetch(req, res, cacheKey, () => Game.find().skip(pg * pageSize).limit(pageSize).lean().exec());
-})
 
 router.get('/', async (req, res) => {
     const pg = 0; 
@@ -115,7 +109,7 @@ async function isImageValid(teste) {
 const http = require('http');
 const https = require('https');
 
-router.get('/testeimage', async (req, res) => {
+router.get('/checkImage', async (req, res) => {
     try {
         const data = await Game.find({});
         let imgfaltando = [];
