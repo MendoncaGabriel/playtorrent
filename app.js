@@ -1,12 +1,13 @@
 const express = require('express')
 const path = require('path')
-const cors = require('cors')
-require("dotenv").config(); 
-
-require('./connect/MongoDB.js')
 const app = express()
 
-app.use(cors)
+
+const injectSpeedInsights = require("@vercel/speed-insights")
+
+require("dotenv").config(); 
+require('./connect/MongoDB.js')
+
 app.set('view engine', 'ejs')
 
 const routes = require(__dirname + '/router/index.js')
@@ -18,43 +19,45 @@ console.log('Caminho das visualizações:', path.join(process.cwd(), 'views'));
 
 // Configurar Content Security Policy (CSP)
 app.use((req, res, next) => {
-    res.setHeader('Content-Security-Policy', "default-src 'self' https: data: blob:; connect-src 'self' https: www.youtube.com");
-    next();
+  res.setHeader('Content-Security-Policy', "default-src 'self' https: data: blob:; connect-src 'self' https: www.youtube.com");
+  next();
 });
+
 
 // Middleware para redirecionamento
 app.use((req, res, next) => {
-    // Verifica se a URL é diferente de https://www.playtorrent.com.br/
-    if (req.url !== '/' && req.url !== '/download' && req.url !== '/download/') {
-      // Redireciona para https://www.playtorrent.com.br/download/ + restante da URL
-      return res.redirect(`https://www.playtorrent.com.br/download${req.url}`);
-    }
-    // Se a URL for https://www.playtorrent.com.br/ ou /download, continua para o próximo middleware
-    next();
-  });
+  // Verifica se a URL é diferente de https://www.playtorrent.com.br/
+  if (req.url !== '/' && req.url !== '/download' && req.url !== '/download/') {
+    // Redireciona para https://www.playtorrent.com.br/download/ + restante da URL
+    return res.redirect(`https://www.playtorrent.com.br/download${req.url}`);
+  }
+  // Se a URL for https://www.playtorrent.com.br/ ou /download, continua para o próximo middleware
+  next();
+});
   
-  // Middleware para lidar com rotas inexistentes
-  app.use((req, res) => {
-    res.status(404).render('404');
-  });
+
+// Middleware para lidar com rotas inexistentes
+app.use((req, res) => {
+  res.status(404).render('404');
+});
 
 
 // Rota para o sitemap.xml
 const sitemapPath = path.join(__dirname, 'public', 'sitemap.xml');
 app.get('/sitemap.xml', (req, res) => {
-    res.header('Content-Type', 'application/xml');
-    res.sendFile(sitemapPath);
+  res.header('Content-Type', 'application/xml');
+  res.sendFile(sitemapPath);
 });
 
 
 // Rota para o robots.txt
 const robotsPath = path.join(__dirname, 'public', 'robots.txt');
 app.get('/robots.txt', (req, res) => {
-    res.header('Content-Type', 'text/plain');
-    res.sendFile(robotsPath);
+  res.header('Content-Type', 'text/plain');
+  res.sendFile(robotsPath);
 });
 
 
 app.listen(3000, ()=>{
-    console.log('http://localhost:3000')
+  console.log('http://localhost:3000')
 })

@@ -73,9 +73,9 @@
 </html>
 
 <script>
-    const gameId = '<%= data.id %>'
-    const url = `https://www.playtorrent.com.br/viewCont/${gameId}`;
-    //const url = `http://localhost:3000/viewCont/${gameId}`;
+    const gameId = '<%= data.id %>';
+    const url = `https://www.playtorrent.com.br/viewCont/${gameId}` || `http://localhost:3000/viewCont/${gameId}`;
+
 
     fetch(url, {
         method: 'PATCH',
@@ -87,12 +87,14 @@
         if (!response.ok) {
             throw new Error(`Erro ao contar visualização: ${response.status}`);
         }
+        return response.json(); // Converte a resposta para JSON
+    })
+    .then((data) => {
         console.log('Visualização contada com sucesso!');
-        console.log(`visualizações: ${response.views}`)
-
+        console.log(`Visualizações: ${data.views}`);
     })
     .catch((error) => {
-    console.error('Erro ao contar visualização:', error);
-    // Trate o erro de acordo com suas necessidades
+        console.error('Erro ao contar visualização:', error);
+        // Trate o erro de acordo com suas necessidades
     });
 </script>

@@ -72,22 +72,28 @@ router.get('/download/:name', async (req, res) => {
 
 router.patch('/viewCont/:id', async (req, res) => {
     try {
-      const id = req.params.id;
-  
-      const game = await Game.findById(id);
-  
-      if (!game.views) {
-        game.views = 0;
-      }
-  
-      const newUpdate = await Game.findByIdAndUpdate(id, { views: game.views + 1 });
-  
-      res.status(200).json({msg:'Visualização contada com sucesso', views: newUpdate.views });
+        const id = req.params.id;
+        const game = await Game.findById(id);
+
+        if (!game) {
+            return res.status(404).json({ msg: 'Jogo não encontrado' });
+        }
+
+        // Se `views` não existe ou é `undefined` ou `null`
+        if (!game.views) {
+            const newUpdate = await Game.findByIdAndUpdate(id, { views: 1 }, { new: true });
+            return res.status(200).json({ msg: 'Primeira visualização contada com sucesso', views: newUpdate.views });
+        }
+
+        // Se `views` existe, incrementa
+        const newUpdate = await Game.findByIdAndUpdate(id, { $inc: { views: 1 } }, { new: true });
+        return res.status(200).json({ msg: 'Visualização contada com sucesso', views: newUpdate.views });
     } catch (err) {
-      console.error('Erro ao contar visualização:', err);
-      res.status(500).send('Erro ao contar visualização');
+        console.error('Erro ao contar visualização:', err);
+        res.status(500).send('Erro ao contar visualização');
     }
-  });
+});
+
 
 
 async function isImageValid(teste) {
