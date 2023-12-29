@@ -95,6 +95,18 @@ router.patch('/viewCont/:id', async (req, res) => {
 });
 
 
+router.get('/analytics', async (req, res) => {
+    try {
+        const gamesWithViews = await Game.find({ views: { $exists: true } })
+        .sort({ views: -1 }) // Ordena pelo campo 'views' do maior para o menor
+        .select('name views');
+
+        res.render('analytics', { data: gamesWithViews });
+    } catch (err) {
+        console.error('Erro ao obter jogos com visualizações:', err);
+        res.status(500).send('Erro ao obter jogos com visualizações');
+    }
+});
 
 async function isImageValid(teste) {
     let url = 'http://localhost:3000/cover/' + teste

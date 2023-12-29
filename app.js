@@ -27,13 +27,14 @@ app.use((req, res, next) => {
 // Middleware para redirecionamento
 app.use((req, res, next) => {
   // Verifica se a URL é diferente de https://www.playtorrent.com.br/
-  if (req.url !== '/' && req.url !== '/download' && req.url !== '/download/') {
+  if (req.originalUrl !== '/' && req.originalUrl !== '/download' && req.originalUrl !== '/download/' && req.originalUrl !== '/analytics') {
     // Redireciona para https://www.playtorrent.com.br/download/ + restante da URL
-    return res.redirect(`https://www.playtorrent.com.br/download${req.url}`);
+    return res.redirect(`https://www.playtorrent.com.br/download${req.originalUrl}`);
   }
   // Se a URL for https://www.playtorrent.com.br/ ou /download, continua para o próximo middleware
   next();
 });
+
   
 
 // Middleware para lidar com rotas inexistentes
