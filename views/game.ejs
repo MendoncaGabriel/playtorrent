@@ -68,9 +68,13 @@
     
     <section class="p-4  m-auto max-w-screen-xl flex justify-center items-center space-x-4">
 
-        <a href="<%= data.link %>" target="_blank" class=" px-4 py-2 bg-blue-500 hover:bg-blue-700 hover:shadow-lg duration-300 text-white w-72 text-center rounded-md">DOWNLOAD</a>
+        
 
-        <button onclick="copyToClipboard('<%= data.link %>', this), downloadCont()" class=" px-4 py-2 rounded-md bg-gray-500 hover:bg-gray-600 duration-300 hover:shadow-md  flex gap-2">
+        <button onclick="download('<%= data.link %>')" class=" px-4 py-2 bg-blue-500 hover:bg-blue-700 hover:shadow-lg duration-300 text-white w-72 text-center rounded-md">
+            DOWNLOAD
+        </button>
+
+        <button onclick="copyToClipboard('<%= data.link %>', this)" class=" px-4 py-2 rounded-md bg-gray-500 hover:bg-gray-600 duration-300 hover:shadow-md  flex gap-2">
             <span class="material-symbols-outlined">content_copy</span>
             MAGNET LINK
         </button>
@@ -86,6 +90,10 @@
 </html>
 
 <script>
+
+    function download(link){
+        downloadCont()
+    }
 
     function copyToClipboard(text, btn) {
         const textarea = document.createElement('textarea');
@@ -131,8 +139,10 @@
 
 
     async function  downloadCont(){
-        const gameId = '<%= data.id %>';
-        const url = `https://www.playtorrent.com.br/downloadCont/${gameId}`
+     
+        const id = '<%= data.id %>';
+        //const url = `https://www.playtorrent.com.br/downloadCont/${id}`
+        const url = `http://localhost:3000/downloadCont/${id}`
 
         fetch(url, {
             method: 'PATCH',
@@ -144,12 +154,13 @@
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`Erro ao contar download: ${response.status}`);
+                console.log('Erro ao contar download')
             }
             return response.json(); // Converte a resposta para JSON
         })
         .then((data) => {
             console.log('Download contado com sucesso!');
-            console.log(`Download: ${data.views}`);
+            console.log(`Download: ${data.download}`);
         })
         .catch((error) => {
             console.error('Erro ao contar Download:', error);

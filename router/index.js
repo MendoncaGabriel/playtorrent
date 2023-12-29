@@ -80,20 +80,25 @@ router.patch('/downloadCont/:id', async (req, res) => {
             return res.status(404).json({ msg: 'Jogo não encontrado' });
         }
 
-        // Se `download` não existe ou é `undefined` ou `null`
+        const update = { $inc: { download: 1 } };
+
+        // Se `download` não existe, define-o como 1
         if (!game.download) {
-            const newUpdate = await Game.findByIdAndUpdate(id, { download: 1 }, { new: true });
-            return res.status(200).json({ msg: 'Primeiro download contada com sucesso', download: newUpdate.download });
+            update.download = 1;
         }
 
-        // Se `views` existe, incrementa
-        const newUpdate = await Game.findByIdAndUpdate(id, { $inc: { download: 1 } }, { new: true });
-        return res.status(200).json({ msg: 'Download contado com sucesso', download: newUpdate.download });
+        const newUpdate = await Game.findByIdAndUpdate(id, update, { new: true });
+
+        return res.status(200).json({
+            msg: newUpdate.download === 1 ? 'Primeiro download contado com sucesso' : 'Download contado com sucesso',
+            download: newUpdate.download
+        });
     } catch (err) {
         console.error('Erro ao contar download:', err);
         res.status(500).send('Erro ao contar download');
     }
 });
+
 
 
 router.patch('/viewCont/:id', async (req, res) => {
