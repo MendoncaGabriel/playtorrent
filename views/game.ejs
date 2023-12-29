@@ -25,11 +25,12 @@
             <img src="/cover/<%= data.img %>" alt="" class="w-52 h-72 rounded-md object-cover">
             
             <iframe
-                title="<%="Trailer video do jogo: " + data.name %>""
+                title="<%= 'Trailer video do jogo: ' + data.name %>"
                 src="<%= data.video %>"
-                frame="0"
-                class="bg-gray-600 h-72   object-cover aspect-video  rounded-md"
+                frameborder="0"
+                class="bg-gray-600 h-72 object-cover aspect-video rounded-md"
             ></iframe>
+        
         </section>
     </main>
 
