@@ -70,7 +70,7 @@
 
         <a href="<%= data.link %>" target="_blank" class=" px-4 py-2 bg-blue-500 hover:bg-blue-700 hover:shadow-lg duration-300 text-white w-72 text-center rounded-md">DOWNLOAD</a>
 
-        <button onclick="copyToClipboard('<%= data.link %>', this)" class=" px-4 py-2 rounded-md bg-gray-500 hover:bg-gray-600 duration-300 hover:shadow-md  flex gap-2">
+        <button onclick="copyToClipboard('<%= data.link %>', this), downloadCont()" class=" px-4 py-2 rounded-md bg-gray-500 hover:bg-gray-600 duration-300 hover:shadow-md  flex gap-2">
             <span class="material-symbols-outlined">content_copy</span>
             MAGNET LINK
         </button>
@@ -127,4 +127,33 @@
         console.error('Erro ao contar visualização:', error);
         // Trate o erro de acordo com suas necessidades
     });
+
+
+
+    async function  downloadCont(){
+        const gameId = '<%= data.id %>';
+        const url = `https://www.playtorrent.com.br/downloadCont/${gameId}`
+
+        fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`Erro ao contar download: ${response.status}`);
+            }
+            return response.json(); // Converte a resposta para JSON
+        })
+        .then((data) => {
+            console.log('Download contado com sucesso!');
+            console.log(`Download: ${data.views}`);
+        })
+        .catch((error) => {
+            console.error('Erro ao contar Download:', error);
+            // Trate o erro de acordo com suas necessidades
+        });
+    }
 </script>
