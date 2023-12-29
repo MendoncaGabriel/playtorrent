@@ -11,6 +11,7 @@ const Game = mongoose.model('Game', {
     platform: String,
     type: String,
     download: Number,
+    views: Number,
 })
 
 module.exports = Game

@@ -71,3 +71,28 @@
 
 </body>
 </html>
+
+<script>
+    const gameId = '<%= data.id %>'
+    const url = `https://playtorrent.com.br/viewCont/${gameId}`;
+    //const url = `http://localhost:3000/viewCont/${gameId}`;
+
+    fetch(url, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error(`Erro ao contar visualização: ${response.status}`);
+        }
+        console.log('Visualização contada com sucesso!');
+        console.log(`visualizações: ${response.views}`)
+
+    })
+    .catch((error) => {
+    console.error('Erro ao contar visualização:', error);
+    // Trate o erro de acordo com suas necessidades
+    });
+</script>
