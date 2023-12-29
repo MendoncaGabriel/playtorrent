@@ -187,20 +187,22 @@ router.get('/renameImage', async (req, res) => {
 
 router.get('/search/:name', async (req, res) => {
     try {
-        const termoPesquisa = req.params.name
-        const nameTratad = termoPesquisa.replace(/-/g, ' ')
+        const termoPesquisa = req.params.name;
+        const nameTratad = termoPesquisa.replace(/-/g, ' ');
+        console.log('Nome tratado de pesquisa ' + nameTratad);
 
-        if(!termoPesquisa){
-            return res.status(422).json({msg: "Envie por parametro name"})
+        if (!termoPesquisa) {
+            return res.status(422).json({ msg: "Envie por parametro name" });
         }
 
-        const data = await Game.find({ name: { $regex: new RegExp(`^${nameTratad}$`, 'i') } });
-        console.log(data)
+        const data = await Game.find({ name: { $regex: new RegExp(`${nameTratad}`, 'i') } }).limit(20);
+        console.log(data.length + ' Resultados da busca');
         res.render('search', { data: data, termoPesquisa: termoPesquisa });
- 
+
     } catch (erro) {
         res.status(422).json({ msg: 'erro ao buscar game por id!', erro: erro });
     }
 })
+
 
 module.exports = router;

@@ -24,8 +24,9 @@
 </nav>
 
 <script>
+const inputPesquisa = document.getElementById('inputPesquisa');
+
 function search() {
-    const inputPesquisa = document.getElementById('inputPesquisa');
     const valorDoInput = inputPesquisa.value;
 
     // Verifica se o valor do input não está vazio
@@ -37,5 +38,13 @@ function search() {
         alert("Por favor, insira um termo de pesquisa válido.");
     }
 }
+
+
+inputPesquisa.addEventListener('keyup', (event) => {
+    if(event.keyCode == 13){
+        search();
+    }
+});
+
 
 </script>
