@@ -2,14 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Game = require('../model/Game.js');
 const cache = require('memory-cache');
-const cacheTime = 24 * 60 * 60 * 1000 //24h
-
-
-//teste de imagens
-const http = require('http');
-const https = require('https');
-
-
+const cacheTime = 24 * 60 * 60 * 1000
 
 router.get('/page/:pg', async (req, res) => {
     const pg = req.params.pg
@@ -30,6 +23,14 @@ router.get('/page/:pg', async (req, res) => {
         }
     }
 })
+
+router.get('/page/:pg', async (req, res) => {
+    const pg = parseInt(req.params.pg) || 0;
+    const pageSize = 20;
+    const cacheKey = req.originalUrl || req.url;
+    renderCachedPageOrFetch(req, res, cacheKey, () => Game.find().skip(pg * pageSize).limit(pageSize).lean().exec());
+})
+
 router.get('/', async (req, res) => {
     const pg = 0; 
     const pageSize = 20; 
@@ -49,6 +50,7 @@ router.get('/', async (req, res) => {
         }
     }
 })
+
 router.get('/download/:name', async (req, res) => {
     try {
         const nameTratado = req.params.name.replace(/-/g, ' ');
@@ -71,9 +73,6 @@ router.get('/download/:name', async (req, res) => {
         res.status(500).send('Erro ao carregar a página!');
     }
 })
-
-
-
 
 
 async function isImageValid(teste) {
@@ -113,8 +112,10 @@ async function isImageValid(teste) {
 }
 
 
+const http = require('http');
+const https = require('https');
 
-router.get('/checkImage', async (req, res) => {
+router.get('/testeimage', async (req, res) => {
     try {
         const data = await Game.find({});
         let imgfaltando = [];
@@ -132,8 +133,6 @@ router.get('/checkImage', async (req, res) => {
         res.status(500).send('Erro no teste de imagem');
     }
 });
-
-
 
 
 module.exports = router;
