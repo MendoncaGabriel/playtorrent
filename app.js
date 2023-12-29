@@ -18,11 +18,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 console.log('Caminho das visualizações:', path.join(process.cwd(), 'views'));
 
 
-// Configuração da política de permissões
+// Middleware para configurar a política de permissões
 app.use((req, res, next) => {
   res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), interest-cohort=()');
+
+  // Configuração do cookie
+  res.setHeader('Set-Cookie', 'cookieName=cookieValue; SameSite=None; Secure');
+
   next();
 });
+
 // Middleware para redirecionamento
 app.use((req, res, next) => {
   // Verifica se a URL é diferente de https://www.playtorrent.com.br/
