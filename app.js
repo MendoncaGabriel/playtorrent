@@ -20,10 +20,9 @@ console.log('Caminho das visualizações:', path.join(process.cwd(), 'views'));
 
 // Configuração da política de permissões
 app.use((req, res, next) => {
-  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), ...');
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), interest-cohort=()');
   next();
 });
-
 // Middleware para redirecionamento
 app.use((req, res, next) => {
   // Verifica se a URL é diferente de https://www.playtorrent.com.br/
