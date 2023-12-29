@@ -1,13 +1,12 @@
 const express = require('express')
 const path = require('path')
 const cors = require('cors')
-const app = express()
-app.use(cors)
-const injectSpeedInsights = require("@vercel/speed-insights")
-
 require("dotenv").config(); 
-require('./connect/MongoDB.js')
 
+require('./connect/MongoDB.js')
+const app = express()
+
+app.use(cors)
 app.set('view engine', 'ejs')
 
 const routes = require(__dirname + '/router/index.js')
