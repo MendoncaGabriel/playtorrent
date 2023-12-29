@@ -17,9 +17,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 //ao remover este console.log(tudo para)
 console.log('Caminho das visualizações:', path.join(process.cwd(), 'views'));
 
-// Configurar Content Security Policy (CSP)
+
+// Configuração da política de permissões
 app.use((req, res, next) => {
-  res.setHeader('Content-Security-Policy', "default-src 'self' https: data: blob:; connect-src 'self' https: www.youtube.com");
+  res.setHeader('Permissions-Policy', 'feature-policy-name none');
   next();
 });
 
