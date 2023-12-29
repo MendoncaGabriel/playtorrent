@@ -20,8 +20,8 @@ console.log('Caminho das visualizações:', path.join(process.cwd(), 'views'));
 
 // Middleware para configurar a política de permissões
 app.use((req, res, next) => {
-  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), interest-cohort=(), sync-xhr=()');
   res.setHeader('Set-Cookie', 'cookieName=cookieValue; SameSite=None; Secure');
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), interest-cohort=(), sync-xhr=(), storage=(* "self")');
   next();
 });
 
