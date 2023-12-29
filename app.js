@@ -21,9 +21,21 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use((req, res) => {
-    res.status(404).render('404')
-});
+// Middleware para redirecionamento
+app.use((req, res, next) => {
+    // Verifica se a URL é diferente de https://www.playtorrent.com.br/
+    if (req.url !== '/' && req.url !== '/download' && req.url !== '/download/') {
+      // Redireciona para https://www.playtorrent.com.br/download/ + restante da URL
+      return res.redirect(`https://www.playtorrent.com.br/download${req.url}`);
+    }
+    // Se a URL for https://www.playtorrent.com.br/ ou /download, continua para o próximo middleware
+    next();
+  });
+  
+  // Middleware para lidar com rotas inexistentes
+  app.use((req, res) => {
+    res.status(404).render('404');
+  });
 
 
 // Rota para o sitemap.xml
