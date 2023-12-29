@@ -2,7 +2,14 @@ const express = require('express');
 const router = express.Router();
 const Game = require('../model/Game.js');
 const cache = require('memory-cache');
-const cacheTime = 24 * 60 * 60 * 1000
+const cacheTime = 24 * 60 * 60 * 1000 //24h
+
+
+//teste de imagens
+const http = require('http');
+const https = require('https');
+
+
 
 router.get('/page/:pg', async (req, res) => {
     const pg = req.params.pg
@@ -23,14 +30,6 @@ router.get('/page/:pg', async (req, res) => {
         }
     }
 })
-
-router.get('/page/:pg', async (req, res) => {
-    const pg = parseInt(req.params.pg) || 0;
-    const pageSize = 20;
-    const cacheKey = req.originalUrl || req.url;
-    renderCachedPageOrFetch(req, res, cacheKey, () => Game.find().skip(pg * pageSize).limit(pageSize).lean().exec());
-})
-
 router.get('/', async (req, res) => {
     const pg = 0; 
     const pageSize = 20; 
@@ -50,7 +49,6 @@ router.get('/', async (req, res) => {
         }
     }
 })
-
 router.get('/download/:name', async (req, res) => {
     try {
         const nameTratado = req.params.name.replace(/-/g, ' ');
@@ -73,5 +71,69 @@ router.get('/download/:name', async (req, res) => {
         res.status(500).send('Erro ao carregar a página!');
     }
 })
+
+
+
+
+
+async function isImageValid(teste) {
+    let url = 'http://localhost:3000/cover/' + teste
+    try {
+        // Verifica se a URL termina com uma extensão de imagem comum
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+        const isImageExtension = imageExtensions.some(ext => url.toLowerCase().endsWith(ext));
+    
+        if (!isImageExtension) {
+        return false;
+        }
+    
+        // Determina o módulo HTTP com base no protocolo da URL
+        const protocol = url.startsWith('https') ? https : http;
+    
+        // Faz uma requisição HEAD para obter o cabeçalho da imagem sem baixar todo o conteúdo
+        const response = await new Promise((resolve, reject) => {
+        const req = protocol.request(url, { method: 'HEAD' }, resolve);
+        req.on('error', reject);
+        req.end();
+        });
+    
+        // Verifica se o cabeçalho Content-Type indica que é uma imagem
+        const contentType = response.headers['content-type'];
+        if (!contentType || !contentType.startsWith('image/')) {
+        return false;
+        }
+    
+        // Pode adicionar mais verificações aqui, se necessário
+    
+        return true;
+    } catch (error) {
+        console.error('Erro ao verificar a imagem:', error.message);
+        return false;
+    }
+}
+
+
+
+router.get('/checkImage', async (req, res) => {
+    try {
+        const data = await Game.find({});
+        let imgfaltando = [];
+
+        for (const e of data) {
+            let validation = await isImageValid(e.img);
+            if (!validation) {
+                imgfaltando.push(e);
+            }
+        }
+
+        res.render('buscarImagem', { data: imgfaltando });
+    } catch (error) {
+        console.error('Erro no teste de imagem:', error);
+        res.status(500).send('Erro no teste de imagem');
+    }
+});
+
+
+
 
 module.exports = router;

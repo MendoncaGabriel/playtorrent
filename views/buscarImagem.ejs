@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <ul>
+        <% data.forEach(e => { %>
+          <li>
+            <button onclick="copyToClipboard('<%= e._id %>', this)"><%= e._id %></button>
+            <button onclick="copyToClipboard('capa jogo '+'<%= e.name %>', this)"><%= e.name %></button>
+            
+          </li>
+        <% }) %>
+      </ul>
+      
+      <script>
+        function copyToClipboard(text, e) {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+
+        e.style.background = 'green'
+
+        }
+      </script>
+      
+      
+</body>
+</html>
