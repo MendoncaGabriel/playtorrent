@@ -134,5 +134,22 @@ router.get('/testeimage', async (req, res) => {
     }
 });
 
+router.get('/renameImage', async (req, res) => {
+    try {
+        const games = await Game.find({});
+        let cont = 0;
+        for (const e of games) {
+            await Game.findByIdAndUpdate(e._id, { img: e._id + '.webp' });
+            cont++;
+            console.log(cont + ' - ' + e.name);
+        }
+        res.send('Images renamed successfully.');
+    } catch (error) {
+        console.error('Error renaming images:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
 
 module.exports = router;

@@ -12,6 +12,7 @@ const routes = require(__dirname + '/router/index.js')
 app.use('/', routes);
 app.use(express.static(path.join(__dirname, 'public')));
 
+//ao remover este console.log(tudo para)
 console.log('Caminho das visualizações:', path.join(process.cwd(), 'views'));
 
 // Configurar Content Security Policy (CSP)
