@@ -70,11 +70,11 @@
 
         
 
-        <button onclick="download('<%= data.link %>')" class=" px-4 py-2 bg-blue-500 hover:bg-blue-700 hover:shadow-lg duration-300 text-white w-72 text-center rounded-md">
+        <button onclick="download('<%= data.link %>', true)" class=" px-4 py-2 bg-blue-500 hover:bg-blue-700 hover:shadow-lg duration-300 text-white w-72 text-center rounded-md">
             DOWNLOAD
         </button>
 
-        <button onclick="copyToClipboard('<%= data.link %>', this)" class=" px-4 py-2 rounded-md bg-gray-500 hover:bg-gray-600 duration-300 hover:shadow-md  flex gap-2">
+        <button onclick="copyToClipboard('<%= data.link %>', this), download('<%= data.link %>', false)" class=" px-4 py-2 rounded-md bg-gray-500 hover:bg-gray-600 duration-300 hover:shadow-md  flex gap-2">
             <span class="material-symbols-outlined">content_copy</span>
             MAGNET LINK
         </button>
@@ -91,9 +91,7 @@
 
 <script>
 
-    function download(link){
-        downloadCont()
-    }
+
 
     function copyToClipboard(text, btn) {
         const textarea = document.createElement('textarea');
@@ -138,11 +136,11 @@
 
 
 
-    async function  downloadCont(){
+    async function download(link, direcionar){
      
         const id = '<%= data.id %>';
-        //const url = `https://www.playtorrent.com.br/downloadCont/${id}`
-        const url = `http://localhost:3000/downloadCont/${id}`
+        const url = `https://www.playtorrent.com.br/downloadCont/${id}`
+        //const url = `http://localhost:3000/downloadCont/${id}`
 
         fetch(url, {
             method: 'PATCH',
@@ -161,10 +159,19 @@
         .then((data) => {
             console.log('Download contado com sucesso!');
             console.log(`Download: ${data.download}`);
+
+            // Redireciona para a página desejada
+            if(direcionar){
+              window.open(link, '_blank');
+            }    
         })
         .catch((error) => {
             console.error('Erro ao contar Download:', error);
             // Trate o erro de acordo com suas necessidades
+            // Redireciona para a página desejada
+            if(direcionar){
+              window.open(link, '_blank');
+            }    
         });
     }
 </script>

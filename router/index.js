@@ -33,12 +33,13 @@ router.get('/', async (req, res) => {
     const cachedData = cache.get(cacheKey);
 
     if (cachedData) {
-        res.render('home', { title: 'Home', data: cachedData, page: pg });
+        res.render('home', { title: 'Home', data: cachedData, page: pg, dataCarousel: dataCarousel });
     } else {
         try {
             const data = await Game.find().skip(pg * pageSize).limit(pageSize).exec();
+            const dataCarousel = []
             cache.put(cacheKey, data, cacheTime);
-            res.render('home', { title: 'Home', data: data, page: pg });
+            res.render('home', { title: 'Home', data: data, page: pg, dataCarousel: dataCarousel });
         } catch (error) {
             console.error(error);
             res.status(500).send('Erro interno do servidor');

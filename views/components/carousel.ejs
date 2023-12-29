@@ -1,0 +1,20 @@
+<section class=" p-4  m-auto max-w-screen-xl my-5">
+    <h2 class="text-white text-2xl mb-5"><% title %></h2>
+
+    <div class="flex space-x-4 overflow-auto pb-5 snap-x snap-mandatory px-4">
+
+        <% for( let i = 0; i < dataCarousel.length; i++ ) { %>
+        
+            <% const name = dataCarousel[i].name.replace(/ /g, '-').toLowerCase(); %>
+            <li class="w-52 h-72 bg-black m-auto rounded-md overflow-hidden flex-none hover:scale-105 duration-300 snap-start">
+              <a href="/download/<%= name %>">
+                <img src="/cover/<%= dataCarousel[i].img %>" alt="" class="h-full w-full object-cover">
+              </a>
+            </li>
+
+        <% } %>
+
+    </div>
+
+
+</section>
