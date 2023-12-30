@@ -3,29 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title>PlayTorrent página <%= page %></title>
     <meta name="description" content="Play Torrent - Os melhores jogos para baixar gratuitamente, download gratuito de games, Play Torrents oferece uma seleção de jogos de alta qualidade, garantindo uma experiência de download 100% segura e envolvente, Desfrute de games incríveis sem custo.">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/global.css">
 </head>
 <body class="bg-gray-900">
-
-    <%- include('./components/navbar.ejs') %>
     
-    <main class="max-w-screen-xl  m-auto mt-10">
-        <a href="javascript:void(0);" onclick="history.back();" class="text-white">Voltar</a><br><br>
-
-        <section class="p-4  flex items-center justify-around m-auto  ">
-            
-            <%- include('./components/grid.ejs', { data: data, title: title }) %>
-
-
-        </section>
-
-    </main>
-
-    <%- include('./components/footer.ejs') %>
+    <%- include('./components/navbar.ejs') %>
    
+
+
+    <%- include('./components/grid.ejs', {data: data, title: 'Página ' + page}) %>
+    <%- include('./components/pagination.ejs', { page: page, totalPages: 150 }) %>
+    <%- include('./components/footer.ejs') %>
 </body>
 </html>

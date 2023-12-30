@@ -1,5 +1,5 @@
-<nav class="w-full bg-gray-800 border-black px-10 py-2 flex items-center justify-between">
-    <a href="/" class="flex items-center space-x-4">
+<nav class="w-full  bg-gray-800 border-black px-10 py-4 md:py-2 md:flex grid grid-cols-1 items-center justify-between gap-4 md:gap-0">
+    <a href="/" class="flex items-center space-x-4 m-auto md:m-0">
         <img src="/LOGO.png" alt="" class=" h-14">
         <h2 class="text-2xl text-white font-semibold">PLAYTORRENT</h2>
     </a>
@@ -13,7 +13,7 @@
             </button>
         </div>
         
-            <ul class="flex borde p-4 space-x-2 text-white">
+            <ul class=" p-4 space-x-2 text-white hidden md:flex">
                 <li><a href="/">
                     <span class="material-symbols-outlined text-gray-white text-2xl duration-300 hover:scale-125">
                         home
@@ -22,6 +22,8 @@
             </ul>
     </div>
 </nav>
+
+
 
 <script>
 const inputPesquisa = document.getElementById('inputPesquisa');

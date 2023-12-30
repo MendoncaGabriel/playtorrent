@@ -1,0 +1,19 @@
+*{
+    box-sizing: border-box;
+}
+
+
+/* Google Chrome e WebKit/Blink */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #2196F3;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #595959;
+}

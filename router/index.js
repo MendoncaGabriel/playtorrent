@@ -11,12 +11,12 @@ router.get('/page/:pg', async (req, res) => {
     const cachedData = cache.get(cacheKey);
 
     if (cachedData) {
-        res.render('home', { title: 'Home', data: cachedData, page: pg });
+        res.render('page', { title: 'Home', data: cachedData, page: pg });
     } else {
         try {
             const data = await Game.find().skip(pg * pageSize).limit(pageSize).exec();
             cache.put(cacheKey, data, cacheTime);
-            res.render('home', { title: 'Home', data: data, page: pg });
+            res.render('page', { title: 'Home', data: data, page: pg });
         } catch (error) {
             console.error(error);
             res.status(500).send('Erro interno do servidor');
@@ -32,45 +32,45 @@ router.get('/', async (req, res) => {
     const cacheKey = req.originalUrl || req.url;
     const cachedData = cache.get(cacheKey);
 
-    if (cachedData) {
-        // Se os dados estão em cache, use-os diretamente
-        const dataCarousel = getTopDownloads(cachedData, 10);
-        res.render('home', { title: 'Home', data: cachedData, page: pg, dataCarouselDownloads: dataCarousel.downloads, dataCarouselViews: dataCarousel.views });
-    } else {
-        try {
-            // Se os dados não estão em cache, consulte o banco de dados
-            const data = await Game.find().skip(pg * pageSize).limit(pageSize).exec();
+    try {
+        const [data, dataTopViews, dataTopDownloads] = await Promise.all([
+            getGamesWithPagination(pg, pageSize),
+            getTopGames('views', 10),
+            getTopGames('download', 10)
+        ]);
 
-            // Filtra e organiza os top 10 jogos com base em downloads e visualizações
-            const dataCarousel = getTopDownloads(data, 10);
 
-            // Coloca os dados em cache
+        if (cachedData) {
+            res.render('home', { title: 'Home', data: cachedData, page: pg, dataTopViews, dataTopDownloads });
+        } else {
             cache.put(cacheKey, data, cacheTime);
-
-            // Renderiza a página
-            res.render('home', { title: 'Home', data: data, page: pg, dataCarouselDownloads: dataCarousel.downloads, dataCarouselViews: dataCarousel.views });
-        } catch (error) {
-            console.error(error);
-            res.status(500).send('Erro interno do servidor');
+            res.render('home', { title: 'Home', data, page: pg, dataTopViews, dataTopDownloads });
         }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        res.status(500).send('Erro interno do servidor');
     }
 });
 
-function getTopDownloads(data, count) {
-    const gamesWithDownloads = data.filter(game => game.download !== undefined);
-    const gamesWithViews = data.filter(game => game.views !== undefined);
-
-    const sortedGamesByDownloads = gamesWithDownloads.sort((a, b) => b.download - a.download);
-    const sortedGamesByViews = gamesWithViews.sort((a, b) => b.views - a.views);
-
-    const topGamesDownloads = sortedGamesByDownloads.slice(0, count);
-    const topGamesViews = sortedGamesByViews.slice(0, count);
-
-    return {
-        downloads: topGamesDownloads,
-        views: topGamesViews
-    };
+async function getGamesWithPagination(page, size) {
+    return Game.find().skip(page * size).limit(size).exec();
 }
+
+async function getTopGames(field, limit) {
+    const matchQuery = { [field]: { $exists: true } };
+    const sortQuery = { [field]: -1 };
+
+    return Game.aggregate([
+        { $match: matchQuery },
+        { $sort: sortQuery },
+        { $limit: limit }
+    ]);
+}
+
+
+
+
+
 
 
 
@@ -235,7 +235,6 @@ router.get('/renameImage', async (req, res) => {
         for (const e of games) {
             await Game.findByIdAndUpdate(e._id, { img: e._id + '.webp' });
             cont++;
-            console.log(cont + ' - ' + e.name);
         }
         res.send('Images renamed successfully.');
     } catch (error) {
@@ -249,15 +248,14 @@ router.get('/search/:name', async (req, res) => {
     try {
         const termoPesquisa = req.params.name;
         const nameTratad = termoPesquisa.replace(/-/g, ' ');
-        console.log('Nome tratado de pesquisa ' + nameTratad);
+  
 
         if (!termoPesquisa) {
             return res.status(422).json({ msg: "Envie por parametro name" });
         }
 
         const data = await Game.find({ name: { $regex: new RegExp(`${nameTratad}`, 'i') } }).limit(20);
-        console.log(data.length + ' Resultados da busca');
-        res.render('search', { data: data, termoPesquisa: termoPesquisa });
+        res.render('search', { data: data, title: "Resultado da pesquisa: " + termoPesquisa });
 
     } catch (erro) {
         res.status(422).json({ msg: 'erro ao buscar game por id!', erro: erro });
