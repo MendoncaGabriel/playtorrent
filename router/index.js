@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Game = require('../model/Game.js');
 const cache = require('memory-cache');
-const cacheTime = 24 * 60 * 60 * 1000
+const cacheTime = 2 * 60 * 60 * 1000
 
 router.get('/page/:pg', async (req, res) => {
     const pg = req.params.pg
@@ -41,8 +41,10 @@ router.get('/', async (req, res) => {
 
         if (cachedData) {
             res.render('home', { title: 'Home', data: cachedData, page: pg, dataTopViews, dataTopDownloads });
+            console.log('Pagina com cache!')
         } else {
             cache.put(cacheKey, data, cacheTime);
+            console.log('Sem cache, consultando banco de dados e cacheando...')
             res.render('home', { title: 'Home', data, page: pg, dataTopViews, dataTopDownloads });
         }
     } catch (error) {
@@ -50,6 +52,7 @@ router.get('/', async (req, res) => {
         res.status(500).send('Erro interno do servidor');
     }
 });
+
 async function getGamesWithPagination(page, size) {
     return Game.find().skip(page * size).limit(size).exec();
 }
