@@ -9,10 +9,8 @@
         <% if (currentItem && currentItem.name) { %>
 
           <% const name = currentItem.name.replace(/ /g, '-').toLowerCase(); %>
-          <a href="/download/<%= name %>" class="rounded-md overflow-hidden  hover:scale-105 duration-300  w-52 h-72 bg-black  flex-none ">
-            <img src="/cover/<%= currentItem.img %>" alt="" class="h-full w-full object-cover">
-          </a>
-          
+ 
+          <%- include('./cover.ejs', {name: name, img:currentItem.img}) %>
         <% } %>
 
       <% } %>
