@@ -24,8 +24,6 @@ router.get('/page/:pg', async (req, res) => {
     }
 })
 
-
-
 router.get('/', async (req, res) => {
     const pg = 0;
     const pageSize = 20;
@@ -67,15 +65,6 @@ async function getTopGames(field, limit) {
     ]);
 }
 
-
-
-
-
-
-
-
-
-
 router.get('/download/:name', async (req, res) => {
     try {
         const nameTratado = req.params.name.replace(/-/g, ' ');
@@ -98,8 +87,6 @@ router.get('/download/:name', async (req, res) => {
         res.status(500).send('Erro ao carregar a página!');
     }
 })
-
-
 
 router.patch('/downloadCont/:id', async (req, res) => {
     try {
@@ -129,8 +116,6 @@ router.patch('/downloadCont/:id', async (req, res) => {
     }
 });
 
-
-
 router.patch('/viewCont/:id', async (req, res) => {
     try {
         const id = req.params.id;
@@ -154,7 +139,6 @@ router.patch('/viewCont/:id', async (req, res) => {
         res.status(500).send('Erro ao contar visualização');
     }
 });
-
 
 router.get('/analytics', async (req, res) => {
     try {
@@ -205,7 +189,6 @@ async function isImageValid(teste) {
     }
 }
 
-
 const http = require('http');
 const https = require('https');
 
@@ -243,7 +226,6 @@ router.get('/renameImage', async (req, res) => {
     }
 });
 
-
 router.get('/search/:name', async (req, res) => {
     try {
         const termoPesquisa = req.params.name;
@@ -261,6 +243,5 @@ router.get('/search/:name', async (req, res) => {
         res.status(422).json({ msg: 'erro ao buscar game por id!', erro: erro });
     }
 })
-
 
 module.exports = router;
