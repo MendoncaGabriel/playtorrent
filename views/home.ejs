@@ -8,18 +8,24 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/global.css">
-</head>
-<body class="bg-gray-900">
+    <body class="bg-gray-900">
     
-    <%- include('./components/navbar.ejs') %>
-   
- 
-    <%- include('./components/carousel.ejs', {title: 'Mais Visitadas', dataCarousel: dataTopViews})%>
-    <%- include('./components/carousel.ejs', {title: 'Mais Baixadas', dataCarousel: dataTopDownloads})%>
-
-
-    <%- include('./components/grid.ejs', {data: data, title: 'Recem adicionados'}) %>
-    <%- include('./components/pagination.ejs', { page: page, totalPages: 150 }) %>
-    <%- include('./components/footer.ejs') %>
-</body>
+        <%- include('./components/navbar.ejs') %>
+       
+        <% if (dataTopViews) { %>
+            <%- include('./components/carousel.ejs', {title: 'Mais Visitadas', dataCarousel: dataTopViews})%>
+        <% } else { %>
+            <p>Dados de visualizações não disponíveis.</p>
+        <% } %>
+    
+        <% if (dataTopDownloads) { %>
+            <%- include('./components/carousel.ejs', {title: 'Mais Baixadas', dataCarousel: dataTopDownloads})%>
+        <% } else { %>
+            <p>Dados de downloads não disponíveis.</p>
+        <% } %>
+    
+        <%- include('./components/grid.ejs', {data: data, title: 'Recem adicionados'}) %>
+        <%- include('./components/pagination.ejs', { page: page, totalPages: 150 }) %>
+        <%- include('./components/footer.ejs') %>
+    </body>
 </html>
