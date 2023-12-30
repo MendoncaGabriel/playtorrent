@@ -1,3 +1,8 @@
+*{
+    box-sizing: border-box;
+}
+
+
 /* Google Chrome e WebKit/Blink */
 ::-webkit-scrollbar {
     width: 10px;

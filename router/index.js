@@ -39,9 +39,6 @@ router.get('/', async (req, res) => {
             getTopGames('download', 10)
         ]);
 
-        console.log('Data:', data);
-        console.log('Top Views:', dataTopViews);
-        console.log('Top Downloads:', dataTopDownloads);
 
         if (cachedData) {
             res.render('home', { title: 'Home', data: cachedData, page: pg, dataTopViews, dataTopDownloads });
@@ -238,7 +235,6 @@ router.get('/renameImage', async (req, res) => {
         for (const e of games) {
             await Game.findByIdAndUpdate(e._id, { img: e._id + '.webp' });
             cont++;
-            console.log(cont + ' - ' + e.name);
         }
         res.send('Images renamed successfully.');
     } catch (error) {
@@ -252,14 +248,13 @@ router.get('/search/:name', async (req, res) => {
     try {
         const termoPesquisa = req.params.name;
         const nameTratad = termoPesquisa.replace(/-/g, ' ');
-        console.log('Nome tratado de pesquisa ' + nameTratad);
+  
 
         if (!termoPesquisa) {
             return res.status(422).json({ msg: "Envie por parametro name" });
         }
 
         const data = await Game.find({ name: { $regex: new RegExp(`${nameTratad}`, 'i') } }).limit(20);
-        console.log(data.length + ' Resultados da busca');
         res.render('search', { data: data, title: "Resultado da pesquisa: " + termoPesquisa });
 
     } catch (erro) {

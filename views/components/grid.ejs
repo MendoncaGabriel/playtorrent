@@ -1,13 +1,13 @@
 
 <section class="max-w-screen-xl m-auto my-5 ">
 
-  <h2 class="text-white text-2xl mb-5"><%= title%></h2>
+  <h2 class="text-white text-2xl md:mb-5 md:ml-0 ml-4 "><%= title%></h2>
   <div class="border-black p-4  grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5  gap-5 ">
     <% for (let i = 0; i < data.length; i++) { %>
   
       <% const name = data[i].name.replace(/ /g, '-').toLowerCase(); %>
         <%- include('./cover.ejs', {name: name, img: data[i].img}) %>
       <% } %>
-      
+
     </div>
 </section>
