@@ -1,12 +1,17 @@
-<ul class="border-black p-4  grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5  gap-5 max-w-screen-xl m-auto">
-  <% for (let i = 0; i < data.length; i++) { %>
 
-    <% const name = data[i].name.replace(/ /g, '-').toLowerCase(); %>
+<section class="max-w-screen-xl m-auto my-5">
 
-    <li class="w-52 h-72 bg-black m-auto rounded-md overflow-hidden hover:scale-105 duration-300">
-      <a href="/download/<%= name %>">
-        <img src="/cover/<%= data[i].img %>" alt="" class="h-full w-full object-cover">
-      </a>
-    </li>
-  <% } %>
-</ul>
+  <h2 class="text-white text-2xl mb-5"><%= title%></h2>
+  <ul class="border-black p-4  grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5  gap-5 ">
+    <% for (let i = 0; i < data.length; i++) { %>
+  
+      <% const name = data[i].name.replace(/ /g, '-').toLowerCase(); %>
+  
+      <li class="w-52 h-72 bg-black m-auto rounded-md overflow-hidden hover:scale-105 duration-300">
+        <a href="/download/<%= name %>">
+          <img src="/cover/<%= data[i].img %>" alt="" class="h-full w-full object-cover">
+        </a>
+      </li>
+    <% } %>
+  </ul>
+</section>
