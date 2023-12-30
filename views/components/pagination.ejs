@@ -1,6 +1,6 @@
 <div class="md:w-96 w-[90%] m-auto my-10">
     <div class="flex justify-between mt-4 bg-white m-auto">
-        <a href="<%= page > 1 ? '/page/' + (page - 1) : '/' %>" class="px-2 py-1 bg-[#2196F3] hover:bg-blue-500 hover:shadow-md duration-300 text-white">Anterior</a>
+        <a href="<%= page > 1 ? '/page/' + (page - 1) : '/' %>" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 hover:shadow-md duration-300 text-white font-medium">Anterior</a>
         <div class="flex justify-around m-auto border w-72">
             <% 
                 const maxPagesToShow = 5;
@@ -10,12 +10,12 @@
             %>
 
             <% for (let i = startPage; i <= endPage; i++) {  %>
-                <a href="/page/<%= i %>" class="font-semibold <%= parseInt(i) === parseInt(page) ? 'bg-[#2196F3] text-white' : 'text-[#2196F3]' %> px-2 py-1 hover:bg-[#2196F3] hover:text-white"><%= i %></a>
+                <a href="/page/<%= i %>" class="font-semibold <%= parseInt(i) === parseInt(page) ? 'bg-[#2196F3] text-white' : 'text-blue-600' %> px-2 py-1 hover:bg-[#2196F3] hover:text-white"><%= i %></a>
 
             <% } %>
         </div>
 
 
-        <a href="<%= page < totalPages ? '/page/' + (parseInt(page) + 1) : '/page/' + totalPages %>" class="px-2 py-1 bg-[#2196F3] hover:bg-blue-500 hover:shadow-md duration-300 text-white ml-auto ">Próximo</a>
+        <a href="<%= page < totalPages ? '/page/' + (parseInt(page) + 1) : '/page/' + totalPages %>" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 hover:shadow-md duration-300 text-white ml-auto font-medium">Próximo</a>
     </div>
 </div>
