@@ -11,7 +11,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "watch": "npx tailwindcss -i ./app.css -o ./public/styles.css --watch",
+    "watch": "npx tailwindcss -i ./app.css -o ./public/css/styles.css --watch",
     "build:styles": "npx postcss app.css -o public/styles.css",
     "watch:styles": "onchange 'app.css' -- npx postcss app.css -o public/styles.css",
     "lint:ejs": "ejs-lint views/**/*.ejs",
