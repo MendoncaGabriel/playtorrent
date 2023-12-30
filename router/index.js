@@ -24,6 +24,7 @@ router.get('/page/:pg', async (req, res) => {
     }
 })
 
+
 router.get('/', async (req, res) => {
     const pg = 0;
     const pageSize = 20;
@@ -49,11 +50,9 @@ router.get('/', async (req, res) => {
         res.status(500).send('Erro interno do servidor');
     }
 });
-
 async function getGamesWithPagination(page, size) {
     return Game.find().skip(page * size).limit(size).exec();
 }
-
 async function getTopGames(field, limit) {
     const matchQuery = { [field]: { $exists: true } };
     const sortQuery = { [field]: -1 };
@@ -64,6 +63,7 @@ async function getTopGames(field, limit) {
         { $limit: limit }
     ]);
 }
+
 
 router.get('/download/:name', async (req, res) => {
     try {
@@ -87,6 +87,7 @@ router.get('/download/:name', async (req, res) => {
         res.status(500).send('Erro ao carregar a página!');
     }
 })
+
 
 router.patch('/downloadCont/:id', async (req, res) => {
     try {
@@ -116,6 +117,7 @@ router.patch('/downloadCont/:id', async (req, res) => {
     }
 });
 
+
 router.patch('/viewCont/:id', async (req, res) => {
     try {
         const id = req.params.id;
@@ -139,6 +141,7 @@ router.patch('/viewCont/:id', async (req, res) => {
         res.status(500).send('Erro ao contar visualização');
     }
 });
+
 
 router.get('/analytics', async (req, res) => {
     try {
@@ -188,9 +191,9 @@ async function isImageValid(teste) {
         return false;
     }
 }
-
 const http = require('http');
 const https = require('https');
+
 
 router.get('/checkImage', async (req, res) => {
     try {
@@ -211,6 +214,7 @@ router.get('/checkImage', async (req, res) => {
     }
 });
 
+
 router.get('/renameImage', async (req, res) => {
     try {
         const games = await Game.find({});
@@ -225,6 +229,7 @@ router.get('/renameImage', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 router.get('/search/:name', async (req, res) => {
     try {
@@ -243,5 +248,6 @@ router.get('/search/:name', async (req, res) => {
         res.status(422).json({ msg: 'erro ao buscar game por id!', erro: erro });
     }
 })
+
 
 module.exports = router;

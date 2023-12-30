@@ -1,6 +1,17 @@
-<div class="md:w-52 md:h-72 w-40 h-60  bg-black m-auto rounded-md overflow-hidden hover:scale-105 duration-300 flex-none">
-    <a href="/download/<%= name %>" title="capa do jogo <%= name.replace(/-/g, ' ') %>">
-      <img src="/cover/<%= img %>" alt="" class="h-full w-full object-cover">
-    </a>
+<div class="md:w-52 md:h-72 w-40 h-60  bg-black m-auto rounded-md overflow-hidden hover:scale-105 duration-300 flex-none relative ">
+  <a href="/download/<%= name %>" title="capa do jogo <%= name.replace(/-/g, ' ') %>">
+    <img src="/cover/<%= img %>" alt="" class="h-full w-full object-cover">
+
+  </a>
+  <% if (typeof downloads !== 'undefined' && downloads > 0 ) { %>
+    <div class="absolute top-2 right-2  text-white z-50 flex space-x-2">
+      <span class="material-symbols-outlined">download</span>
+      <p><%= downloads %></p>
+      
+    </div>
+
+  <% } %>
+
+
 </div>
 
