@@ -1,19 +1,47 @@
-<section class="p-4 m-auto max-w-screen-xl my-5">
-    <h2 class="text-white text-2xl "><%= title %></h2>
+<section class="p-4 m-auto max-w-screen-xl my-5 relative duration-500">
+  <h2 class="text-white text-2xl">
+    <%= title %>
+  </h2>
 
-    <div class="flex space-x-4 overflow-auto pb-5 snap-x  md:pt-10 pt-5">
-
-      <% for (let i = 0; i < dataCarousel.length; i++) { %>
-
-        <% const currentItem = dataCarousel[i]; %>
+  <div id="<%= title.replace(/ /g, '').toLowerCase() %>" class="flex space-x-4 overflow-auto pb-5 md:pt-10 pt-5 relative">
+    <% for (let i=0; i < dataCarousel.length; i++) { %>
+      <% const currentItem=dataCarousel[i]; %>
         <% if (currentItem && currentItem.name) { %>
+          <% const name=currentItem.name.replace(/ /g, '-' ).toLowerCase(); %>
+            <%- include('./cover.ejs', {name: name, img:currentItem.img}) %>
+              <% } %>
+                <% } %>
+  </div>
 
-          <% const name = currentItem.name.replace(/ /g, '-').toLowerCase(); %>
- 
-          <%- include('./cover.ejs', {name: name, img:currentItem.img}) %>
-        <% } %>
+  <div class=" flex justify-between absolute top-1/2 left-1/2 w-full transform -translate-x-1/2 -translate-y-1/2">
+    <button
+      class="bg-gray-800 opacity-90 p-3 duration-300 hover:bg-gray-300 hover:text-gray-800 text-white flex items-center justify-center rounded-full"
+      onclick="prevSlide('<%= title %>')">
+      <span class="material-symbols-outlined">chevron_left</span>
+    </button>
 
-      <% } %>
-             
-    </div>
+    <button
+      class="bg-gray-800 opacity-90 p-3 duration-300 hover:bg-gray-300 hover:text-gray-800 text-white flex items-center justify-center rounded-full"
+      onclick="nextSlide('<%= title %>')">
+      <span class="material-symbols-outlined">chevron_right</span>
+    </button>
+  </div>
 </section>
+
+<script>
+  function prevSlide(title) {
+    const id = title.replace(/ /g, '').toLowerCase();
+    document.getElementById(id).scrollBy({
+      left: -window.innerWidth,
+      behavior: 'smooth'
+    });
+  }
+
+  function nextSlide(title) {
+    const id = title.replace(/ /g, '').toLowerCase();
+    document.getElementById(id).scrollBy({
+      left: window.innerWidth,
+      behavior: 'smooth'
+    });
+  }
+</script>
