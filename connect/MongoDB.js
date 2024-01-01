@@ -11,7 +11,7 @@ function MongoDB(){
         console.log('Conectado ao MongoDB')
     })
     .catch((erro)=>{
-        console.log(erro)
+        console.log('Erro ao se conectar no banco de dados!')
     })
 }
 module.exports = MongoDB()
