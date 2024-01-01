@@ -6,7 +6,12 @@
     <% for (let i = 0; i < data.length; i++) { %>
   
       <% const name = data[i].name.replace(/ /g, '-').toLowerCase(); %>
-      <%- include('./cover.ejs', {name: name, img: data[i].img, downloads: data[i].download}) %>
+      <%- include('./cover.ejs', {
+        name: name, 
+        img: data[i].img, 
+        downloads: data[i].download,
+        views: data[i].views
+        }) %>
 
 
 

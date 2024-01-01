@@ -1,4 +1,4 @@
-<nav class="w-full  bg-gray-800 border-black px-10 py-4 md:py-2 md:flex grid grid-cols-1 items-center justify-between gap-4 md:gap-0">
+<nav class="w-full  bg-gray-800 border-black px-10 py-4 md:py-2 md:flex grid grid-cols-1 items-center justify-between gap-4 md:gap-0 ">
     <a href="/" class="flex items-center space-x-4 m-auto md:m-0">
         <img src="/LOGO.png" alt="" class=" h-14 w-14">
         <h2 class="text-2xl text-white font-semibold">PLAYTORRENT</h2>
@@ -6,17 +6,18 @@
 
     <div class="flex items-center space-x-4 justify-between">
 
-        <div class=" bg-white overflow-hidden rounded-md flex items-center justify-center px-2 w-96">
-            <input id="inputPesquisa" type="text" placeholder="Pesquisar" class="px-4 py-2 w-full  focus:outline-none text-gray-600">
+        <div class=" bg-white overflow-hidden rounded-md flex items-center justify-center px-2 h-10 w-96  py-0">
+            <input id="inputPesquisa" type="text" placeholder="Pesquisar" class="px-4  w-full  focus:outline-none text-gray-600">
             <button class="pt-1" onclick="search()">
-                <span class="material-symbols-outlined text-gray-600  px-2 text-2xl duration-300 hover:scale-125">search</span>
+                <span class="material-symbols-outlined text-gray-600  px-2 text-2xl duration-300 hover:scale-125">
+                    <img src="/icons/icons8-lupa-100.png" class="w-8 " alt=""></span>
             </button>
         </div>
         
             <ul class=" p-4 space-x-2 text-white hidden md:flex">
                 <li><a href="/">
                     <span class="material-symbols-outlined text-gray-white text-2xl duration-300 hover:scale-125">
-                        home
+                        <img src="/icons/icons8-casa-100.png" class="w-10" alt="">
                     </span>
                 </a></li>
             </ul>
