@@ -1,6 +1,6 @@
 <div class="md:w-52 md:h-72 w-40 h-60  bg-black m-auto rounded-md overflow-hidden hover:scale-105 duration-300 flex-none relative  ">
   <a href="/download/<%= name %>" title="capa do jogo <%= name.replace(/-/g, ' ') %>">
-    <img src="/cover/<%= img %>" alt="" class="h-full w-full object-cover obg">
+    <img src="/cover/<%= img %>" id="componentCover" onerror="substituirImagemPadrao()" alt="" class=" h-full w-full object-cover obg">
 
   </a>
   <div class="absolute bottom-2 right-2 flex space-x-2">
@@ -27,3 +27,15 @@
 
 </div>
 
+<script>
+      function substituirImagemPadrao() {
+      // Seleciona a imagem
+      var imagem = document.querySelector('#componentCover');
+
+      // Substitui a src da imagem pela imagem padrão
+      imagem.src = '/default-img-cover.webp';
+
+      // Opcional: Pode definir um texto alternativo para a imagem padrão
+      imagem.alt = 'Imagem Padrão';
+    }
+</script>
