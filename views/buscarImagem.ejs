@@ -11,7 +11,8 @@
         <% data.forEach(e => { %>
           <li>
             <button onclick="copyToClipboard('<%= e._id %>', this)"><%= e._id %></button>
-            <button onclick="copyToClipboard('capa do jogo imbd game '+'<%= e.name %>', this)"><%= e.name %></button>
+            <button onclick="copyToClipboard('capa do jogo imbd game '+'<%= e.name %>', this)"><%= e.name %></button> 
+            <span><%= e.platform  %></span>
             
           </li>
         <% }) %>
