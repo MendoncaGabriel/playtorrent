@@ -123,15 +123,11 @@ router.get('/page/:pg', async (req, res) => {
     const cachedData = cache.get(cacheKey);
 
     if (cachedData) {
-       
-        console.log(cachedData)
-        console.log('CACHE')
         res.render('page', { title: 'Home', data: cachedData, page: pg });
     } else {
         try {
             const data = await Game.find().skip(pg * pageSize).limit(pageSize).exec();
             cache.put(cacheKey, data, cacheTime);
-            console.log('NO_CACHE')
             res.render('page', { title: 'Home', data: data, page: pg });
           
         } catch (error) {
