@@ -1115,6 +1115,10 @@ video {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
+  .md\:justify-center {
+    justify-content: center;
+  }
+
   .md\:gap-0 {
     gap: 0px;
   }
