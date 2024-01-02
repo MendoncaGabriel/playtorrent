@@ -57,16 +57,29 @@
 
         <!-- GÊNERO -->
         <% if (data.class && data.class.length !== 0) { %>
-            <div class="p-4 flex space-x-3  ">
+            <div class="p-4  flex  space-x-3 overflow-auto  justify-center items-center">
                 <% let array = data.class %>
                 <%const arraySemRepeticao = [...new Set(array)];%>
                     
                 <% arraySemRepeticao.forEach(element => { %>
-                    <p class="px-8 py-2 bg-gray-800 text-white rounded-full"><%= element.replace(/_/g, ' ') %></p>
+                    <p class="px-8 py-2 bg-gray-800  text-white rounded-full m-auto md:m-0 text-center flex-none"><%= element.replace(/_/g, ' ') %></p>
                 <% }) %>
             </div>
         <% } %>
     </article>
+
+
+    <section class="m-auto max-w-screen-xl grid md:grid-cols-3 grid-cols-2  items-center justify-around mb-10 gap-2 p-2">
+        <a href="https://curriculoexpress.com.br?ref=pt" target="_blank">
+            <img src="/advertising/IMG_0924.png" alt="Curriculo express" class="w-72 m-auto">
+        </a>
+        <a href="https://curriculoexpress.com.br?ref=pt" target="_blank">
+            <img src="/advertising/IMG_0925.png" alt="Curriculo express" class="w-72 m-auto">
+        </a>
+        <a href="https://curriculoexpress.com.br?ref=pt" target="_blank">
+            <img src="/advertising/IMG_0926.png" alt="Curriculo express" class="w-72 m-auto">
+        </a>
+    </section>
 
     
     <section class="p-4  m-auto grid grid-cols-1 md:grid-cols-2 md:max-w-[35%] gap-4  items-center space-x-4  ">
