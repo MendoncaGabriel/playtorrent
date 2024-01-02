@@ -21,14 +21,16 @@
     </section>
 
     <header class="p-4  grid grid-cols-1   md:flex items-center justify-around m-auto max-w-screen-xl md:gap-0 gap-4 ">
-        
-        <%- include('./components/cover.ejs', { 
-            name: data.name, 
-            img: data.img, 
-            downloads: data.download, 
-            views: data.views 
+        <div class="m-auto">
+
+            <%- include('./components/cover.ejs', { 
+                name: data.name, 
+                img: data.img, 
+                downloads: data.download, 
+                views: data.views 
             })
-        %>
+            %>
+        </div>
 
         <iframe
             title="<%= 'Trailer video do jogo: ' + data.name %>"

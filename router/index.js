@@ -116,6 +116,7 @@ router.get('/', async (req, res) => {
     }
 })
 
+
 router.get('/page/:pg', async (req, res) => {
     const pg = req.params.pg
     const pageSize = 20; 
@@ -126,7 +127,10 @@ router.get('/page/:pg', async (req, res) => {
         res.render('page', { title: 'Home', data: cachedData, page: pg });
     } else {
         try {
-            const data = await Game.find().skip(pg * pageSize).limit(pageSize).exec();
+            const data = await Game.find().skip(pg * pageSize).limit(pageSize).lean().exec();
+
+            
+
             cache.put(cacheKey, data, cacheTime);
             res.render('page', { title: 'Home', data: data, page: pg });
           
