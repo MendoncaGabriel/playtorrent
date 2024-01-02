@@ -8,93 +8,84 @@
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/global.css">
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-    
-
 </head>
+
 <body class="bg-gray-900 text-white ">
     <%- include('./components/navbar.ejs') %>
 
-    <main >
-        <section class="p-4  md:flex items-center justify-around m-auto max-w-screen-xl mt-2">
-            <a href="javascript:void(0);" onclick="history.back();">Voltar</a><br><br>
-            <h1 class="md:text-5xl text-2xl text-center">Game: <%= data.name %></h1>
-        </section>
+    <h2 class="text-gray-900"><%= `${data._id}`  %></h2>
 
-        <section class="p-4  grid grid-cols-1   md:flex items-center justify-around m-auto max-w-screen-xl md:gap-0 gap-4">
-            <img src="/cover/<%= data.img %>" id="imgCover" onerror="substituirImagemPadrao()" alt="" class="w-52 h-72 rounded-md object-cover md:m-0 m-auto bg-black">
-            
-            <iframe
-                title="<%= 'Trailer video do jogo: ' + data.name %>"
-                src="<%= data.video %>"
-                frameborder="0"
-                class="bg-gray-600 w-full md:w-auto md:h-72 object-cover aspect-video rounded-md"
-                allow="autoplay; encrypted-media"
-            ></iframe>
+    <section class="p-4  md:flex items-center justify-around m-auto max-w-screen-xl mt-2 ">
+        <a href="javascript:void(0);" onclick="history.back();" title="botão de voltar">Voltar</a><br><br>
+        <h1 class="md:text-5xl text-2xl text-center font-serif">Game: <%= data.name %></h1>
+    </section>
+
+    <header class="p-4  grid grid-cols-1   md:flex items-center justify-around m-auto max-w-screen-xl md:gap-0 gap-4 ">
         
-        </section>
-    </main>
+        <%- include('./components/cover.ejs', { 
+            name: data.name, 
+            img: data.img, 
+            downloads: data.download, 
+            views: data.views 
+            })
+        %>
 
-    <article>
-        <section class="p-4  m-auto max-w-screen-xl">
+        <iframe
+            title="<%= 'Trailer video do jogo: ' + data.name %>"
+            src="<%= data.video %>"
+            frameborder="0"
+            class="bg-gray-600 w-full md:w-auto md:h-72 object-cover aspect-video rounded-md m-auto"
+            allow="autoplay; encrypted-media"
+        ></iframe>
+    
+    </header>
+
+
+    <article class="p-4  m-auto max-w-screen-lg my-10 space-y-5 ">
+
+        <% if (data.description) { %>
             <p><%= data.description %></p>
-        </section>
+        <% } %>
 
-        <section class="p-4  m-auto max-w-screen-xl">
+        <% if (data.information) { %>
             <p><%= data.information %></p>
-        </section>
+        <% } %>
 
+        <% if (data.platform) { %>
+            <p>Plataforma: <%= data.platform %></p>
+        <% } %>
+
+        <!-- GÊNERO -->
         <% if (data.class && data.class.length !== 0) { %>
-            <section class="p-4  m-auto max-w-screen-xl flex space-x-3">
-                <% data.class.forEach(element => { %>
-                    <p c><%= element %></p>
+            <div class="p-4 flex space-x-3  ">
+                <% let array = data.class %>
+                <%const arraySemRepeticao = [...new Set(array)];%>
+                    
+                <% arraySemRepeticao.forEach(element => { %>
+                    <p class="px-8 py-2 bg-gray-800 text-white rounded-full"><%= element.replace(/_/g, ' ') %></p>
                 <% }) %>
-            </section>
+            </div>
         <% } %>
     </article>
 
-
-    
-    
-    <section class="p-4  m-auto max-w-screen-xl">
-        <!-- tipo: jogo <p><%= data.type %></p> <br> --> 
-        <p>Plataforma: <%= data.platform %></p>
-    </section>
-    
-    <% if (data.download) { %>
-        <section class="p-4  m-auto max-w-screen-xl">
-            <p>DOWNLOADS: <%= data.download %></p>
-        </section>
-    <% } %>
     
     <section class="p-4  m-auto grid grid-cols-1 md:grid-cols-2 md:max-w-[35%] gap-4  items-center space-x-4  ">
-
-        <button onclick="download('<%= data.link %>', true)" class="m-auto max-w-72 md:m-0  px-4 py-2 bg-blue-500 hover:bg-blue-700 hover:shadow-lg duration-300 text-white text-center rounded-md w-full ">
-            DOWNLOAD
-        </button>
+        <button onclick="download('<%= data.link %>', true)" class="m-auto max-w-72 md:m-0  px-4 py-2 bg-blue-700 hover:bg-blue-800 hover:shadow-lg duration-300 text-white text-center rounded-md w-full ">DOWNLOAD</button>
         
- 
-        <button onclick="copyToClipboard('<%= data.link %>', this), download('<%= data.link %>', false)" class="m-auto max-w-72  py-2 rounded-md bg-gray-500 hover:bg-gray-600 duration-300 hover:shadow-md  flex items-center justify-center space-x-2 px-8" style="margin-left: auto; margin-right: auto;" >
+        <button onclick="copyToClipboard('<%= data.link %>', this), download('<%= data.link %>', false)" class="m-auto max-w-72  py-2 rounded-md bg-gray-700 hover:bg-gray-800 duration-300 hover:shadow-md  flex items-center justify-center space-x-2 px-8" style="margin-left: auto; margin-right: auto;" >
             <span>
                 <img src="/icons/icons8-copiar-96.png" class="w-7" alt="">
             </span>
             <p >MAGNET LINK</p>
-            
         </button>
-   
     </section>
 
     <%- include('./components/keywords.ejs', {name: data.name}) %>
-
     <%- include('./components/footer.ejs') %>
-
-
 </body>
 </html>
 
 <script>
-
-
-
     function copyToClipboard(text, btn) {
         const textarea = document.createElement('textarea');
         textarea.value = text;
@@ -111,71 +102,9 @@
         }, 1000);
     }
 
-
-
-
-    
-    const gameId = '<%= data.id %>';
-    const url = `https://www.playtorrent.com.br/viewCont/${gameId}`
-
-
-    fetch(url, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error(`Erro ao contar visualização: ${response.status}`);
-        }
-        return response.json(); // Converte a resposta para JSON
-    })
-    .then((data) => {
-        console.log('Visualização contada com sucesso!');
-        console.log(`Visualizações: ${data.views}`);
-    })
-    .catch((error) => {
-        console.error('Erro ao contar visualização:', error);
-        // Trate o erro de acordo com suas necessidades
-    });
-
-
-
-
-
-    // const gameId = '<%= data.id %>';
-    // const url = `https://www.playtorrent.com.br/viewCont/${gameId}`
-
-
-    // fetch(url, {
-    //     method: 'PATCH',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    // })
-    // .then((response) => {
-    //     if (!response.ok) {
-    //         throw new Error(`Erro ao contar visualização: ${response.status}`);
-    //     }
-    //     return response.json(); // Converte a resposta para JSON
-    // })
-    // .then((data) => {
-    //     console.log('Visualização contada com sucesso!');
-    //     console.log(`Visualizações: ${data.views}`);
-    // })
-    // .catch((error) => {
-    //     console.error('Erro ao contar visualização:', error);
-    //     // Trate o erro de acordo com suas necessidades
-    // });
-
-
-
     async function download(link, direcionar){
-     
         const id = '<%= data.id %>';
         const url = `https://www.playtorrent.com.br/downloadCont/${id}`
-        //const url = `http://localhost:3000/downloadCont/${id}`
 
         fetch(url, {
             method: 'PATCH',
@@ -186,7 +115,7 @@
 
         .then((response) => {
             if (!response.ok) {
-                throw new Error(`Erro ao contar download: ${response.status}`);
+                throw new Error(`Erro  ao contar download: ${response.status}`);
                 console.log('Erro ao contar download')
             }
             return response.json(); // Converte a resposta para JSON
@@ -208,17 +137,5 @@
               window.open(link, '_blank');
             }    
         });
-    }
-
-
-    function substituirImagemPadrao() {
-      // Seleciona a imagem
-      var imagem = document.querySelector('#imgCover');
-
-      // Substitui a src da imagem pela imagem padrão
-      imagem.src = '/default-img-cover.webp';
-
-      // Opcional: Pode definir um texto alternativo para a imagem padrão
-      imagem.alt = 'Imagem Padrão';
     }
 </script>

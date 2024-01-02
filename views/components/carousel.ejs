@@ -6,11 +6,21 @@
   <div id="<%= title.replace(/ /g, '').toLowerCase() %>" class="flex space-x-4 overflow-auto pb-5 md:pt-10 pt-5 relative">
     <% for (let i=0; i < dataCarousel.length; i++) { %>
       <% const currentItem=dataCarousel[i]; %>
+
         <% if (currentItem && currentItem.name) { %>
           <% const name=currentItem.name.replace(/ /g, '-' ).toLowerCase(); %>
-            <%- include('./cover.ejs', {name: name, img:currentItem.img}) %>
-              <% } %>
-                <% } %>
+
+
+            <%- include('./cover.ejs', { 
+              name: name, 
+              img: currentItem.img, 
+              downloads: currentItem.download,
+              views: currentItem.views
+              })
+          %>
+        <% } %>
+
+    <% } %>
   </div>
 
   <div class=" flex justify-between absolute top-1/2 left-1/2 w-full transform -translate-x-1/2 -translate-y-1/2">
