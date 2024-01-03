@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Game = require('../model/Game.js');
+const Game = require('../model/gameSchema.js');
+const registerView = require('../services/registerView.js')
 const cache = require('memory-cache');
 const http = require('http');
 const https = require('https');
@@ -59,21 +60,20 @@ async function contViwer(id){
     try {
         const game = await Game.findById(id);
 
+        await registerView(game);
         if (!game) {
             return res.status(404).json({ msg: 'Jogo não encontrado' });
         }
-
-        // Se `views` não existe ou é `undefined` ou `null`
         if (!game.views) {
             await Game.findByIdAndUpdate(id, { views: 1 }, { new: true });
         }
 
-        // Se `views` existe, incrementa +1
         await Game.findByIdAndUpdate(id, { $inc: { views: 1 } }, { new: true });
     } catch (err) {
         console.error('Erro ao contar visualização:', err);
     }
 }
+
 
 //Rotas--------------------------------------------------------
 router.get('/', async (req, res) => {
@@ -211,18 +211,80 @@ router.patch('/downloadCont/:id', async (req, res) => {
     }
 })
 
+const analyticsSchema = require('../model/analyticsSchema.js')
 router.get('/analytics', async (req, res) => {
     try {
-        const gamesWithViews = await Game.find({ views: { $exists: true } })
-        .sort({ views: -1 }) // Ordena pelo campo 'views' do maior para o menor
-        .select('name views');
+        let query = {};
+        const selectedDate = req.query.date;
 
-        res.render('analytics', { data: gamesWithViews });
+        if (selectedDate) {
+            // Se uma data for fornecida, filtrar por essa data
+            query = {
+                views: { $exists: true },
+                date: new Date(selectedDate + 'T00:00:00.000Z') // Considerando que a data é fornecida no formato YYYY-MM-DD
+            };
+        } else {
+            // Caso contrário, retornar todos os dados
+            query = { views: { $exists: true } };
+        }
+
+        const gamesWithViews = await analyticsSchema.find(query)
+            .sort({ views: -1 }) // Ordena pelo campo 'views' do maior para o menor
+            .select('name views date');
+
+        if (req.headers.accept.includes('application/json')) {
+            // Se a solicitação aceitar JSON, retorne os dados como JSON
+            res.json(gamesWithViews);
+        } else {
+            // Caso contrário, renderize a página EJS
+            res.render('analytics', { data: gamesWithViews });
+        }
     } catch (err) {
         console.error('Erro ao obter jogos com visualizações:', err);
         res.status(500).send('Erro ao obter jogos com visualizações');
     }
-})
+});
+
+
+router.get('/analytics/:time', async (req, res) => {
+    const time = req.params.time;
+
+    try {
+        let query = {};
+        const selectedDate = req.params.time;
+
+        if (selectedDate) {
+            // Se uma data for fornecida, filtrar por essa data
+            query = {
+                views: { $exists: true },
+                date: new Date(selectedDate + 'T00:00:00.000Z') // Considerando que a data é fornecida no formato YYYY-MM-DD
+            };
+        } else {
+            // Caso contrário, retornar todos os dados
+            query = { views: { $exists: true } };
+        }
+
+        const gamesWithViews = await analyticsSchema.find(query)
+            .sort({ views: -1 }) // Ordena pelo campo 'views' do maior para o menor
+            .select('name views date');
+
+        if (req.headers.accept.includes('application/json')) {
+            // Se a solicitação aceitar JSON, retorne os dados como JSON
+            res.json(gamesWithViews);
+        } else {
+            // Caso contrário, renderize a página EJS
+            res.render('analytics', { data: gamesWithViews });
+        }
+    } catch (err) {
+        console.error('Erro ao obter jogos com visualizações:', err);
+        res.status(500).send('Erro ao obter jogos com visualizações');
+    }
+});
+
+module.exports = router;
+
+
+
 
 router.get('/checkImage', async (req, res) => {
     try {
