@@ -9,7 +9,8 @@
 </head>
 <body class="bg-gray-100 p-8">
 
-    <div class="max-w-xl mx-auto bg-white p-6 rounded-md shadow-md">
+    <div class="max-w-screen-xl mx-auto bg-white p-6 rounded-md shadow-md">
+      
       <input type="date" id="filterDate">
       <button onclick="reloadWithDate()" class="bg-blue-200 px-4 py-1 text-blue-600 font-semibold border border-blue-600">Filtrar</button><br>
 
@@ -25,37 +26,46 @@
 
 
         <h1 class="text-2xl font-bold mb-4">Visualizações de Jogos</h1>
+        <h1 class="text-2xl font-bold mb-4">Total: <%= totalViews %></h1>
 
-        <canvas id="myChart" width="400" height="200"></canvas>
+        <canvas id="myChart" width="400" height="200" style="max-height: 300px; overflow-y: auto;"></canvas>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
         <script>
           document.addEventListener('DOMContentLoaded', function() {
-              const data = JSON.parse('<%- JSON.stringify(data) %>');
-      
-              const ctx = document.getElementById('myChart').getContext('2d');
-              const myChart = new Chart(ctx, {
-                  type: 'bar',
-                  data: {
-                      labels: data.map(game => game.name),
-                      datasets: [{
-                          label: 'Visualizações',
-                          data: data.map(game => game.views),
-                          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                          borderColor: 'rgba(75, 192, 192, 1)',
-                          borderWidth: 1
-                      }]
+            const data = JSON.parse('<%- JSON.stringify(data) %>');
+          
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const maxBars = 10; // Número máximo de barras a serem exibidas
+        
+            const myChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: data.map(game => game.name).slice(0, maxBars), // Limita o número de barras
+                datasets: [{
+                  label: 'Visualizações',
+                  data: data.map(game => game.views).slice(0, maxBars), // Limita o número de barras
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                indexAxis: 'y', // Define o eixo de indexação como Y
+                scales: {
+                  x: {
+                    beginAtZero: true
                   },
-                  options: {
-                      scales: {
-                          y: {
-                              beginAtZero: true
-                          }
-                      }
+                  y: {
+                    beginAtZero: true
                   }
-              });
+                }
+              }
+            });
           });
-      </script>
+        </script>
+
     </div>
 
 </body>

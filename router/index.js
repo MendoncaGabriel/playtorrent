@@ -232,12 +232,15 @@ router.get('/analytics', async (req, res) => {
             .sort({ views: -1 }) // Ordena pelo campo 'views' do maior para o menor
             .select('name views date');
 
+        // Calcular o total de visualizações
+        const totalViews = gamesWithViews.reduce((total, game) => total + game.views, 0);
+
         if (req.headers.accept.includes('application/json')) {
             // Se a solicitação aceitar JSON, retorne os dados como JSON
-            res.json(gamesWithViews);
+            res.json(gamesWithViews, totalViews );
         } else {
             // Caso contrário, renderize a página EJS
-            res.render('analytics', { data: gamesWithViews });
+            res.render('analytics', { data: gamesWithViews, totalViews: totalViews  });
         }
     } catch (err) {
         console.error('Erro ao obter jogos com visualizações:', err);
@@ -268,12 +271,15 @@ router.get('/analytics/:time', async (req, res) => {
             .sort({ views: -1 }) // Ordena pelo campo 'views' do maior para o menor
             .select('name views date');
 
+        // Calcular o total de visualizações
+        const totalViews = gamesWithViews.reduce((total, game) => total + game.views, 0);
+
         if (req.headers.accept.includes('application/json')) {
             // Se a solicitação aceitar JSON, retorne os dados como JSON
-            res.json(gamesWithViews);
+            res.json(gamesWithViews, totalViews);
         } else {
             // Caso contrário, renderize a página EJS
-            res.render('analytics', { data: gamesWithViews });
+            res.render('analytics', { data: gamesWithViews, totalViews});
         }
     } catch (err) {
         console.error('Erro ao obter jogos com visualizações:', err);
