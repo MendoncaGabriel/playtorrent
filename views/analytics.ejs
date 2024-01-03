@@ -30,7 +30,7 @@
             const data = JSON.parse('<%- JSON.stringify(data) %>');
           
             const ctx = document.getElementById('myChart').getContext('2d');
-            const maxBars = 100; // Número máximo de barras a serem exibidas
+            const maxBars = 50; // Número máximo de barras a serem exibidas
             const myChart = new Chart(ctx, {
               type: 'bar',
               data: {
