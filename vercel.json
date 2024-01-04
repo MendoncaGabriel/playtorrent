@@ -1,24 +1,19 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "app.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "functions": {
-    "api/*": {
-      "maxDuration": 30
-    }
-  },
-  "routes": [
-    {
-      "src": "/storage/(.*)",
-      "dest": "/storage/$1"
-    },
-    {
-      "src": "/.*", 
-      "dest": "/app.js"
-    }
-  ]
-}
+    "version": 2,
+    "builds": [
+      {
+        "src": "app.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/storage/(.*)",
+        "dest": "/storage/$1"
+      },
+      {
+        "src": "/.*", 
+        "dest": "/app.js"
+      }
+    ]
+  }
