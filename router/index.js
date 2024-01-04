@@ -102,7 +102,7 @@ router.get('/', async (req, res) => {
             getGamesWithPagination(pg, pageSize),
             getTopGames('views', 10),
             getTopGames('download', 10)
-        ]);
+        ])
 
         if (!data || !dataTopViews || !dataTopDownloads) {
             console.error('Dados ausentes ou inválidos.');
@@ -209,8 +209,7 @@ router.patch('/downloadCont/:id', async (req, res) => {
         console.error('Erro ao contar download:', err);
         res.status(500).send('Erro ao contar download');
     }
-});
-
+})
 
 router.get('/analytics', async (req, res) => {
     try {
