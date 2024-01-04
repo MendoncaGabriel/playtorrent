@@ -3,14 +3,13 @@ const path = require('path')
 const app = express()
 
 
-const injectSpeedInsights = require("@vercel/speed-insights")
-
 require("dotenv").config(); 
 require('./connect/MongoDB.js')
 
 app.set('view engine', 'ejs')
 
 const routes = require(__dirname + '/router/index.js')
+app.set('timeout', 10000);
 app.use('/', routes);
 app.use(express.static(path.join(__dirname, 'public')));
 
