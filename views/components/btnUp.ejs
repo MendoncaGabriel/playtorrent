@@ -1,0 +1,34 @@
+<button class="fixed bottom-4 right-4 p-2 bg-gray-800 rounded-full w-14 h-14 hidden z-50" id="scrollTopBtn" onclick="scrollToTop()">
+    <img src="/icons/icons8-acima-52.png" alt="botão voltar ao topo">
+</button>
+
+<script>
+    var scrollTopBtn = document.getElementById('scrollTopBtn');
+
+    function handleScroll() {
+        // Obtém a posição atual do scroll
+        var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+
+        // Define a classe hidden com base na posição do scroll
+        if (currentScroll > 100) {
+            scrollTopBtn.classList.remove('hidden');
+        } else {
+            scrollTopBtn.classList.add('hidden');
+        }
+    }
+
+    function scrollToTop() {
+        // Anima o scroll para o topo
+        window.requestAnimationFrame(function() {
+            var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+
+            if (currentScroll > 0) {
+                window.scrollTo(0, currentScroll - currentScroll / 8);
+                window.requestAnimationFrame(scrollToTop);
+            }
+        });
+    }
+
+    // Adiciona um ouvinte de evento de rolagem para lidar com a exibição do botão
+    window.addEventListener('scroll', handleScroll);
+</script>

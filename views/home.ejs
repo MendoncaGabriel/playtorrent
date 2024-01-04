@@ -14,15 +14,25 @@
 </head>
 <body class="bg-gray-900">
     
+    <!-- Navbar -->
     <%- include('./components/navbar.ejs') %>
-   
- 
+
+    <!-- Carrosel mais visitadas -->
     <%- include('./components/carousel.ejs', {title: 'Mais Visitadas', dataCarousel: dataTopViews})%>
+
+    <!-- Carrosel mais baixadas -->
     <%- include('./components/carousel.ejs', {title: 'Mais Baixadas', dataCarousel: dataTopDownloads})%>
 
-
+    <!-- Grade de jogos -->
     <%- include('./components/grid.ejs', {data: data, title: 'Recem adicionados'}) %>
+
+    <!-- Paginaçõa -->
     <%- include('./components/pagination.ejs', { page: page, totalPages: 150 }) %>
+
+    <!-- Btn Up -->
+    <%- include('./components/btnUp.ejs') %>
+
+    <!-- Footer -->
     <%- include('./components/footer.ejs') %>
 </body>
 </html>

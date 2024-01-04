@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const Game = require('../model/gameSchema.js');
 const registerView = require('../services/registerView.js')
 const cache = require('memory-cache');
 const http = require('http');
 const https = require('https');
 const cacheTime = 24 * 60 * 60 * 1000
+
+//Schemas-----------------------------------------------------
+const Game = require('../model/gameSchema.js');
+const analyticsSchema = require('../model/analyticsSchema.js')
 
 //Funções--------------------------------------------------------
 async function isImageValid(teste) {
@@ -116,7 +119,6 @@ router.get('/', async (req, res) => {
     }
 })
 
-
 router.get('/page/:pg', async (req, res) => {
     const pg = req.params.pg
     const pageSize = 20; 
@@ -211,7 +213,6 @@ router.patch('/downloadCont/:id', async (req, res) => {
     }
 })
 
-const analyticsSchema = require('../model/analyticsSchema.js')
 router.get('/analytics', async (req, res) => {
     try {
         let query = {};
@@ -246,8 +247,7 @@ router.get('/analytics', async (req, res) => {
         console.error('Erro ao obter jogos com visualizações:', err);
         res.status(500).send('Erro ao obter jogos com visualizações');
     }
-});
-
+})
 
 router.get('/analytics/:time', async (req, res) => {
     const time = req.params.time;
@@ -285,12 +285,7 @@ router.get('/analytics/:time', async (req, res) => {
         console.error('Erro ao obter jogos com visualizações:', err);
         res.status(500).send('Erro ao obter jogos com visualizações');
     }
-});
-
-module.exports = router;
-
-
-
+})
 
 router.get('/checkImage', async (req, res) => {
     try {
@@ -336,8 +331,8 @@ router.get('/search/:name', async (req, res) => {
             return res.status(422).json({ msg: "Envie por parametro name" });
         }
 
-        const data = await Game.find({ name: { $regex: new RegExp(`${nameTratad}`, 'i') } }).limit(20);
-        res.render('search', { data: data, title: "Resultado da pesquisa: " + termoPesquisa });
+        const data = await Game.find({ name: { $regex: new RegExp(`${nameTratad}`, 'i') } }).limit(10);
+        res.render('search', { data: data, title: "Resultados para: " + nameTratad });
 
     } catch (erro) {
         res.status(422).json({ msg: 'erro ao buscar game por id!', erro: erro });

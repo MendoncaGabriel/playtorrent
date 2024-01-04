@@ -10,21 +10,25 @@
     <link rel="stylesheet" href="/css/global.css">
 </head>
 <body class="bg-gray-900">
-
+    <!-- Navbar -->
     <%- include('./components/navbar.ejs') %>
     
-    <main class="max-w-screen-xl  m-auto mt-10">
-        <a href="javascript:void(0);" onclick="history.back();" class="text-white">Voltar</a><br><br>
+    <main class="max-w-screen-xl  m-auto">
+        <!-- Voltar -->
+        <a href="javascript:void(0);" onclick="history.back();" class="hover:text-blue-500 text-white" title="botão de voltar">Voltar</a>
 
-        <section class="p-4  flex items-center justify-around m-auto  ">
-            
+        <section class=" flex items-center justify-around m-auto  ">
+
             <%- include('./components/grid.ejs', { data: data, title: title }) %>
-
 
         </section>
 
     </main>
 
+    <!-- Btn Up -->
+    <%- include('./components/btnUp.ejs') %>
+
+    <!-- Footer -->
     <%- include('./components/footer.ejs') %>
    
 </body>

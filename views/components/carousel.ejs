@@ -7,33 +7,31 @@
     <% for (let i=0; i < dataCarousel.length; i++) { %>
       <% const currentItem=dataCarousel[i]; %>
 
-        <% if (currentItem && currentItem.name) { %>
-          <% const name=currentItem.name.replace(/ /g, '-' ).toLowerCase(); %>
-
-
-            <%- include('./cover.ejs', { 
-              name: name, 
-              img: currentItem.img, 
-              downloads: currentItem.download,
-              views: currentItem.views
-              })
-          %>
-        <% } %>
+      <% if (currentItem && currentItem.name) { %>
+        <% const name=currentItem.name.replace(/ /g, '-' ).toLowerCase(); %>
+        <%- include('./cover.ejs', { 
+          name: name, 
+          img: currentItem.img, 
+          downloads: currentItem.download,
+          views: currentItem.views
+          })
+        %>
+      <% } %>
 
     <% } %>
   </div>
 
   <div class=" flex justify-between absolute top-1/2 left-1/2 w-full transform -translate-x-1/2 -translate-y-1/2">
     <span
-      class="bg-gray-800 opacity-90 p-3 duration-300 hover:bg-gray-700 hover:text-gray-800 text-white flex items-center justify-center rounded-full"
+      class="bg-gray-800 opacity-90 p-2 duration-300 hover:bg-gray-700 hover:text-gray-800 text-white flex items-center justify-center rounded-full"
       onclick="prevSlide('<%= title %>')">
-      <span class="material-symbols-outlined"><img src="/icons/icons8-menor-que-100.png" class="w-10" alt=""></span>
+      <span class="material-symbols-outlined"><img src="/icons/icons8-menor-que-100.png" class="w-10" alt="voltar"></span>
     </span>
 
     <span
-      class="bg-gray-800 opacity-90 p-3 duration-300 hover:bg-gray-700 hover:text-gray-800 text-white flex items-center justify-center rounded-full"
+      class="bg-gray-800 opacity-90 p-2 duration-300 hover:bg-gray-700 hover:text-gray-800 text-white flex items-center justify-center rounded-full"
       onclick="nextSlide('<%= title %>')">
-      <span class="material-symbols-outlined"><img src="/icons/icons8-maior-que-100.png" class="w-10" alt=""></span>
+      <span class="material-symbols-outlined"><img src="/icons/icons8-maior-que-100.png" class="w-10" alt="passar"></span>
     </span>
   </div>
 </section>
