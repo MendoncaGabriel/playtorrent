@@ -11,8 +11,8 @@
     "nodemon": "^3.0.2"
   },
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "watch": "npx tailwindcss -i ./app.css -o ./public/css/styles.css --watch",
     "build:styles": "npx postcss app.css -o public/styles.css",
     "watch:styles": "onchange 'app.css' -- npx postcss app.css -o public/styles.css",
@@ -21,7 +21,7 @@
   },
   "name": "playtorrent",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "index.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
