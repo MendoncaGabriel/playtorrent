@@ -1,41 +1,3 @@
-<section class="p-4 m-auto max-w-screen-xl my-5 relative duration-500">
-  <h2 class="text-white text-2xl">
-    <%= title %>
-  </h2>
-
-  <div id="<%= title.replace(/ /g, '').toLowerCase() %>" class="flex space-x-4 overflow-auto pb-5 md:pt-10 pt-5 relative">
-    <% for (let i=0; i < dataCarousel.length; i++) { %>
-      <% const currentItem=dataCarousel[i]; %>
-
-      <% if (currentItem && currentItem.name) { %>
-        <% const name=currentItem.name.replace(/ /g, '-' ).toLowerCase(); %>
-        <%- include('./cover.ejs', { 
-          name: name, 
-          img: currentItem.img, 
-          downloads: currentItem.download,
-          views: currentItem.views
-          })
-        %>
-      <% } %>
-
-    <% } %>
-  </div>
-
-  <div class=" flex justify-between absolute top-1/2 left-1/2 w-full transform -translate-x-1/2 -translate-y-1/2">
-    <span
-      class="bg-gray-800 opacity-90 p-2 duration-300 hover:bg-gray-700 hover:text-gray-800 text-white flex items-center justify-center rounded-full"
-      onclick="prevSlide('<%= title %>')">
-      <span class="material-symbols-outlined"><img src="/icons/icons8-menor-que-100.png" class="w-10" alt="voltar"></span>
-    </span>
-
-    <span
-      class="bg-gray-800 opacity-90 p-2 duration-300 hover:bg-gray-700 hover:text-gray-800 text-white flex items-center justify-center rounded-full"
-      onclick="nextSlide('<%= title %>')">
-      <span class="material-symbols-outlined"><img src="/icons/icons8-maior-que-100.png" class="w-10" alt="passar"></span>
-    </span>
-  </div>
-</section>
-
 <script>
   function prevSlide(title) {
     const id = title.replace(/ /g, '').toLowerCase();
@@ -53,3 +15,48 @@
     });
   }
 </script>
+
+
+<section class="p-4 m-auto max-w-screen-xl my-5 relative duration-500 ">
+
+
+  <!-- Titulo -->
+  <h2 class="text-white text-2xl">
+    <%= title %>
+  </h2>
+
+  <!-- Itens -->
+  <div id="<%= title.replace(/ /g, '').toLowerCase() %>" class="flex space-x-4 overflow-auto pb-5 md:pt-10 pt-5 ">
+    <% for (let i=0; i < dataCarousel.length; i++) { %>
+      <% const currentItem=dataCarousel[i]; %>
+
+      <% if (currentItem && currentItem.name) { %>
+        <% const name=currentItem.name.replace(/ /g, '-' ).toLowerCase(); %>
+        <%- include('./cover.ejs', { 
+          name: name, 
+          img: currentItem.img, 
+          downloads: currentItem.download,
+          views: currentItem.views
+          })
+        %>
+      <% } %>
+    <% } %>
+  </div>
+
+  <!-- Voltar -->
+  <button 
+    class="absolute transform -translate-y-1/2 top-1/2 bg-gray-800 opacity-95 p-2 duration-300  hover:bg-gray-700 hover:text-gray-800 text-white  rounded-full"
+    onclick="prevSlide('<%= title %>')">
+    <img src="/icons/icons8-menor-que-100.png" class="w-10" alt="voltar">
+  </button>
+
+  <!-- Passar -->
+  <button
+    class="absolute right-0 transform -translate-y-1/2 top-1/2 bg-gray-800 opacity-95 p-2 duration-300  hover:bg-gray-700 hover:text-gray-800 text-white  rounded-full"
+    onclick="nextSlide('<%= title %>')">
+    <img src="/icons/icons8-maior-que-100.png" class="w-10" alt="passar">
+  </button>
+
+</section>
+
+
