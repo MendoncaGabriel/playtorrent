@@ -2,14 +2,13 @@ const express = require('express')
 const path = require('path')
 const app = express()
 
-
 require("dotenv").config(); 
 require('./connect/MongoDB.js')
 
 app.set('view engine', 'ejs')
 
 const routes = require(__dirname + '/router/index.js')
-app.set('timeout', 10000);
+app.set('timeout', 10000); //definie tempo maximo de carregamento em 10s //important!
 app.use('/', routes);
 app.use(express.static(path.join(__dirname, 'public')));
 

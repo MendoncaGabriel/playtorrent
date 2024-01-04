@@ -196,11 +196,9 @@ router.patch('/downloadCont/:id', async (req, res) => {
 
         const update = { $inc: { download: 1 } };
 
-        // Se `download` não existe, define-o como 1
-        if (!game.download) {
-            update.download = 1;
-        }
-
+        // Se `download` não existe, não tente definir diretamente
+        // o MongoDB cuidará disso automaticamente com `$inc`
+        
         const newUpdate = await Game.findByIdAndUpdate(id, update, { new: true });
 
         return res.status(200).json({
@@ -211,7 +209,8 @@ router.patch('/downloadCont/:id', async (req, res) => {
         console.error('Erro ao contar download:', err);
         res.status(500).send('Erro ao contar download');
     }
-})
+});
+
 
 router.get('/analytics', async (req, res) => {
     try {

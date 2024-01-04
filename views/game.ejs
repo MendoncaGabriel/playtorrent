@@ -133,6 +133,7 @@
     }
 
     async function download(link, direcionar){
+        console.log('click download')
         const id = '<%= data.id %>';
         const url = `/downloadCont/${id}`
 
@@ -142,29 +143,18 @@
                 'Content-Type': 'application/json',
             },
         })
-
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`Erro  ao contar download: ${response.status}`);
-                console.log('Erro ao contar download')
-            }
-            return response.json(); // Converte a resposta para JSON
-        })
+        .then(response => response.json())
         .then((data) => {
-            console.log('Download contado com sucesso!');
-            console.log(`Download: ${data.download}`);
-
-            // Redireciona para a página desejada
+            console.log(`Download contado com sucesso!: ${data.download}`);
+            // Redirecionar
             if(direcionar){
-              window.open(link, '_blank');
+               window.open(link, '_blank');
             }    
         })
         .catch((error) => {
             console.error('Erro ao contar Download:', error);
-            // Trate o erro de acordo com suas necessidades
-            // Redireciona para a página desejada
             if(direcionar){
-              window.open(link, '_blank');
+               window.open(link, '_blank');
             }    
         });
     }
