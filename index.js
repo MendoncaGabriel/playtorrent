@@ -7,6 +7,7 @@ require('./connect/MongoDB.js')
 //sets
 app.set('timeout', 10000); //definie tempo maximo de carregamento em 10s //important!
 app.set('view engine', 'ejs')
+path.join(process.cwd(), 'views')
 
 //rotas
 const routesPages = require(__dirname + '/router/pages.js')
@@ -16,7 +17,6 @@ app.use('/', routesServices);
 
 //definindo pasta publica
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 
 
