@@ -29,4 +29,31 @@ router.patch('/downloadCont/:id', async (req, res) => {
 })
 
 
+// Rota para o sitemap.xml
+router.get('/sitemap.xml', (req, res) => {
+    res.header('Content-Type', 'application/xml');
+    res.sendFile(SITEMAP_PATH);
+});
+  
+  
+// Rota para o robots.txt
+router.get('/robots.txt', (req, res) => {
+    res.header('Content-Type', 'text/plain');
+    res.sendFile(ROBOTS_PATH);
+});
+
+
+// Middleware para configurar a política de permissões
+router.use((req, res, next) => {
+    res.setHeader('Set-Cookie', 'cookieName=cookieValue; SameSite=None; Secure');
+    res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), interest-cohort=(), sync-xhr=(), storage=(* "self")');
+    next();
+});
+  
+  
+// Middleware para lidar com rotas inexistentes
+router.use((req, res) => {
+    res.status(404).render('404');
+});
+
 module.exports = router;
