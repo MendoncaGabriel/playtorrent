@@ -8,6 +8,8 @@ require('./connect/MongoDB.js');
 app.set('timeout', 10000); // Define tempo máximo de carregamento em 10s // Importante!
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'views')); // Cria um caminho absoluto para o diretório 'views' com base no diretório de trabalho atual do processo Node.js.
+
+
 //rotas
 const routesPages = require(__dirname + '/router/pages.js')
 const routesServices = require(__dirname + '/router/services.js')
@@ -16,7 +18,6 @@ app.use('/', routesServices);
 
 //definindo pasta publica
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 
 // Middleware para configurar a política de permissões
