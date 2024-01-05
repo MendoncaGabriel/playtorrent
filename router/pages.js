@@ -120,7 +120,7 @@ router.get('/page/:pg', async (req, res) => {
           
         } catch (error) {
             console.error(error);
-            res.status(500).send('Erro interno do servidor');
+            return  res.status(404).render('404',{msg: "Erro na pagina!"});
         }
     }
 })
@@ -152,7 +152,8 @@ router.get('/download/:name', async (req, res) => {
         }
     } catch (err) {
         console.error(err);
-        res.status(500).send('Erro ao carregar a página!');
+        return  res.status(404).render('404',{msg: "Erro ao carregar a página!"});
+  
     }
 })
 
@@ -167,7 +168,8 @@ router.get('/search/:name', async (req, res) => {
         const data = await Game.find({ name: { $regex: new RegExp(`${nameTratad}`, 'i') } }).limit(10);
         res.render('search', { data: data, title: "Resultados para: " + nameTratad });
     } catch (erro) {
-        res.status(422).json({ msg: 'erro ao buscar game por id!', erro: erro });
+
+        return  res.status(404).render('404',{msg: 'erro ao buscar game por id!', erro: erro});
     }
 })
 
@@ -184,8 +186,7 @@ router.get('/checkImage', async (req, res) => {
         }
         res.render('buscarImagem', { data: imgfaltando });
     } catch (error) {
-        console.error('Erro no teste de imagem:', error);
-        res.status(500).send('Erro no teste de imagem');
+        return  res.status(500).render('404',{msg: 'Erro no teste de imagem: ' + error});
     }
 })
 
