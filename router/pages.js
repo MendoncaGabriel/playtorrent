@@ -75,7 +75,7 @@ router.get('/', async (req, res) => {
 
             if (!data || !dataTopViews || !dataTopDownloads) {
                 console.error('Dados ausentes ou inválidos no cache.');
-                return res.status(500).send('Erro interno do servidor');
+                return  res.status(404).render('404',{msg: "Erro interno do servidor"});
             }
 
             console.log('Página com cache!');
