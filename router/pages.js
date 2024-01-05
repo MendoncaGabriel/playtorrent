@@ -59,23 +59,7 @@ async function getTopGames(field, limit) {
         { $limit: limit }
     ]);
 }
-async function contViwer(id){
-    try {
-        const game = await Game.findById(id);
 
-        await registerView(game);
-        if (!game) {
-            return res.status(404).json({ msg: 'Jogo não encontrado' });
-        }
-        if (!game.views) {
-            await Game.findByIdAndUpdate(id, { views: 1 }, { new: true });
-        }
-
-        await Game.findByIdAndUpdate(id, { $inc: { views: 1 } }, { new: true });
-    } catch (err) {
-        console.error('Erro ao contar visualização:', err);
-    }
-}
 
 
 //Rotas de paginas--------------------------------------------------------
@@ -158,7 +142,7 @@ router.get('/download/:name', async (req, res) => {
         if (cachedData) {
             console.log('CACHE')
             res.render('game', { data: cachedData });
-            contViwer(`${cachedData._id}`)
+     
         }else{
             console.log('NO-CACHE')
 
@@ -170,7 +154,7 @@ router.get('/download/:name', async (req, res) => {
             if (data) {
                 cache.put(nameTratado, data, cacheTime); 
                 res.render('game', { data: data });
-                contViwer(`${data._id}`) 
+               
             } else {
                 res.status(404).json({ msg: 'Não encontrado!' });
             }
