@@ -65,8 +65,8 @@ async function getTopGames(field, limit) {
 //Rotas de paginas--------------------------------------------------------
 // home
 router.get('/', async (req, res) => {
-    const pg = 0;
-    const pageSize = 20;
+    const DEFAULT_PAGE  = 0;
+    const PAGE_SIZE = 20;
     const cacheKey = req.originalUrl || req.url;
     const cachedData = cache.get(cacheKey);
 
@@ -80,11 +80,11 @@ router.get('/', async (req, res) => {
             }
 
             console.log('Página com cache!');
-            return res.render('home', { title: 'Home', data, page: pg, dataTopViews, dataTopDownloads });
+            return res.render('home', { title: 'Home', data, page: DEFAULT_PAGE , dataTopViews, dataTopDownloads });
         }
 
         const [data, dataTopViews, dataTopDownloads] = await Promise.all([
-            getGamesWithPagination(pg, pageSize),
+            getGamesWithPagination(DEFAULT_PAGE , PAGE_SIZE),
             getTopGames('views', 10),
             getTopGames('download', 10)
         ])
@@ -97,7 +97,7 @@ router.get('/', async (req, res) => {
         cache.put(cacheKey, { data, dataTopViews, dataTopDownloads }, cacheTime);
         console.log('Sem cache, consultando banco de dados e cacheando...');
 
-        res.render('home', { title: 'Home', data, page: pg, dataTopViews, dataTopDownloads });
+        res.render('home', { title: 'Home', data, page: DEFAULT_PAGE , dataTopViews, dataTopDownloads });
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
         res.status(500).send('Erro interno do servidor');
@@ -107,8 +107,8 @@ router.get('/', async (req, res) => {
 // paginação
 router.get('/page/:pg', async (req, res) => {
     const pg = req.params.pg
-    const pageSize = 20; 
-    const cacheKey = req.originalUrl || req.url;
+    const pageSize = 20
+    const cacheKey = req.originalUrl || req.url
     const cachedData = cache.get(cacheKey);
 
     if (cachedData) {
@@ -116,9 +116,6 @@ router.get('/page/:pg', async (req, res) => {
     } else {
         try {
             const data = await Game.find().skip(pg * pageSize).limit(pageSize).lean().exec();
-
-            
-
             cache.put(cacheKey, data, cacheTime);
             res.render('page', { title: 'Home', data: data, page: pg });
           
@@ -133,34 +130,27 @@ router.get('/page/:pg', async (req, res) => {
 router.get('/download/:name', async (req, res) => {
     try {
         const nameTratado = req.params.name.replace(/-/g, ' ');
-        const cachedData = cache.get(nameTratado);
- 
         if (!nameTratado) {
-            return res.status(422).json({ msg: 'Não encontrado!' });
+            return res.status(422).json({ msg: 'Nome inválido!' });
         }
-        
+        const cachedData = cache.get(nameTratado);
+        if (!nameTratado) {
+            return  res.status(404).render('404');
+        }
         if (cachedData) {
-            console.log('CACHE')
             res.render('game', { data: cachedData });
      
         }else{
-            console.log('NO-CACHE')
-
-
             const data = await Game.findOne({ name: { $regex: new RegExp(`^${nameTratado}$`, 'i') } })
-
-
+           
 
             if (data) {
                 cache.put(nameTratado, data, cacheTime); 
                 res.render('game', { data: data });
-               
             } else {
-                res.status(404).json({ msg: 'Não encontrado!' });
+                res.status(404).render('404', {msg: "Jogo não encontrado!"});
             }
         }
-
-
     } catch (err) {
         console.error(err);
         res.status(500).send('Erro ao carregar a página!');
@@ -172,15 +162,11 @@ router.get('/search/:name', async (req, res) => {
     try {
         const termoPesquisa = req.params.name;
         const nameTratad = termoPesquisa.replace(/-/g, ' ');
-  
-
         if (!termoPesquisa) {
             return res.status(422).json({ msg: "Envie por parametro name" });
         }
-
         const data = await Game.find({ name: { $regex: new RegExp(`${nameTratad}`, 'i') } }).limit(10);
         res.render('search', { data: data, title: "Resultados para: " + nameTratad });
-
     } catch (erro) {
         res.status(422).json({ msg: 'erro ao buscar game por id!', erro: erro });
     }
@@ -191,14 +177,12 @@ router.get('/checkImage', async (req, res) => {
     try {
         const data = await Game.find({});
         let imgfaltando = [];
-
         for (const e of data) {
             let validation = await isImageValid(e.img);
             if (!validation) {
                 imgfaltando.push(e);
             }
         }
-
         res.render('buscarImagem', { data: imgfaltando });
     } catch (error) {
         console.error('Erro no teste de imagem:', error);

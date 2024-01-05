@@ -22,7 +22,16 @@
     <div class="flex items-center justify-center h-screen ">
         <div class="text-center">
             <h2 class="text-4xl text-gray-700 font-semibold mb-4">404 - Página não encontrada :(</h2>
-            <p class="text-gray-600">A página que você está procurando pode ter sido removida ou não está mais disponível.</p>
+            <% if (msg) { %>
+             
+                <p class="text-gray-600"><%= msg %></p>
+    
+            <% } else { %> 
+
+                <p class="text-gray-600">A página que você está procurando pode ter sido removida ou não está mais disponível.</p>
+            <% } %>
+             
+             
             <br>
             <span class="text-gray-600 text-xl">Visite nossa</span>
             <a href="/" class="text-xl text-blue-700"> Home</a>
