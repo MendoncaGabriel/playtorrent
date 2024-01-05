@@ -7,7 +7,7 @@ require('./connect/MongoDB.js')
 //sets
 app.set('timeout', 10000); //definie tempo maximo de carregamento em 10s //important!
 app.set('view engine', 'ejs')
-path.join(process.cwd(), 'views')
+path.join(process.cwd(), 'views') //cria um caminho absoluto para o diretório 'views' com base no diretório de trabalho atual do processo Node.js.
 
 //rotas
 const routesPages = require(__dirname + '/router/pages.js')
