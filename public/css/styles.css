@@ -638,6 +638,10 @@ video {
   aspect-ratio: 16 / 9;
 }
 
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
 .h-10 {
   height: 2.5rem;
 }
@@ -696,6 +700,10 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-80 {
+  width: 20rem;
 }
 
 .max-w-72 {
