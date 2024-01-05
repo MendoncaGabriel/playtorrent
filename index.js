@@ -16,9 +16,8 @@ const ROBOTS_PATH = path.join(PUBLIC_PATH, 'robots.txt');
 app.set('timeout', 10000); // Define tempo máximo de carregamento em 10s // Importante!
 app.set('view engine', 'ejs');
 
-// Middleware para lidar com rotas inexistentes
+// Middleware para lidar com rotas não encontradas
 app.use((req, res) => {
-  console.log('Acesso à rota 404');
   return res.status(404).render('404');
 });
 
