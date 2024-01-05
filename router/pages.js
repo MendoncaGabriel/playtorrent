@@ -8,7 +8,7 @@ const cacheTime = 24 * 60 * 60 * 1000
 
 //Schemas-----------------------------------------------------
 const Game = require('../model/gameSchema.js');
-const analyticsSchema = require('../model/analyticsSchema.js')
+
 
 //Funções--------------------------------------------------------
 async function isImageValid(teste) {
@@ -78,7 +78,8 @@ async function contViwer(id){
 }
 
 
-//Rotas--------------------------------------------------------
+//Rotas de paginas--------------------------------------------------------
+// home
 router.get('/', async (req, res) => {
     const pg = 0;
     const pageSize = 20;
@@ -119,6 +120,7 @@ router.get('/', async (req, res) => {
     }
 })
 
+// paginação
 router.get('/page/:pg', async (req, res) => {
     const pg = req.params.pg
     const pageSize = 20; 
@@ -143,11 +145,7 @@ router.get('/page/:pg', async (req, res) => {
     }
 })
 
-router.get('/edit-page', (req, res)=>{
-    
-    res.render('editPage')
-})
-
+// download
 router.get('/download/:name', async (req, res) => {
     try {
         const nameTratado = req.params.name.replace(/-/g, ' ');
@@ -185,106 +183,26 @@ router.get('/download/:name', async (req, res) => {
     }
 })
 
-router.patch('/downloadCont/:id', async (req, res) => {
+// Busca
+router.get('/search/:name', async (req, res) => {
     try {
-        const id = req.params.id;
-        const game = await Game.findById(id);
+        const termoPesquisa = req.params.name;
+        const nameTratad = termoPesquisa.replace(/-/g, ' ');
+  
 
-        if (!game) {
-            return res.status(404).json({ msg: 'Jogo não encontrado' });
+        if (!termoPesquisa) {
+            return res.status(422).json({ msg: "Envie por parametro name" });
         }
 
-        const update = { $inc: { download: 1 } };
+        const data = await Game.find({ name: { $regex: new RegExp(`${nameTratad}`, 'i') } }).limit(10);
+        res.render('search', { data: data, title: "Resultados para: " + nameTratad });
 
-        // Se `download` não existe, não tente definir diretamente
-        // o MongoDB cuidará disso automaticamente com `$inc`
-        
-        const newUpdate = await Game.findByIdAndUpdate(id, update, { new: true });
-
-        return res.status(200).json({
-            msg: newUpdate.download === 1 ? 'Primeiro download contado com sucesso' : 'Download contado com sucesso',
-            download: newUpdate.download
-        });
-    } catch (err) {
-        console.error('Erro ao contar download:', err);
-        res.status(500).send('Erro ao contar download');
+    } catch (erro) {
+        res.status(422).json({ msg: 'erro ao buscar game por id!', erro: erro });
     }
 })
 
-router.get('/analytics', async (req, res) => {
-    try {
-        let query = {};
-        const selectedDate = req.query.date;
-
-        if (selectedDate) {
-            // Se uma data for fornecida, filtrar por essa data
-            query = {
-                views: { $exists: true },
-                date: new Date(selectedDate + 'T00:00:00.000Z') // Considerando que a data é fornecida no formato YYYY-MM-DD
-            };
-        } else {
-            // Caso contrário, retornar todos os dados
-            query = { views: { $exists: true } };
-        }
-
-        const gamesWithViews = await analyticsSchema.find(query)
-            .sort({ views: -1 }) // Ordena pelo campo 'views' do maior para o menor
-            .select('name views date');
-
-        // Calcular o total de visualizações
-        const totalViews = gamesWithViews.reduce((total, game) => total + game.views, 0);
-
-        if (req.headers.accept.includes('application/json')) {
-            // Se a solicitação aceitar JSON, retorne os dados como JSON
-            res.json(gamesWithViews, totalViews );
-        } else {
-            // Caso contrário, renderize a página EJS
-            res.render('analytics', { data: gamesWithViews, totalViews: totalViews  });
-        }
-    } catch (err) {
-        console.error('Erro ao obter jogos com visualizações:', err);
-        res.status(500).send('Erro ao obter jogos com visualizações');
-    }
-})
-
-router.get('/analytics/:time', async (req, res) => {
-    const time = req.params.time;
-
-    try {
-        let query = {};
-        const selectedDate = req.params.time;
-
-        if (selectedDate) {
-            // Se uma data for fornecida, filtrar por essa data
-            query = {
-                views: { $exists: true },
-                date: new Date(selectedDate + 'T00:00:00.000Z') // Considerando que a data é fornecida no formato YYYY-MM-DD
-            };
-        } else {
-            // Caso contrário, retornar todos os dados
-            query = { views: { $exists: true } };
-        }
-
-        const gamesWithViews = await analyticsSchema.find(query)
-            .sort({ views: -1 }) // Ordena pelo campo 'views' do maior para o menor
-            .select('name views date');
-
-        // Calcular o total de visualizações
-        const totalViews = gamesWithViews.reduce((total, game) => total + game.views, 0);
-
-        if (req.headers.accept.includes('application/json')) {
-            // Se a solicitação aceitar JSON, retorne os dados como JSON
-            res.json(gamesWithViews, totalViews);
-        } else {
-            // Caso contrário, renderize a página EJS
-            res.render('analytics', { data: gamesWithViews, totalViews});
-        }
-    } catch (err) {
-        console.error('Erro ao obter jogos com visualizações:', err);
-        res.status(500).send('Erro ao obter jogos com visualizações');
-    }
-})
-
+// Lista de paginas sem capas
 router.get('/checkImage', async (req, res) => {
     try {
         const data = await Game.find({});
@@ -304,38 +222,9 @@ router.get('/checkImage', async (req, res) => {
     }
 })
 
-router.get('/renameImage', async (req, res) => {
-    try {
-        const games = await Game.find({});
-        let cont = 0;
-        for (const e of games) {
-            await Game.findByIdAndUpdate(e._id, { img: e._id + '.webp' });
-            cont++;
-        }
-        res.send('Images renamed successfully.');
-    } catch (error) {
-        console.error('Error renaming images:', error);
-        res.status(500).send('Internal Server Error');
-    }
-})
 
-router.get('/search/:name', async (req, res) => {
-    try {
-        const termoPesquisa = req.params.name;
-        const nameTratad = termoPesquisa.replace(/-/g, ' ');
-  
 
-        if (!termoPesquisa) {
-            return res.status(422).json({ msg: "Envie por parametro name" });
-        }
 
-        const data = await Game.find({ name: { $regex: new RegExp(`${nameTratad}`, 'i') } }).limit(10);
-        res.render('search', { data: data, title: "Resultados para: " + nameTratad });
-
-    } catch (erro) {
-        res.status(422).json({ msg: 'erro ao buscar game por id!', erro: erro });
-    }
-})
 
 
 module.exports = router;

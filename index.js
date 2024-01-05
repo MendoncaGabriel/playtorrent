@@ -1,19 +1,23 @@
 const express = require('express')
 const path = require('path')
 const app = express()
-
 require("dotenv").config(); 
 require('./connect/MongoDB.js')
 
+//sets
+app.set('timeout', 10000); //definie tempo maximo de carregamento em 10s //important!
 app.set('view engine', 'ejs')
 
-const routes = require(__dirname + '/router/index.js')
-app.set('timeout', 10000); //definie tempo maximo de carregamento em 10s //important!
-app.use('/', routes);
+//rotas
+const routesPages = require(__dirname + '/router/pages.js')
+const routesServices = require(__dirname + '/router/services.js')
+app.use('/', routesPages);
+app.use('/', routesServices);
+
+//definindo pasta publica
 app.use(express.static(path.join(__dirname, 'public')));
 
-//ao remover este console.log(tudo para)
-console.log('Caminho das visualizações:', path.join(process.cwd(), 'views'));
+
 
 
 // Middleware para configurar a política de permissões
