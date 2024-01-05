@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const registerView = require('../services/registerView.js')
 const cache = require('memory-cache');
 const http = require('http');
 const https = require('https');
