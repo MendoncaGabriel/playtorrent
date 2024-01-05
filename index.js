@@ -22,21 +22,6 @@ app.use(express.static(PUBLIC_PATH));
 const routesPages = require('./router/pages.js');
 app.use('/', routesPages);
 
-// Middleware para verificar a URL e redirecionar se necessário
-app.use((req, res, next) => {
-  const originalUrl = req.originalUrl;
-
-  // Verifique se a URL não contém "/download/"
-  if (!originalUrl.includes('/download/')) {
-    // Redirecione para a versão correta da URL
-    const correctUrl = originalUrl.replace('/', '/download/');
-    return res.redirect(correctUrl);
-  }
-
-  // Continue para as rotas normais se a URL estiver correta
-  next();
-});
-
 
 //rotas-------------
 app.patch('/downloadCont/:id', async (req, res) => {
