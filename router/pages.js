@@ -89,17 +89,15 @@ router.get('/', async (req, res) => {
         ])
 
         if (!data || !dataTopViews || !dataTopDownloads) {
-            console.error('Dados ausentes ou inválidos.');
-            return res.status(500).send('Erro interno do servidor');
+            return  res.status(404).render('404',{msg: "Erro interno do servidor"});
         }
 
         cache.put(cacheKey, { data, dataTopViews, dataTopDownloads }, cacheTime);
-        console.log('Sem cache, consultando banco de dados e cacheando...');
 
         res.render('home', { title: 'Home', data, page: DEFAULT_PAGE , dataTopViews, dataTopDownloads });
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
-        res.status(500).send('Erro interno do servidor');
+        return  res.status(404).render('404',{msg: "Erro interno do servidor"});
     }
 })
 
