@@ -110,16 +110,7 @@ router.get('/', async (req, res) => {
     
 })
 
-//Relatorio de visitas
-router.get('/views', async (req, res) => {
-    try {
-        const data = await Visitas.find({});
-        res.render('views', { data });
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        res.status(500).send('Erro interno do servidor');
-    }
-});
+
 
 // paginação
 router.get('/page/:pg', async (req, res) => {

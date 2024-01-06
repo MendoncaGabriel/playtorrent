@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-
+const http = require('http');
+const https = require('https');
 const Visitas = require('../model/Visitas.js')
 
 router.post('/constView', async (req, res)=>{
@@ -31,4 +32,15 @@ router.post('/constView', async (req, res)=>{
     }
 })
 
+
+//Relatorio de visitas
+router.get('/views', async (req, res) => {
+    try {
+        const data = await Visitas.find({});
+        res.render('views', { data });
+    } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+        res.status(500).send('Erro interno do servidor');
+    }
+});
 module.exports = router;
