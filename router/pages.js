@@ -93,7 +93,7 @@ async function getTopGames(field, limit) {
 
 // home
 router.get('/', async (req, res) => {
-    incrementarVisitas();
+    const pg = 0
     const DEFAULT_PAGE  = 0;
     const PAGE_SIZE = 20;
     const cacheKey = req.originalUrl || req.url;
@@ -146,7 +146,7 @@ router.get('/views', async (req, res) => {
 
 // paginação
 router.get('/page/:pg', async (req, res) => {
-    incrementarVisitas();
+  
     const pg = req.params.pg
     const pageSize = 20
     const cacheKey = req.originalUrl || req.url
@@ -171,7 +171,7 @@ router.get('/page/:pg', async (req, res) => {
 
 // download
 router.get('/download/:name', async (req, res) => {
-    incrementarVisitas();
+
     try {
         const nameTratado = req.params.name.replace(/-/g, ' ');
         if (!nameTratado) {
@@ -206,7 +206,7 @@ router.get('/download/:name', async (req, res) => {
 
 // Busca
 router.get('/search/:name', async (req, res) => {
-    incrementarVisitas();
+
     try {
         const termoPesquisa = req.params.name;
         const nameTratad = termoPesquisa.replace(/-/g, ' ');
