@@ -13,7 +13,7 @@ const SITEMAP_PATH = path.join(PUBLIC_PATH, 'sitemap.xml');
 const ROBOTS_PATH = path.join(PUBLIC_PATH, 'robots.txt');
 
 // configurações
-app.set('timeout', 10000); // Define tempo máximo de carregamento em 10s // Importante!
+app.set('timeout', 20000); // Define tempo máximo de carregamento em 20s // Importante!
 app.set('view engine', 'ejs');
 app.set('views', VIEWS_PATH);
 app.use(express.static(PUBLIC_PATH));
