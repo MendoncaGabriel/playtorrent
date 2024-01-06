@@ -93,6 +93,7 @@ async function getTopGames(field, limit) {
 
 // home
 router.get('/', async (req, res) => {
+    incrementarVisitas();
     const DEFAULT_PAGE  = 0;
     const PAGE_SIZE = 20;
     const cacheKey = req.originalUrl || req.url;
@@ -145,6 +146,7 @@ router.get('/views', async (req, res) => {
 
 // paginação
 router.get('/page/:pg', async (req, res) => {
+    incrementarVisitas();
     const pg = req.params.pg
     const pageSize = 20
     const cacheKey = req.originalUrl || req.url
@@ -152,22 +154,24 @@ router.get('/page/:pg', async (req, res) => {
 
     if (cachedData) {
         res.render('page', { title: 'Home', data: cachedData, page: pg });
-        incrementarVisitas();
+      
     } else {
         try {
             const data = await Game.find().skip(pg * pageSize).limit(pageSize).lean().exec();
             cache.put(cacheKey, data, cacheTime);
             res.render('page', { title: 'Home', data: data, page: pg });
-            incrementarVisitas();
+      
         } catch (error) {
             console.error(error);
             return  res.status(404).render('404',{msg: "Erro na pagina!"});
         }
     }
+   
 })
 
 // download
 router.get('/download/:name', async (req, res) => {
+    incrementarVisitas();
     try {
         const nameTratado = req.params.name.replace(/-/g, ' ');
         if (!nameTratado) {
@@ -179,7 +183,7 @@ router.get('/download/:name', async (req, res) => {
         }
         if (cachedData) {
             res.render('game', { data: cachedData });
-            incrementarVisitas();
+           
         }else{
             const data = await Game.findOne({ name: { $regex: new RegExp(`^${nameTratado}$`, 'i') } })
 
@@ -202,6 +206,7 @@ router.get('/download/:name', async (req, res) => {
 
 // Busca
 router.get('/search/:name', async (req, res) => {
+    incrementarVisitas();
     try {
         const termoPesquisa = req.params.name;
         const nameTratad = termoPesquisa.replace(/-/g, ' ');
@@ -219,7 +224,7 @@ router.get('/search/:name', async (req, res) => {
     }
 
 
-    incrementarVisitas();
+  
 })
 
 // Lista de paginas sem capas
