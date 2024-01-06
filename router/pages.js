@@ -8,6 +8,34 @@ const cacheTime = 24 * 60 * 60 * 1000
 
 //Schemas-----------------------------------------------------
 const Game = require('../model/gameSchema.js');
+const Visitas = require('../model/Visitas.js')
+
+
+async function incrementarVisitas() {
+    try {
+        // Encontrar o documento correspondente à data atual
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0); // Define a hora para 00:00:00
+        const documentoAtual = await Visitas.findOne({ date: hoje });
+
+        if (documentoAtual) {
+            // Se já existe um documento para a data atual, incrementar o total de visitas
+            documentoAtual.views += 1;
+            await documentoAtual.save();
+            console.log('Visita registrada com sucesso!, Total: ' + documentoAtual.views);
+        } else {
+            // Se não existe um documento para a data atual, criar um novo documento com total 1
+            const novoDocumento = new Visitas({ views: 1, date: hoje });
+            await novoDocumento.save();
+            console.log('Visita registrada com sucesso!, Total: ' + novoDocumento.views);
+        }
+
+    } catch (erro) {
+        console.error('Erro ao incrementar o total de visitas:', erro.message);
+    }
+}
+
+
 
 
 //Funções--------------------------------------------------------
@@ -63,26 +91,28 @@ async function getTopGames(field, limit) {
 
 
 //Rotas de paginas--------------------------------------------------------
+
 // home
 router.get('/', async (req, res) => {
     const pg = 0;
     const pageSize = 20;
     const cacheKey = req.originalUrl || req.url;
     const cachedData = cache.get(cacheKey);
-
+    
     try {
         if (cachedData) {
             const { data, dataTopViews, dataTopDownloads } = cachedData;
-
             if (!data || !dataTopViews || !dataTopDownloads) {
                 console.error('Dados ausentes ou inválidos no cache.');
-                return res.status(500).send('Erro interno do servidor');
+                res.status(500).send('Erro interno do servidor');
+                return 
             }
-
-            console.log('Página com cache!');
-            return res.render('home', { title: 'Home', data, page: pg, dataTopViews, dataTopDownloads });
+            
+            incrementarVisitas();
+            res.render('home', { title: 'Home', data, page: pg, dataTopViews, dataTopDownloads });
+            return 
         }
-
+        
         const [data, dataTopViews, dataTopDownloads] = await Promise.all([
             getGamesWithPagination(pg, pageSize),
             getTopGames('views', 10),
@@ -95,14 +125,27 @@ router.get('/', async (req, res) => {
         }
 
         cache.put(cacheKey, { data, dataTopViews, dataTopDownloads }, cacheTime);
-        console.log('Sem cache, consultando banco de dados e cacheando...');
-
+        
         res.render('home', { title: 'Home', data, page: pg, dataTopViews, dataTopDownloads });
+        incrementarVisitas();
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
         res.status(500).send('Erro interno do servidor');
     }
+    
+    
 })
+
+//Relatorio de visitas
+router.get('/views', async (req, res) => {
+    try {
+        const data = await Visitas.find({});
+        res.render('views', { data });
+    } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+        res.status(500).send('Erro interno do servidor');
+    }
+});
 
 // paginação
 router.get('/page/:pg', async (req, res) => {
@@ -113,15 +156,13 @@ router.get('/page/:pg', async (req, res) => {
 
     if (cachedData) {
         res.render('page', { title: 'Home', data: cachedData, page: pg });
+        incrementarVisitas();
     } else {
         try {
             const data = await Game.find().skip(pg * pageSize).limit(pageSize).lean().exec();
-
-            
-
             cache.put(cacheKey, data, cacheTime);
             res.render('page', { title: 'Home', data: data, page: pg });
-          
+            incrementarVisitas();
         } catch (error) {
             console.error(error);
             res.status(500).send('Erro interno do servidor');
@@ -134,33 +175,24 @@ router.get('/download/:name', async (req, res) => {
     try {
         const nameTratado = req.params.name.replace(/-/g, ' ');
         const cachedData = cache.get(nameTratado);
- 
         if (!nameTratado) {
             return res.status(422).json({ msg: 'Não encontrado!' });
         }
-        
         if (cachedData) {
             console.log('CACHE')
             res.render('game', { data: cachedData });
-     
+            incrementarVisitas();
         }else{
-            console.log('NO-CACHE')
-
-
             const data = await Game.findOne({ name: { $regex: new RegExp(`^${nameTratado}$`, 'i') } })
-
-
-
             if (data) {
                 cache.put(nameTratado, data, cacheTime); 
                 res.render('game', { data: data });
+                incrementarVisitas();
                
             } else {
                 res.status(404).json({ msg: 'Não encontrado!' });
             }
         }
-
-
     } catch (err) {
         console.error(err);
         res.status(500).send('Erro ao carregar a página!');
@@ -172,7 +204,6 @@ router.get('/search/:name', async (req, res) => {
     try {
         const termoPesquisa = req.params.name;
         const nameTratad = termoPesquisa.replace(/-/g, ' ');
-  
 
         if (!termoPesquisa) {
             return res.status(422).json({ msg: "Envie por parametro name" });
@@ -180,10 +211,14 @@ router.get('/search/:name', async (req, res) => {
 
         const data = await Game.find({ name: { $regex: new RegExp(`${nameTratad}`, 'i') } }).limit(10);
         res.render('search', { data: data, title: "Resultados para: " + nameTratad });
+        incrementarVisitas();
 
     } catch (erro) {
         res.status(422).json({ msg: 'erro ao buscar game por id!', erro: erro });
     }
+
+
+    incrementarVisitas();
 })
 
 // Lista de paginas sem capas

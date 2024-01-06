@@ -1,4 +1,4 @@
-const Analytics = require('../model/analyticsSchema.js')
+const Analytics = require('../model/Visitas.js')
 async function registerView(game) {
     try {
         const existingAnalytics = await Analytics.findOne({
