@@ -7,32 +7,9 @@ const cacheTime = 24 * 60 * 60 * 1000
 
 //Schemas-----------------------------------------------------
 const Game = require('../model/gameSchema.js');
-const Visitas = require('../model/Visitas.js')
 
 
-async function incrementarVisitas() {
-    try {
-        // Encontrar o documento correspondente à data atual
-        const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0); // Define a hora para 00:00:00
-        const documentoAtual = await Visitas.findOne({ date: hoje });
 
-        if (documentoAtual) {
-            // Se já existe um documento para a data atual, incrementar o total de visitas
-            documentoAtual.views += 1;
-            await documentoAtual.save();
-            console.log('Visita registrada com sucesso!, Total: ' + documentoAtual.views);
-        } else {
-            // Se não existe um documento para a data atual, criar um novo documento com total 1
-            const novoDocumento = new Visitas({ views: 1, date: hoje });
-            await novoDocumento.save();
-            console.log('Visita registrada com sucesso!, Total: ' + novoDocumento.views);
-        }
-
-    } catch (erro) {
-        console.error('Erro ao incrementar o total de visitas:', erro.message);
-    }
-}
 
 
 
