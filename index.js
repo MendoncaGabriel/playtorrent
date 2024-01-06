@@ -18,6 +18,9 @@ app.set('view engine', 'ejs');
 app.set('views', VIEWS_PATH);
 app.use(express.static(PUBLIC_PATH));
 
+
+
+
 //rotas
 const routesPages = require('./router/pages.js');
 app.use('/', routesPages);
@@ -73,11 +76,12 @@ app.use((req, res, next) => {
 });
 
 
-// Middleware para lidar com rotas inexistentes
-app.use((req, res) => {
-  res.status(404).render('404');
-});
 
+
+// Middleware para lidar com rotas não encontradas
+app.use((req, res) => {
+  return res.status(404).render('404');
+});
 
 
 app.listen(PORT, ()=>{
