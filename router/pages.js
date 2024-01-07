@@ -194,11 +194,24 @@ router.get('/checkImage', async (req, res) => {
 //rotas
 router.get('/topView', async (req, res)=>{
     try {
-        const data = await Game.find()
-        .sort({ views: -1 }) // Ordena as views do maior para o menor
-        .limit(10); // Limita a busca a 10 documentos
+        const cacheKey = req.originalUrl || req.url;
+        const cachedData = cache.get(cacheKey);
 
-        res.status(200).json(data)
+        
+        if(cachedData){
+            const { data } = cachedData;
+            console.log('topViewer com cache')
+            res.status(200).json(data)
+        }else{
+            console.log('topViewer sem cache')
+
+            const data = await Game.find()
+            .sort({ views: -1 }) // Ordena as views do maior para o menor
+            .limit(10); // Limita a busca a 10 documentos
+            
+            cache.put(cacheKey, { data }, cacheTime);
+            res.status(200).json(data)
+        }
 
     } catch (error) {
         res.status(404).json({msg: 'Erro ao caregar topViews :' + data})
@@ -206,11 +219,23 @@ router.get('/topView', async (req, res)=>{
 })
 router.get('/topDownloads', async (req, res)=>{
     try {
-        const data = await Game.find()
-        .sort({ download: -1 }) 
-        .limit(10); 
+        const cacheKey = req.originalUrl || req.url;
+        const cachedData = cache.get(cacheKey);
 
-        res.status(200).json(data)
+        if(cachedData){
+            const { data } = cachedData;
+            console.log('topDownloads com cache')
+            res.status(200).json(data)
+        }else{
+            console.log('topDownloads sem cache')
+            const data = await Game.find()
+            .sort({ download: -1 }) 
+            .limit(10); 
+            
+            cache.put(cacheKey, { data }, cacheTime);
+            res.status(200).json(data)
+        }
+        
 
     } catch (error) {
         res.status(404).json({msg: 'Erro ao caregar topDownloads :' + data})
