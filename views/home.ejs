@@ -29,22 +29,30 @@
     <%- include('./components/navbar.ejs') %>
 
     <!-- Carrosel mais visitadas -->
-    <%- include('./components/carousel.ejs', {title: 'Mais Visitadas', dataCarousel: dataTopViews})%>
+    <%- include('./components/carouselAsync.ejs', {title: 'Mais Visitadas', router: '/topView'})%>
+    <%- include('./components/carouselAsync.ejs', {title: 'Mais Baixados', router: '/topDownloads'})%>
+
+
+
 
     <!-- Carrosel mais baixadas -->
-    <%- include('./components/carousel.ejs', {title: 'Mais Baixadas', dataCarousel: dataTopDownloads})%>
+
 
     <!-- Grade de jogos -->
     <%- include('./components/grid.ejs', {data: data, title: 'Recem adicionados'}) %>
 
     <!-- Paginaçõa -->
-    <%- include('./components/pagination.ejs', { page: page, totalPages: 150 }) %>
+    <%- include('./components/pagination.ejs', { page: 0, totalPages: 150 }) %>
 
     <!-- Btn Up -->
     <%- include('./components/btnUp.ejs') %>
 
     <!-- Footer -->
     <%- include('./components/footer.ejs') %>
+
+
+
+
 </body>
 </html>
 
@@ -52,10 +60,10 @@
 <script>
     //contar viwer
     fetch('/services/constView', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
     })
     .then(response => response.json())
     .then((data) => {
@@ -65,3 +73,8 @@
         console.error('Erro ao contar Download:', error);  
     });
 </script>
+
+
+
+
+

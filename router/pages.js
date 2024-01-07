@@ -50,19 +50,8 @@ async function isImageValid(teste) {
         return false;
     }
 }
-async function getGamesWithPagination(page, size) {
-    return Game.find().skip(page * size).limit(size).exec();
-}
-async function getTopGames(field, limit) {
-    const matchQuery = { [field]: { $exists: true } };
-    const sortQuery = { [field]: -1 };
 
-    return Game.aggregate([
-        { $match: matchQuery },
-        { $sort: sortQuery },
-        { $limit: limit }
-    ]);
-}
+
 
 
 
@@ -70,38 +59,32 @@ async function getTopGames(field, limit) {
 
 // home
 router.get('/', async (req, res) => {
-    const pg = 0
-    const DEFAULT_PAGE  = 0;
-    const PAGE_SIZE = 20;
-    const cacheKey = req.originalUrl || req.url;
-    const cachedData = cache.get(cacheKey);
     
     try {
+        const cacheKey = req.originalUrl || req.url;
+        const cachedData = cache.get(cacheKey);
+
         if (cachedData) {
-            const { data, dataTopViews, dataTopDownloads } = cachedData;
-            if (!data || !dataTopViews || !dataTopDownloads) {
+            const { data } = cachedData;
+            if (!data) {
                 console.error('Dados ausentes ou inválidos no cache.');
                 return res.status(500).send('Erro interno do servidor');
             }
 
             console.log('Página com cache!');
-            return res.render('home', { title: 'Home', data, page: pg, dataTopViews, dataTopDownloads });
+            return res.render('home', { data });
         }
         
-        const [data, dataTopViews, dataTopDownloads] = await Promise.all([
-            getGamesWithPagination(DEFAULT_PAGE , PAGE_SIZE),
-            getTopGames('views', 10),
-            getTopGames('download', 10)
-        ])
+        const data = await Game.find().skip(0 * 20).limit(20)
 
-        if (!data || !dataTopViews || !dataTopDownloads) {
+        if (!data) {
             return  res.status(404).render('404',{msg: "Erro interno do servidor"});
         }
 
-        cache.put(cacheKey, { data, dataTopViews, dataTopDownloads }, cacheTime);
+        cache.put(cacheKey, { data }, cacheTime);
         console.log('Sem cache, consultando banco de dados e cacheando...');
 
-        res.render('home', { title: 'Home', data, page: pg, dataTopViews, dataTopDownloads });
+        res.render('home', { title: 'Home', data, page: 0,  });
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
         return  res.status(404).render('404',{msg: "Erro interno do servidor"});
@@ -110,29 +93,25 @@ router.get('/', async (req, res) => {
     
 })
 
-
-
 // paginação
 router.get('/page/:pg', async (req, res) => {
-  
-    const pg = req.params.pg
-    const pageSize = 20
-    const cacheKey = req.originalUrl || req.url
-    const cachedData = cache.get(cacheKey);
 
-    if (cachedData) {
-        res.render('page', { title: 'Home', data: cachedData, page: pg });
-      
-    } else {
-        try {
-            const data = await Game.find().skip(pg * pageSize).limit(pageSize).lean().exec();
-            cache.put(cacheKey, data, cacheTime);
-            res.render('page', { title: 'Home', data: data, page: pg });
-      
-        } catch (error) {
-            console.error(error);
-            return  res.status(404).render('404',{msg: "Erro na pagina!"});
-        }
+    try {
+        const pg = req.params.pg
+        const pageSize = 20
+        //cache
+        const cacheKey = req.originalUrl || req.url
+        const cachedData = cache.get(cacheKey);
+        if (cachedData) {
+            return es.render('page', { title: 'Home', data: cachedData, page: pg });
+        } 
+
+        const data = await Game.find().skip(pg * pageSize).limit(pageSize)
+        cache.put(cacheKey, data, cacheTime);
+        res.render('page', { title: 'Home', data: data, page: pg });
+    } catch (error) {
+        console.error(error);
+        return  res.status(404).render('404',{msg: "Erro na pagina!"});
     }
    
 })
@@ -146,15 +125,15 @@ router.get('/download/:name', async (req, res) => {
             return res.status(422).json({ msg: 'Nome inválido!' });
         }
         const cachedData = cache.get(nameTratado);
-        if (!nameTratado) {
-            return  res.status(404).render('404');
-        }
-        if (cachedData) {
-            res.render('game', { data: cachedData });
-           
-        }else{
-            const data = await Game.findOne({ name: { $regex: new RegExp(`^${nameTratado}$`, 'i') } })
 
+        if (cachedData) {
+            console.log('Pagina com cash')
+            res.render('game', { data: cachedData });
+            
+        }else{
+            console.log('Pagina sem cash')
+        
+            const data = await Game.findOne({ name: { $regex: new RegExp(`^${nameTratado}$`, 'i') } });            
 
 
             if (data) {
@@ -212,8 +191,31 @@ router.get('/checkImage', async (req, res) => {
     }
 })
 
+//rotas
+router.get('/topView', async (req, res)=>{
+    try {
+        const data = await Game.find()
+        .sort({ views: -1 }) // Ordena as views do maior para o menor
+        .limit(10); // Limita a busca a 10 documentos
 
+        res.status(200).json(data)
 
+    } catch (error) {
+        res.status(404).json({msg: 'Erro ao caregar topViews :' + data})
+    }
+})
+router.get('/topDownloads', async (req, res)=>{
+    try {
+        const data = await Game.find()
+        .sort({ download: -1 }) 
+        .limit(10); 
+
+        res.status(200).json(data)
+
+    } catch (error) {
+        res.status(404).json({msg: 'Erro ao caregar topDownloads :' + data})
+    }
+})
 
 
 
