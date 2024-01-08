@@ -29,16 +29,12 @@
     <%- include('./components/navbar.ejs') %>
 
     <!-- Carrosel mais visitadas -->
-    <%- include('./components/carouselAsync.ejs', {title: 'Mais Visitadas', router: '/topView'})%>
-    <%- include('./components/carouselAsync.ejs', {title: 'Mais Baixados', router: '/topDownloads'})%>
-
-
-
-
+    <%- include('./components/carousel.ejs', {title: 'Mais Visitadas', dataCarousel: topViewr})%>
+     
     <!-- Carrosel mais baixadas -->
+    <%- include('./components/carousel.ejs', {title: 'Mais Baixados', dataCarousel: topDownload})%>
 
 
-    <!-- Grade de jogos -->
     <%- include('./components/grid.ejs', {data: data, title: 'Recem adicionados'}) %>
 
     <!-- Paginaçõa -->
@@ -49,6 +45,7 @@
 
     <!-- Footer -->
     <%- include('./components/footer.ejs') %>
+
 
 
 
