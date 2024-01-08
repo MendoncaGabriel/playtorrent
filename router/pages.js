@@ -54,7 +54,7 @@ async function isImageValid(teste) {
 
 async function TopViewr(){
     try {
-        const data = await Game.find()
+        const data = await Game.find().lean()
         .sort({ views: -1 }) // Ordena as views do maior para o menor
         .limit(10); // Limita a busca a 10 documentos
         return data
@@ -65,7 +65,7 @@ async function TopViewr(){
 
 async function TopDownload(){
     try {
-        const data = await Game.find()
+        const data = await Game.find().lean()
         .sort({ download: -1 }) // Ordena as views do maior para o menor
         .limit(10); // Limita a busca a 10 documentos
         return data
@@ -95,7 +95,7 @@ router.get('/', async (req, res) => {
         }
 
         const [data, topViewr, topDownload] = await Promise.all([
-            Game.find().skip(0 * 20).limit(20),
+            Game.find().skip(0 * 20).limit(20).lean(),
             TopViewr(),
             TopDownload()
         ]);

@@ -20,6 +20,8 @@ const gameSchema = new mongoose.Schema({
 
 // Crie um índice no campo 'name'
 gameSchema.index({ name: 1 });
+gameSchema.index({ views: 1 });
+gameSchema.index({ download: 1 });
 
 const Game = mongoose.model('Game', gameSchema);
 
