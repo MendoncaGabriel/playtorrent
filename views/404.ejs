@@ -22,6 +22,7 @@
     <div class="flex items-center justify-center h-screen ">
         <div class="text-center">
             <h2 class="text-4xl text-gray-700 font-semibold mb-4">404 - Página não encontrada :(</h2>
+
             <% if (msg) { %>
              
                 <p class="text-gray-600"><%= msg %></p>
@@ -58,6 +59,23 @@
 </html>
 
 <script>
+
+    //contar viwer
+    fetch('/services/constView', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    })
+    .then(response => response.json())
+    .then((data) => {
+        console.log(data.msg);
+    })
+    .catch((error) => {
+        console.error('Erro ao contar Download:', error);  
+    });
+
+
     setTimeout(()=>{
         window.location.href = '/';
     }, 3000)

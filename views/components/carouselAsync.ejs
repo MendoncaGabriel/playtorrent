@@ -1,0 +1,110 @@
+<script>
+    function prevSlide(title) {
+      const id = title.replace(/ /g, '').toLowerCase();
+      document.getElementById(id).scrollBy({
+        left: -window.innerWidth,
+        behavior: 'smooth'
+      });
+    }
+  
+    function nextSlide(title) {
+      const id = title.replace(/ /g, '').toLowerCase();
+      document.getElementById(id).scrollBy({
+        left: window.innerWidth,
+        behavior: 'smooth'
+      });
+    }
+  </script>
+  
+  
+  <section class="p-4 m-auto max-w-screen-xl my-5 relative duration-500 ">
+  
+  
+    <!-- Titulo -->
+    <h2 class="text-white text-2xl">
+      <%= title %>
+    </h2>
+  
+    <!-- Itens -->
+    <div id="<%= title.replace(/ /g, '').toLowerCase() %>" class="flex space-x-4 overflow-auto pb-5 md:pt-10 pt-5 ">
+  
+    </div>
+  
+   
+  
+    <script>
+      fetch(`<%= router  %>`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => res.json())
+        .then((response) => {
+  
+          response.forEach(element => {
+            let container = document.getElementById(`<%= title.replace(/ /g, '').toLowerCase() %>`)
+            container.innerHTML += `
+          <a href="/download/${element.name}" title="capa do jogo ${element.name.replace(/-/g, ' ')} " >
+          <div class="md:w-52 md:h-72 w-40 h-60  bg-black m-auto rounded-md overflow-hidden hover:scale-105 duration-300 flex-none relative  ">
+            <img src="/cover/${element.img}"  onerror="imageError(this)" alt="" class=" h-full w-full object-cover obg">
+            
+            <div class="absolute bottom-2 right-2 flex space-x-2">
+              <!-- DOWNLOADS -->
+              
+              ${element.download ?
+                `<div class=" bg-gray-900 px-4 rounded-full py-1   text-white z-50 flex items-center space-x-3">
+                  <span >
+                    <img src="/icons/icons8-baixar-52.png"  class="w-4" alt="">
+                  </span>
+                  
+                  ${`<p>${element.download}</p>`}
+                </div>` : ''
+              }
+                
+                
+              <!-- VISUALIZAÇÕES -->
+              ${element.views ? `
+                <div class=" bg-gray-900 px-4 rounded-full py-1   text-white z-50 flex items-center space-x-3">
+                  <span >
+                    <img src="/icons/icons8-visível-90.png" class="w-4" alt="">
+                  </span>
+                  <p>${element.views}</p>
+                </div>` : ''
+              }
+              
+                  
+            </div>  
+          </div>
+        </a>
+          `
+  
+          });
+        })
+  
+      function imageError(img) {
+        img.src = '/default-img-cover.webp';
+        img.alt = 'Imagem Padrão';
+      }
+  
+    </script>
+  
+  
+  
+  
+  
+    <!-- Voltar -->
+    <button
+      class="absolute transform -translate-y-1/2 top-1/2 bg-gray-800 opacity-95 p-2 duration-300  hover:bg-gray-700 hover:text-gray-800 text-white  rounded-full"
+      onclick="prevSlide('<%= title %>')">
+      <img src="/icons/icons8-menor-que-100.png" class="w-10" alt="voltar">
+    </button>
+  
+    <!-- Passar -->
+    <button
+      class="absolute right-0 transform -translate-y-1/2 top-1/2 bg-gray-800 opacity-95 p-2 duration-300  hover:bg-gray-700 hover:text-gray-800 text-white  rounded-full"
+      onclick="nextSlide('<%= title %>')">
+      <img src="/icons/icons8-maior-que-100.png" class="w-10" alt="passar">
+    </button>
+  
+  </section>

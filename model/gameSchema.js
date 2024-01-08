@@ -1,7 +1,11 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const Game = mongoose.model('Game', {
-    name: String,
+const gameSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        unique: true
+    },
     img: String,
     video: String,
     description: String,
@@ -12,6 +16,13 @@ const Game = mongoose.model('Game', {
     type: String,
     download: Number,
     views: Number,
-})
+});
 
-module.exports = Game
+// Crie um índice no campo 'name'
+gameSchema.index({ name: 1 });
+gameSchema.index({ views: 1 });
+gameSchema.index({ download: 1 });
+
+const Game = mongoose.model('Game', gameSchema);
+
+module.exports = Game;
