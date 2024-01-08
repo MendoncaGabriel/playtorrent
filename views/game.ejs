@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NXNEHR3E8D"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'G-NXNEHR3E8D');
@@ -13,12 +14,13 @@
 
     <!-- GOOGLE ADS -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3260819922434722"
-    crossorigin="anonymous"></script>
-    
+        crossorigin="anonymous"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download  <%= data.name %> torrent</title>
-    <meta name="description" content="Download grátis via torrent do jogo <%= data.name %>, baixe na playtorrent, game para <%= data.platform %> do genero <% data.class.forEach(element => { %><%= element %>, <% }) %>" >
+    <title>Download <%= data.name %> torrent</title>
+    <meta name="description"
+        content="Download grátis via torrent do jogo <%= data.name %>, baixe na playtorrent, game para <%= data.platform %> do genero <% data.class.forEach(element => { %><%= element %>, <% }) %>">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/global.css">
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
@@ -28,70 +30,85 @@
 <body class="bg-gray-900 text-white ">
     <!-- Navbar -->
     <%- include('./components/navbar.ejs') %>
-    
-    <header class="p-4 max-w-screen-lg m-auto grid grid-cols-1 gap-4  justify-center">
-        <!-- Voltar -->
-        <a href="javascript:void(0);" onclick="history.back();" class="hover:text-blue-500 text-white" title="botão de voltar">Voltar</a>
 
-        <!-- Titulo -->
-        <h1 class="md:text-5xl text-2xl text-center font-serif"><%= data.name %></h1>
-     
-        <div class="md:flex space-y-4 md:space-y-0 items-center justify-around">
-            <!-- Capa -->
-            <div>
-                <%- include('./components/cover.ejs', { 
-                    name: data.name, 
-                    img: data.img, 
-                    downloads: data.download, 
-                    views: data.views 
-                })
-                %>
+
+
+        <header class="p-4 max-w-screen-lg m-auto grid grid-cols-1 gap-4  justify-center">
+            <section class="border">
+                <script async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3260819922434722"
+                    crossorigin="anonymous"></script>
+                <!-- Horizontal -->
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3260819922434722"
+                    data-ad-slot="1987401872" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </section>
+            <!-- Voltar -->
+            <a href="javascript:void(0);" onclick="history.back();" class="hover:text-blue-500 text-white"
+                title="botão de voltar">Voltar</a>
+
+            <!-- Titulo -->
+            <h1 class="md:text-5xl text-2xl text-center font-serif">
+                <%= data.name %>
+            </h1>
+
+            <div class="md:flex space-y-4 md:space-y-0 items-center justify-around">
+                <!-- Capa -->
+                <div>
+                    <%- include('./components/cover.ejs', { name: data.name, img: data.img, downloads: data.download,
+                        views: data.views }) %>
+                </div>
+
+                <!-- Trailer -->
+                <iframe title="<%= 'Trailer video do jogo: ' + data.name %>" src="<%= data.video %>" frameborder="0"
+                    class="bg-gray-600 w-full md:w-auto md:h-72 object-cover aspect-video rounded-md"
+                    allow="autoplay; encrypted-media"></iframe>
             </div>
-
-            <!-- Trailer -->
-            <iframe
-                title="<%= 'Trailer video do jogo: ' + data.name %>"
-                src="<%= data.video %>"
-                frameborder="0"
-                class="bg-gray-600 w-full md:w-auto md:h-72 object-cover aspect-video rounded-md"
-                allow="autoplay; encrypted-media"
-            ></iframe>
-        </div>
-    </header>
+        </header>
 
 
-    <article class="p-4  m-auto max-w-screen-lg">
-        <div class="space-y-5">
-            <% if (data.description) { %>
-                <p><%= data.description %></p>
-            <% } %>
-                
-            <% if (data.information) { %>
-                <p><%= data.information %></p>
-            <% } %>
-                    
-            <% if (data.platform) { %>
-                <p>Plataforma: <%= data.platform %></p>
-            <% } %>
-        </div>
-
-        <!-- GÊNERO -->
-        <% if (data.class && data.class.length !== 0) { %>
-            <div class="flex  space-x-3 overflow-auto  md:justify-center items-center">
-                <% let array = data.class %>
-                <%const arraySemRepeticao = [...new Set(array)];%>
-                    
-                <% arraySemRepeticao.forEach(element => { %>
-                    <% if (element && element !== 'undefined' && element !== '') { %>
-                        <p class="px-8 py-2 bg-gray-800  text-white rounded-full m-auto md:m-0 text-center flex-none"><%= element.replace(/_/g, ' ') %></p>
+        <article class="p-4  m-auto max-w-screen-lg">
+            <div class="space-y-5">
+                <% if (data.description) { %>
+                    <p>
+                        <%= data.description %>
+                    </p>
                     <% } %>
-                <% }) %>
+
+                        <% if (data.information) { %>
+                            <p>
+                                <%= data.information %>
+                            </p>
+                            <% } %>
+
+                                <% if (data.platform) { %>
+                                    <p>Plataforma: <%= data.platform %>
+                                    </p>
+                                    <% } %>
             </div>
-        <% } %>
-    </article>
+
+            <!-- GÊNERO -->
+            <% if (data.class && data.class.length !==0) { %>
+                <div class="flex  space-x-3 overflow-auto  md:justify-center items-center">
+                    <% let array=data.class %>
+                        <%const arraySemRepeticao=[...new Set(array)];%>
+
+                            <% arraySemRepeticao.forEach(element=> { %>
+                                <% if (element && element !=='undefined' && element !=='' ) { %>
+                                    <p
+                                        class="px-8 py-2 bg-gray-800  text-white rounded-full m-auto md:m-0 text-center flex-none">
+                                        <%= element.replace(/_/g, ' ' ) %>
+                                    </p>
+                                    <% } %>
+                                        <% }) %>
+                </div>
+                <% } %>
+        </article>
 
 
-    <section class="m-auto max-w-screen-lg grid md:grid-cols-3 grid-cols-2  items-center justify-around mb-10 gap-2 p-2">
+        <!-- <section class="m-auto max-w-screen-lg grid md:grid-cols-3 grid-cols-2  items-center justify-around mb-10 gap-2 p-2">
         <a href="https://curriculoexpress.com.br?ref=pt" target="_blank">
             <img src="/advertising/IMG_0924.png" alt="Curriculo express" class="w-72 m-auto">
         </a>
@@ -101,29 +118,57 @@
         <a href="https://curriculoexpress.com.br?ref=pt" target="_blank">
             <img src="/advertising/IMG_0926.png" alt="Curriculo express" class="w-72 m-auto">
         </a>
-    </section>
+    </section> -->
+        <section>
 
-    
-    <section class="p-4  m-auto grid grid-cols-1 md:grid-cols-2 md:max-w-[35%] gap-4  items-center space-x-4  ">
-        <button onclick="download('<%= data.link %>', true)" class="m-auto max-w-72 md:m-0  px-4 py-2 bg-blue-700 hover:bg-blue-800 hover:shadow-lg duration-300 text-white text-center rounded-md w-full ">DOWNLOAD</button>
-        
-        <button onclick="copyToClipboard('<%= data.link %>', this), download('<%= data.link %>', false)" class="m-auto max-w-72  py-2 rounded-md bg-gray-700 hover:bg-gray-800 duration-300 hover:shadow-md  flex items-center justify-center space-x-2 px-8" style="margin-left: auto; margin-right: auto;" >
-            <span>
-                <img src="/icons/icons8-copiar-96.png" class="w-7" alt="">
-            </span>
-            <p >MAGNET LINK</p>
-        </button>
-    </section>
+            <script async
+                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3260819922434722"
+                crossorigin="anonymous"></script>
+            <!-- quadrado -->
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3260819922434722"
+                data-ad-slot="8552810220" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </section>
 
-    <!-- Palavras chaves -->
-    <%- include('./components/keywords.ejs', {name: data.name}) %>
 
-    <!-- Btn Up -->
-    <%- include('./components/btnUp.ejs') %>
+        <section class="p-4  m-auto grid grid-cols-1 md:grid-cols-2 md:max-w-[35%] gap-4  items-center space-x-4  ">
+            <button onclick="download('<%= data.link %>', true)"
+                class="m-auto max-w-72 md:m-0  px-4 py-2 bg-blue-700 hover:bg-blue-800 hover:shadow-lg duration-300 text-white text-center rounded-md w-full ">DOWNLOAD</button>
 
-    <!-- Footer -->
-    <%- include('./components/footer.ejs') %>
+            <button onclick="copyToClipboard('<%= data.link %>', this), download('<%= data.link %>', false)"
+                class="m-auto max-w-72  py-2 rounded-md bg-gray-700 hover:bg-gray-800 duration-300 hover:shadow-md  flex items-center justify-center space-x-2 px-8"
+                style="margin-left: auto; margin-right: auto;">
+                <span>
+                    <img src="/icons/icons8-copiar-96.png" class="w-7" alt="">
+                </span>
+                <p>MAGNET LINK</p>
+            </button>
+        </section>
+
+        <section>
+            <script async
+                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3260819922434722"
+                crossorigin="anonymous"></script>
+            <!-- Vertical -->
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3260819922434722"
+                data-ad-slot="9261642261" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </section>
+
+        <!-- Palavras chaves -->
+        <%- include('./components/keywords.ejs', {name: data.name}) %>
+
+            <!-- Btn Up -->
+            <%- include('./components/btnUp.ejs') %>
+
+                <!-- Footer -->
+                <%- include('./components/footer.ejs') %>
 </body>
+
 </html>
 
 <script>
@@ -143,7 +188,7 @@
         }, 1000);
     }
 
-    async function download(link, direcionar){
+    async function download(link, direcionar) {
         console.log('click download')
         const id = '<%= data.id %>';
         const url = `/downloadCont/${id}`
@@ -154,19 +199,19 @@
                 'Content-Type': 'application/json',
             },
         })
-        .then(response => response.json())
-        .then((data) => {
-            console.log(`Download contado com sucesso!: ${data.download}`);
-            // Redirecionar
-            if(direcionar){
-               window.open(link, '_blank');
-            }    
-        })
-        .catch((error) => {
-            console.error('Erro ao contar Download:', error);
-            if(direcionar){
-               window.open(link, '_blank');
-            }    
-        });
+            .then(response => response.json())
+            .then((data) => {
+                console.log(`Download contado com sucesso!: ${data.download}`);
+                // Redirecionar
+                if (direcionar) {
+                    window.open(link, '_blank');
+                }
+            })
+            .catch((error) => {
+                console.error('Erro ao contar Download:', error);
+                if (direcionar) {
+                    window.open(link, '_blank');
+                }
+            });
     }
 </script>
