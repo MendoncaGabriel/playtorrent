@@ -3,8 +3,8 @@ const router = express.Router();
 const cache = require('memory-cache');
 const http = require('http');
 const https = require('https');
-// const cacheTime = 24 * 60 * 60 * 1000
-const cacheTime = 1000
+const cacheTime = 24 * 60 * 60 * 1000
+//const cacheTime = 1000
 
 //Schemas-----------------------------------------------------
 const Game = require('../model/gameSchema.js');

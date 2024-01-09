@@ -5,6 +5,7 @@ require("dotenv").config();
 const dbuser = process.env.DB_USER;
 const dbpass = process.env.DB_PASS;
 
+
 function MongoDB(){
     mongoose.connect(process.env.MONGODB_URI || `mongodb+srv://${dbuser}:${dbpass}@cluster0.vuws7v9.mongodb.net/?retryWrites=true&w=majority`)
     .then(()=>{
