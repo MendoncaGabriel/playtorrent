@@ -1,11 +1,11 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 require("dotenv").config();
 
 
-const urlConnect = process.env.MONGODB_URI
+const MONGODB_URI = process.env.MONGODB_URI;
 
 function MongoDB(){
-    mongoose.connect(urlConnect)
+    mongoose.connect(MONGODB_URI)
     .then(()=>{
         console.log('Conectado ao MongoDB')
     })
@@ -15,3 +15,6 @@ function MongoDB(){
     })
 }
 module.exports = MongoDB()
+
+
+
