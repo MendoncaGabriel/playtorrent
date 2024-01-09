@@ -4,6 +4,7 @@ const app = express();
 require("dotenv").config(); 
 require('./connect/MongoDB.js');
 const Game = require('./model/gameSchema.js');
+ 
 
 //Portas e Caminhos
 const PORT = 3000;
