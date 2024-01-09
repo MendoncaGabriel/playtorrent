@@ -34,7 +34,7 @@
     <!-- Carrosel mais baixadas -->
     <%- include('./components/carousel.ejs', {title: 'Mais Baixados', dataCarousel: topDownload})%>
 
-
+    <!-- Grid -->
     <%- include('./components/grid.ejs', {data: data, title: 'Recem adicionados'}) %>
 
     <!-- Paginaçõa -->
@@ -46,14 +46,8 @@
     <!-- Footer -->
     <%- include('./components/footer.ejs') %>
 
-
-
-
-
 </body>
 </html>
-
-
 <script>
     //contar viwer
     fetch('/services/constView', {

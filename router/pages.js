@@ -3,7 +3,8 @@ const router = express.Router();
 const cache = require('memory-cache');
 const http = require('http');
 const https = require('https');
-const cacheTime = 24 * 60 * 60 * 1000
+// const cacheTime = 24 * 60 * 60 * 1000
+const cacheTime = 1000
 
 //Schemas-----------------------------------------------------
 const Game = require('../model/gameSchema.js');
@@ -60,6 +61,24 @@ async function TopViewr(){
         return data
     } catch (error) {
         console.log('Erro ao caregar topViews :' + data)
+    }
+}
+
+async function Recomendation(generoDaPaginaAtual, nomeDoJogo){
+    try {
+        console.log(nomeDoJogo);
+
+        const data = await Game.find({
+            "class": { $in: generoDaPaginaAtual }
+        }).limit(11);
+
+        if (data) {
+            // Encontrar e remover o jogo com o mesmo nome da lista
+            const filteredData = data.filter(jogo => jogo.name !== nomeDoJogo);
+            return filteredData;
+        }
+    } catch (error) {
+        console.log('Erro ao caregar Recomendation :' + data)
     }
 }
 
@@ -139,27 +158,31 @@ router.get('/page/:pg', async (req, res) => {
 
 // download
 router.get('/download/:name', async (req, res) => {
-
+    
     try {
         const nameTratado = req.params.name.replace(/-/g, ' ');
-        if (!nameTratado) {
-            return res.status(422).json({ msg: 'Nome inválido!' });
-        }
         const cachedData = cache.get(nameTratado);
 
         if (cachedData) {
-            console.log('Pagina com cash')
-            res.render('game', { data: cachedData });
+            console.log('CACHE')
+            const { data, recomend } = cachedData;
+            res.render('game', { data: data, recomend: recomend });
             
-        }else{
-            console.log('Pagina sem cash')
+        }
+        else{
+            console.log('NO CACHE!')
         
-            const data = await Game.findOne({ name: { $regex: new RegExp(`^${nameTratado}$`, 'i') } });            
+            const [data] = await Promise.all([
+                Game.findOne({ name: { $regex: new RegExp(`^${nameTratado}$`, 'i') } }).lean(),
+            ]);
+
 
 
             if (data) {
-                cache.put(nameTratado, data, cacheTime); 
-                res.render('game', { data: data });
+                const recomend = await Recomendation(data.class, data.name);
+                cache.put(data, recomend); 
+                
+                res.render('game', { data: data, recomend: recomend });
                
             } else {
                 res.status(404).render('404', {msg: "Jogo não encontrado!"});
