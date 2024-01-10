@@ -17,15 +17,59 @@
     <div id="<%= idUl %>" class="shadow-md overflow-auto  bg-white flex-col p-2 rounded-md text-black absolute top-[100%] w-auto z-50 hidden space-y-2 " style="max-height: 200px; height: auto;">
         
         <% for( let i = 0; i < array.length; i++ ) { %>
-
-            <% if (typeof pg !== 'undefined' && pg) { %>
-                <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/<%= title.toLowerCase()  %>/<%= array[i] %>/<%= pg %>"><%= array[i].replace('_', ' ') %></a>
+            <% if (array[i] === 'Sair') { %>
+                <button id="btnSair" onclick="sair()" class="hover:bg-gray-300 w-full px-4 py-2 flex items-center"><%= array[i].replace('_', ' ') %></button>
+            <% } else if (typeof pg !== 'undefined' && pg) { %>
+                <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center" href="/<%= title.toLowerCase() %>/<%= array[i] %>/<%= pg %>"><%= array[i].replace('_', ' ') %></a>
             <% } else { %> 
-                <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/<%= title.toLowerCase()  %>/<%= array[i] %>"><%= array[i].replace('_', ' ') %></a>
+                <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center" href="/<%= title.toLowerCase() %>/<%= array[i] %>"><%= array[i].replace('_', ' ') %></a>
             <% } %>
+            
         <%}%>    
         
     </div>
+
+
+
+    <script>
+
+
+
+        function checkSair() {
+            function getCookie(name) {
+                const cookies = document.cookie.split('; ');
+                for (const cookie of cookies) {
+                    const [cookieName, cookieValue] = cookie.split('=');
+                    if (cookieName === name) {
+                        return cookieValue;
+                    }
+                }
+                return null;
+            }
+
+            const userName = getCookie('tokenUser');
+
+            if (userName == null) {
+                document.getElementById('btnSair').style.display = 'none';
+                console.log('ocultar');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', checkSair);
+
+        function sair() {
+            // Remover o cookie tokenUser
+            document.cookie = "tokenUser=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+            // Remover userName do localStorage
+            localStorage.removeItem('userName');
+
+            // Recarregar a página
+            location.reload();
+        }
+
+
+
+    </script>
 
     <script>
 
