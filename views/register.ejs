@@ -61,7 +61,7 @@ function register() {
         password: document.getElementById('password').value
     };
 
-    fetch('/auth/register', {
+    fetch('/authentication/register', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',

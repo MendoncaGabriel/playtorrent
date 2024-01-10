@@ -28,7 +28,7 @@ const services = require('./router/services.js')
 const auth = require('./router/auth.js')
 app.use('/', routesPages);
 app.use('/services', services);
-app.use('/auth', auth)
+app.use('/authentication', auth)
 
 
 

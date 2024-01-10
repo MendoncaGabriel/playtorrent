@@ -114,7 +114,7 @@ inputPesquisa.addEventListener('keyup', (event) => {
         if (token) {
             console.log('Usuário está com token.');
 
-            fetch('/auth/check-token', {
+            fetch('/authentication/check-token', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
