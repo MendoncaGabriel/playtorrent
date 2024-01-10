@@ -10,24 +10,23 @@ const User = require('../model/user.js')
 //Registrar usuario
 router.use(express.json());
 router.post('/register', async (req, res) => {
-    console.log(req.body);
     const { name, email, password } = req.body;
 
     // validação
     if (!name) {
-        return res.status(422).json({ msg: "o nome é obrigatório" });
+        return res.status(422).json({ field: 'name', msg: 'O nome é obrigatório' });
     }
     if (!email) {
-        return res.status(422).json({ msg: "o email é obrigatório" });
+        return res.status(422).json({ field: 'email', msg: 'O email é obrigatório' });
     }
     if (!password) {
-        return res.status(422).json({ msg: "a senha é obrigatória" });
+        return res.status(422).json({ field: 'password', msg: 'A senha é obrigatória' });
     }
 
     // verificar se o usuário já existe
     const userExists = await User.findOne({ email: email });
     if (userExists) {
-        return res.status(422).json({ msg: "por favor, utilize outro email" });
+        return res.status(422).json({ field: 'email', msg: 'Por favor, utilize outro email' });
     }
 
     // criar senha hash
@@ -53,6 +52,7 @@ router.post('/register', async (req, res) => {
         res.status(500).json({ msg: 'Aconteceu um erro no servidor, tente novamente mais tarde!' });
     }
 });
+
 
 //fazer login
 router.post('/login', async (req, res)=>{
@@ -109,7 +109,6 @@ router.post('/check-token', (req, res) => {
 
     try {
         const SECRET = process.env.SECRET
-        console.log(SECRET)
         const decoded = jwt.verify(token, SECRET);
         console.log(decoded)
 

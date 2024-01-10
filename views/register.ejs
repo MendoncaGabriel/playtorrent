@@ -78,18 +78,12 @@ function register() {
     })
     .then(responseData => {
         console.log(responseData);
-
-        // Salvar o token em um cookie chamado 'tokenUser'
         document.cookie = `tokenUser=${responseData.token}; path=/`;
-        // Ou você pode usar uma biblioteca como js-cookie para facilitar a manipulação de cookies
-        // Exemplo usando js-cookie: https://github.com/js-cookie/js-cookie
-        // import Cookies from 'js-cookie';
-        // Cookies.set('tokenUser', responseData.token, { path: '/' });
-
         window.open('/');
     })
     .catch(error => {
-        console.error(error);
+        console.log(error);
+        c
         // Lida com erros na requisição aqui
     });
 }
