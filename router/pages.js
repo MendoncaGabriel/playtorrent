@@ -127,26 +127,37 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/page/:pg', async (req, res) => {
-
     try {
-        const pg = req.params.pg
-        const pageSize = 20
-        //cache
-        const cacheKey = req.originalUrl || req.url
-        const cachedData = cache.get(cacheKey);
-        if (cachedData) {
-            return es.render('page', { title: 'Home', data: cachedData, page: pg });
-        } 
+        const pg = req.params.pg;
+        const pageSize = 20;
+        const cacheKey = req.originalUrl || req.url;
 
-        const data = await Game.find().skip(pg * pageSize).limit(pageSize)
-        cache.put(cacheKey, data, cacheTime);
-        res.render('page', { title: 'Home', data: data, page: pg });
+        // Check if data is already in the cache
+        const cachedData = cache.get(cacheKey);
+
+        if (cachedData) {
+            console.log('CACHE')
+            // Data is available in the cache, use it
+            const { title, data, page } = cachedData;
+            return res.render('page', { title, data, page });
+        }
+        console.log('NO CACHE')
+
+        // Data is not in the cache, fetch it from the database
+        const data = await Game.find().skip(pg * pageSize).limit(pageSize);
+
+        // Store the data in the cache for future use
+        cache.put(cacheKey, { title: 'Home', data, page: pg }, cacheTime);
+
+        // Render the page with the fetched data
+        res.render('page', { title: 'Home', data, page: pg });
+
     } catch (error) {
         console.error(error);
-        return  res.status(404).render('404',{msg: "Erro na pagina!"});
+        return res.status(404).render('404', { msg: 'Erro na pagina!' });
     }
-   
-})
+});
+
 
 router.get('/download/:name', async (req, res) => {
     
