@@ -223,11 +223,11 @@ router.get('/genero/:genero/:pg', async (req, res)=>{
 
         const data = await Game.find({
             "class": { $in: genero }
-        }).skip(pg * 20).limit(50);
+        }).skip(pg * 20).limit(20);
 
         const titulo = 'GÊNERO: ' + genero.toUpperCase()
-
-        res.render('genero', {data:data, title: titulo, total: totalResults});
+        const n = (totalResults/20).toFixed(0)
+        res.render('genero', {data:data, title: titulo, pages: n });
 
     } catch (erro) {
 
@@ -253,8 +253,8 @@ router.get('/plataforma/:plataforma/:pg', async (req, res)=>{
         }).skip(pg * 20).limit(20)
 
         const titulo = 'PLATAFORMA: ' + plataforma.toUpperCase()
-
-        res.render('plataforma', {data:data, title: titulo, total: totalResults});
+        const n = (totalResults/20).toFixed(0)
+        res.render('plataforma', {data:data, title: titulo, pages: n});
 
     } catch (erro) {
 

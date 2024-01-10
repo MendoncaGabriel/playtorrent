@@ -1,0 +1,82 @@
+<div class="text-gray-600 w-full flex justify-around items-center max-w-screen-sm md:px-16 px-5 m-auto my-10">
+    <button id="previousBtn" class="bg-white rounded-md px-4 py-1 font-medium hover:bg-gray-600 hover:text-white" onclick="previous()">Página Anterior</button>
+    <button id="nextBtn" class="bg-white rounded-md px-4 py-1 font-medium hover:bg-gray-600 hover:text-white" onclick="next()">Próxima Página</button>
+</div>
+
+
+
+<script>
+  var regex = /\/(\d+)$/;
+  let url = window.location.href;
+
+  function getNextNumber(currentNumber) {
+    currentNumber = parseInt(currentNumber, 10);
+    var nextNumber = currentNumber + 1;
+    return nextNumber.toString();
+  }
+
+  function getPreviousNumber(currentNumber) {
+    currentNumber = parseInt(currentNumber, 10);
+    var previousNumber = currentNumber - 1;
+    return previousNumber > 0 ? previousNumber.toString() : null;
+  }
+
+  function updateURL(newNumber) {
+    return url.replace(regex, '/' + newNumber);
+  }
+
+  function updateAndRedirect(newNumber) {
+    var novaURL = updateURL(newNumber);
+    window.location.href = novaURL;
+  }
+
+
+  function updateButtonVisibility(currentNumber) {
+    
+    var previousBtn = document.getElementById('previousBtn');
+  
+    var nextBtn = document.getElementById('nextBtn');
+
+    // Oculta o botão "Página Anterior" se o número for igual a 1
+    previousBtn.style.display = currentNumber === '1' ? 'none' : 'block';
+
+    // Oculta o botão "Próxima Página" se o número for igual a 10
+    nextBtn.style.display = currentNumber === `<%= pages  %>` ? 'none' : 'block';
+  }
+
+ 
+
+  function next() {
+    var match = url.match(regex);
+
+    if (match && match[1]) {
+      var currentNumber = match[1];
+      var nextNumber = getNextNumber(currentNumber);
+      updateAndRedirect(nextNumber);
+    } else {
+      console.log("Nenhum número encontrado na URL.");
+    }
+  }
+
+  function previous() {
+    var match = url.match(regex);
+
+    if (match && match[1]) {
+      var currentNumber = match[1];
+      var previousNumber = getPreviousNumber(currentNumber);
+
+      if (previousNumber !== null) {
+        updateAndRedirect(previousNumber);
+      } else {
+        console.log("Não há número anterior.");
+      }
+    } else {
+      console.log("Nenhum número encontrado na URL.");
+    }
+  }
+
+
+let match = url.match(regex);
+updateButtonVisibility(match && match[1]);
+ 
+</script>
