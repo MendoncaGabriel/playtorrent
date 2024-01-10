@@ -263,15 +263,23 @@ router.get('/plataforma/:plataforma/:pg', async (req, res)=>{
 })
 
 
-router.get('/teste', async (req, res) => {
+router.get('/auth/:modo', async (req, res) => {
     try {
-        const platforms = await Game.distinct('platform');
-        res.json({ platforms });
+        const modo = req.params.modo
+
+        if(modo == 'login'){
+            res.render('login');
+        }else{
+            res.render('register');
+        }
+       
+        
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Erro ao buscar plataformas.' });
+        console.error('Erro: ' + error);
+       
     }
 });
+
 
 // Lista de paginas sem capas
 router.get('/checkImage', async (req, res) => {
@@ -292,10 +300,6 @@ router.get('/checkImage', async (req, res) => {
 
 
 
-//rotas
-router.get('/topView', async (req, res)=>{
-    
-})
 
 router.get('/topDownloads', async (req, res)=>{
     try {

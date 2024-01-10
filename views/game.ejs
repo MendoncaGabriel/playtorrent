@@ -60,19 +60,20 @@
     <!-- Descrição -->
     <article class="p-4  m-auto max-w-screen-lg">
         <div class="space-y-5">
-            <% if (data.description) { %>
+            <% if (typeof data.description !== 'undefined' && data.description) { %>
+       
                 <p>
                     <%= data.description %>
                 </p>
             <% } %>
 
-            <% if (data.information) { %>
+            <% if (typeof data.description !== 'undefined' && data.information) { %>
                 <p>
                     <%= data.information %>
                 </p>
             <% } %>
 
-            <% if (data.platform) { %>
+            <% if (typeof data.plataforma !== 'undefined' && data.platform) { %>
                 <p>
                     Plataforma: <%= data.platform %>
                 </p>
@@ -80,7 +81,7 @@
         </div>
 
         <!-- GÊNERO -->
-        <% if (data.class && data.class.length !==0) { %>
+        <% if (typeof data.class !== 'undefined' && data.class && data.class.length !== 0) { %>
             <div class="flex  space-x-3 overflow-auto  md:justify-center items-center">
                 <% let array=data.class %>
                 <%const arraySemRepeticao=[...new Set(array)];%>

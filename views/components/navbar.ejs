@@ -17,105 +17,24 @@
         
         <ul class=" md:p-4 w-full md:w-auto space-x-4 text-white  flex items-center justify-around pt-4 md:pt-auto " style="margin: 0;">
             <!-- PLATAFORMA -->
-            <li id="drowpDownPlataform">
-                <div id="drowpDownPlataform" class="flex items-center justify-center space-x-2 relative">
-                    <h2>PLATAFORMA</h2>
-                    <img src="/icons/icons8-ordem-descendente-96.png" alt="icone seta" class="w-4">
-                
-                    <div id="drowpDownPlataformUl" class="shadow-md overflow-auto  bg-white flex-col p-2 rounded-md text-black absolute top-[100%] w-auto z-50 hidden space-y-2 " style="height: 200px;">
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/plataforma/COMPUTADOR/1">COMPUTADOR</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/plataforma/PS2/1">PS2</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/plataforma/PS3/1">PS3</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/plataforma/PSP/1">PSP</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/plataforma/XBOX 360/1">XBOX 360</a>
-                     
-                    </div>
-                
-                    <script>
-                        let drowpDownPlataform = document.getElementById('drowpDownPlataform');
-                        let drowpDownPlataformUl = document.getElementById('drowpDownPlataformUl');
-                
-                        drowpDownPlataform.addEventListener('mouseover', () => {
-                            drowpDownPlataformUl.classList.remove('hidden');
-                        });
-                
-                        drowpDownPlataform.addEventListener('mouseout', () => {
-                            drowpDownPlataformUl.classList.add('hidden');
-                        });
-                
-                        // Adicionando um evento ao dropdown para mantê-lo visível ao passar o mouse sobre ele
-                        drowpDownPlataformUl.addEventListener('mouseover', () => {
-                            drowpDownPlataformUl.classList.remove('hidden');
-                        });
-                
-                        // Adicionando um evento ao dropdown para ocultá-lo ao tirar o mouse dele
-                        drowpDownPlataformUl.addEventListener('mouseout', () => {
-                            drowpDownPlataformUl.classList.add('hidden');
-                        });
-                    </script>
-                </div>
-                
+            <li>
+                <% const platformArry = ['COMPUTADOR', 'PS2', 'PS3', 'PSP', 'XBOX 360'] %>
+                <%- include('./dropdown.ejs',  {title: 'PLATAFORMA', array: platformArry, pg: '1'}) %>
             </li>
 
             <!-- GENERO -->
-            <li id="drowpDownDender">
-                <div id="drowpDownDender" class="flex items-center justify-center space-x-2 relative">
-                    <h2>GENERO</h2>
-                    <img src="/icons/icons8-ordem-descendente-96.png" alt="icone seta" class="w-4">
-                
-                    <div id="drowpDownDenderUl" class="shadow-md overflow-auto  bg-white flex-col p-2 rounded-md text-black absolute top-[100%] w-auto z-50 hidden space-y-2 " style="height: 200px;">
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/ANIME/1">ANIME</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/AVENTURA/1">AVENTURA</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/CASUAL/1">CASUAL</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/CORRIDA/1">CORRIDA</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/CRIME/1">CRIME</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/DESTRUIÇÃO/1">DESTRUIÇÃO</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/ESPORTES/1">ESPORTES</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/ESTRATÉGIA/1">ESTRATÉGIA</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/FANTASIA/1">FANTASIA</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/FICÇÃO/1">FICÇÃO</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/HISTÓRIA/1">HISTÓRIA</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/INDIE/1">INDIE</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/LUTA/1">LUTA</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/MUNDO_ABERTO/1">MUNDO ABERTO</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/NUDEZ/1">NUDEZ</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/PLATAFORMA/1">PLATAFORMA</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/PUZZLE/1">PUZZLE</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/RPG/1">RPG</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/SIMULAÇÃO/1">SIMULAÇÃO</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/SOBREVIVÊNCIA/1">SOBREVIVÊNCIA</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/TERROR/1">TERROR</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/TIRO/1">TIRO</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/TOP_GAMES/1">TOP GAMES</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/+18/1">+18</a>
-                        <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center " href="/genero/NSW/1">NSW</a>
-                    </div>
-                
-                    <script>
-                        let drowpDownDender = document.getElementById('drowpDownDender');
-                        let drowpDownDenderUl = document.getElementById('drowpDownDenderUl');
-                
-                        drowpDownDender.addEventListener('mouseover', () => {
-                            drowpDownDenderUl.classList.remove('hidden');
-                        });
-                
-                        drowpDownDender.addEventListener('mouseout', () => {
-                            drowpDownDenderUl.classList.add('hidden');
-                        });
-                
-                        // Adicionando um evento ao dropdown para mantê-lo visível ao passar o mouse sobre ele
-                        drowpDownDenderUl.addEventListener('mouseover', () => {
-                            drowpDownDenderUl.classList.remove('hidden');
-                        });
-                
-                        // Adicionando um evento ao dropdown para ocultá-lo ao tirar o mouse dele
-                        drowpDownDenderUl.addEventListener('mouseout', () => {
-                            drowpDownDenderUl.classList.add('hidden');
-                        });
-                    </script>
-                </div>
-                
+            <li>
+                <% const generoArry = ['ANIME', 'AVENTURA', 'CASUAL', 'CORRIDA', 'CRIME', 'DESTRUIÇÃO', 'DESTRUIÇÃO', 'ESPORTES', 'ESTRATÉGIA', 'FANTASIA', 'FICÇÃO', 'HISTÓRIA', 'INDIE', 'LUTA', 'MUNDO_ABERTO', 'NUDEZ', 'PLATAFORMA', 'PUZZLE', 'RPG', 'SIMULAÇÃO', 'SOBREVIVÊNCIA', 'TERROR', 'TIRO', 'TOP_GAMES', 'NSW'] %>
+                <%- include('./dropdown.ejs',  {title: 'GENERO', array: generoArry, pg: '1'}) %>
             </li>
+
+            <!-- USUARIO -->
+            <li>
+                <% const generoAuth = ['login', 'register'] %>
+                <%- include('./dropdown.ejs',  {title: 'AUTH', img:'/icons/icons8-usuário-96.png', array: generoAuth}) %>
+            </li>
+
+            <!-- Home -->
             <li>
                 <a href="/">
                     <span class="material-symbols-outlined text-gray-white text-2xl duration-300 hover:scale-125">
