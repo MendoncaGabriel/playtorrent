@@ -28,11 +28,6 @@
                 <%- include('./dropdown.ejs',  {title: 'GENERO', array: generoArry, pg: '1'}) %>
             </li>
 
-            <!-- USUARIO -->
-            <li>
-                <% const generoAuth = ['login', 'register'] %>
-                <%- include('./dropdown.ejs',  {title: 'AUTH', img:'/icons/icons8-usuário-96.png', array: generoAuth}) %>
-            </li>
 
             <!-- Home -->
             <li>
@@ -42,9 +37,33 @@
                     </span>
                 </a>
             </li>
+
+            <!-- USUARIO -->
+            <li>
+                <% const generoAuth = ['login', 'register'] %>
+                <%- include('./dropdown.ejs',  {title: 'AUTH', img:'/icons/icons8-usuário-96.png', array: generoAuth}) %>
+            </li>
+
+            <li>
+                <h2 id="Username" class="text-white"></h2>
+                <script>
+                    const userName = localStorage.userName
+                    if(userName && userName !== 'undefined'){
+                        document.getElementById('Username').innerText = userName
+                    }
+                </script>
+            </li>
+
+
     
         </ul>
+
+
     </div>
+
+    
+    
+   
 </nav>
 
 
@@ -72,5 +91,45 @@ inputPesquisa.addEventListener('keyup', (event) => {
     }
 });
 
+
+</script>
+
+
+
+
+<script>
+    function checkUserLoggedIn() {
+        function getCookie(name) {
+            const cookies = document.cookie.split('; ');
+            for (const cookie of cookies) {
+                const [cookieName, cookieValue] = cookie.split('=');
+                if (cookieName === name) {
+                    return cookieValue;
+                }
+            }
+            return null;
+        }
+        const token = getCookie('tokenUser');
+
+        if (token) {
+            console.log('Usuário está com token.');
+
+            fetch('/auth/check-token', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({token: token})
+            })
+            .then(res => res.json())
+            .then((response)=>{
+                console.log(response)
+                localStorage.userName = response.userName
+            })
+        } else {
+            // Token não existe, usuário não está logado
+            console.log('Usuário não está logado.');
+        }
+    }checkUserLoggedIn();
 
 </script>

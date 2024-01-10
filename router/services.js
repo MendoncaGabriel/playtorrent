@@ -1,8 +1,12 @@
+require('dotenv').config()
 const express = require('express');
 const router = express.Router();
-const http = require('http');
-const https = require('https');
 const Visitas = require('../model/Visitas.js')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const User = require('../model/user.js')
+
+
 
 router.post('/constView', async (req, res) => {
     try {
@@ -28,8 +32,6 @@ router.post('/constView', async (req, res) => {
         res.status(500).json({ error: 'Erro interno do servidor' });
     }
 });
-
-
 //Relatorio de visitas
 router.get('/views', async (req, res) => {
     try {
@@ -40,4 +42,11 @@ router.get('/views', async (req, res) => {
         res.status(500).send('Erro interno do servidor');
     }
 });
+
+
+
+
+
+
+
 module.exports = router;

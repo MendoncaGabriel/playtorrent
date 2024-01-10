@@ -23,32 +23,60 @@
     <link rel="stylesheet" href="/css/global.css">
 
 </head>
-<body class="bg-gray-900">
+<body class="bg-gray-900 flex items-center justify-center h-screen">
     
-<h2 class="text-white">EM BREVE...</h2>
+    <div  class="bg-white p-8 md:w-96 rounded-md shadow-md space-y-8">
+        <h2 class="text-center text-2xl">Fazer Login</h2>
 
+        <div>
+            <label for="email">Usuario:</label><br>
+            <input id="email" type="text" placeholder="Usuario" class="border px-4 py-2 w-full bg-gray-50">
+        </div>
+        <div>
+            <label for="password">Senha:</label><br>
+            <input id="password" type="text" placeholder="Usuario" class="border px-4 py-2 w-full bg-gray-50">
+        </div>
 
+        <button onclick="login()" class="bg-blue-500 hover:bg-blue-600 hover:shadow-md w-full py-2 text-white text-xl">Entrar</button>
+
+        <p class="text-center">Não tem uma conta?  <a href="/auth/register" class="text-blue-500">Criar conta</a></p>
+    </div>
 
 </body>
 </html>
+
 <script>
-    //contar viwer
-    fetch('/services/constView', {
-        method: 'POST',
+    function login() {
+    let data = {
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value
+    };
+
+    fetch('/auth/login', {
+        method: "POST",
         headers: {
             'Content-Type': 'application/json',
         },
+        body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .then((data) => {
-        console.log(data.msg);
+    .then(response => {
+        if (response.status === 200) {
+            // A resposta foi bem-sucedida, agora você pode manipular os dados em responseData
+            return response.json();
+        } else {
+            throw new Error(`Erro na requisição: ${response.status}`);
+        }
     })
-    .catch((error) => {
-        console.error('Erro ao contar Download:', error);  
+    .then(responseData => {
+        document.cookie = `tokenUser=${responseData.token}; path=/`;
+        window.open('/');
+    })
+    .catch(error => {
+        console.error(error);
+        // Lida com erros na requisição aqui
     });
+}
+
+
+    </script>
 </script>
-
-
-
-
-

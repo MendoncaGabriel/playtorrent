@@ -25,8 +25,11 @@ app.use(express.static(PUBLIC_PATH));
 //rotas
 const routesPages = require('./router/pages.js');
 const services = require('./router/services.js')
+const auth = require('./router/auth.js')
 app.use('/', routesPages);
 app.use('/services', services);
+app.use('/auth', auth)
+
 
 
 //rotas-------------
