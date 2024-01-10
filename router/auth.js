@@ -109,6 +109,7 @@ router.post('/check-token', (req, res) => {
 
     try {
         const SECRET = process.env.SECRET
+        console.log(SECRET)
         const decoded = jwt.verify(token, SECRET);
         console.log(decoded)
 

@@ -2,9 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const router = express.Router();
 const Visitas = require('../model/Visitas.js')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const User = require('../model/user.js')
+
 
 
 
