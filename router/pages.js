@@ -4,14 +4,10 @@ const cache = require('memory-cache');
 const http = require('http');
 const https = require('https');
 const cacheTime = 24 * 60 * 60 * 1000
-//const cacheTime = 1000
+
 
 //Schemas-----------------------------------------------------
 const Game = require('../model/gameSchema.js');
-
-
-
-
 
 
 
@@ -51,7 +47,6 @@ async function isImageValid(teste) {
         return false;
     }
 }
-
 
 async function TopViewr(){
     try {
@@ -95,8 +90,6 @@ async function TopDownload(){
 
 
 //Rotas de paginas--------------------------------------------------------
-
-// home
 router.get('/', async (req, res) => {
     try {
         const cacheKey = req.originalUrl || req.url;
@@ -133,7 +126,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// paginação
 router.get('/page/:pg', async (req, res) => {
 
     try {
@@ -156,7 +148,6 @@ router.get('/page/:pg', async (req, res) => {
    
 })
 
-// download
 router.get('/download/:name', async (req, res) => {
     
     try {
@@ -195,7 +186,6 @@ router.get('/download/:name', async (req, res) => {
     }
 })
 
-// Busca
 router.get('/search/:name', async (req, res) => {
 
     try {
@@ -217,6 +207,71 @@ router.get('/search/:name', async (req, res) => {
 
   
 })
+
+router.get('/genero/:genero/:pg', async (req, res)=>{
+    try {
+        const genero = req.params.genero;
+        const pg = req.params.pg;
+        
+        if (!genero) {
+            return res.status(422).json({ msg: "Sem genero definido" });
+        }
+
+        const totalResults = await Game.find({
+            "class": { $in: genero }
+        }).countDocuments();
+
+        const data = await Game.find({
+            "class": { $in: genero }
+        }).skip(pg * 20).limit(50);
+
+        const titulo = 'GÊNERO: ' + genero.toUpperCase()
+
+        res.render('genero', {data:data, title: titulo, total: totalResults});
+
+    } catch (erro) {
+
+        return  res.status(404).render('404',{msg: 'erro ao buscar game por id!', erro: erro});
+    }
+})
+
+router.get('/plataforma/:plataforma/:pg', async (req, res)=>{
+    try {
+        const plataforma = req.params.plataforma;
+        const pg = req.params.pg;
+        
+        if (!plataforma) {
+            return res.status(422).json({ msg: "Sem plataforma definido" });
+        }
+
+        const totalResults = await Game.find({
+            "platform": { $in: plataforma }
+        }).countDocuments();
+
+        const data = await Game.find({
+            "platform": { $in: plataforma }
+        }).skip(pg * 20).limit(20)
+
+        const titulo = 'PLATAFORMA: ' + plataforma.toUpperCase()
+
+        res.render('plataforma', {data:data, title: titulo, total: totalResults});
+
+    } catch (erro) {
+
+        return  res.status(404).render('404',{msg: 'erro ao buscar game por id!', erro: erro});
+    }
+})
+
+
+router.get('/teste', async (req, res) => {
+    try {
+        const platforms = await Game.distinct('platform');
+        res.json({ platforms });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erro ao buscar plataformas.' });
+    }
+});
 
 // Lista de paginas sem capas
 router.get('/checkImage', async (req, res) => {
@@ -241,6 +296,7 @@ router.get('/checkImage', async (req, res) => {
 router.get('/topView', async (req, res)=>{
     
 })
+
 router.get('/topDownloads', async (req, res)=>{
     try {
         const cacheKey = req.originalUrl || req.url;
