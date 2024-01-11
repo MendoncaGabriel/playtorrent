@@ -6,7 +6,9 @@
 <section class="bg-gray-700 md:px-8 md:py-8 max-w-screen-xl m-auto">
     
     <!-- Mensagens -->
-    <div id="containerComments" class="p-4 h-80  max-h-96  space-y-5 overflow-auto "></div>
+    <div id="containerComments" class="p-4 h-80  max-h-96  space-y-5 overflow-auto relative ">
+        <h2 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">Seja o primeiro a comentar :)</h2>
+    </div>
         
 
     <div class="grid md:grid-cols-10 grid-cols-4 md:py-10 py-5 gap-2  p-2 ">
@@ -144,7 +146,7 @@
         console.log(response.comments)
 
 
-        if(response.comments){
+        if(response.comments.length > 0){
             document.getElementById('containerComments').innerHTML = ''
             response.comments.forEach(element => {
                 document.getElementById('containerComments').innerHTML += `
