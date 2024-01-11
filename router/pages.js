@@ -278,9 +278,11 @@ router.get('/auth/:modo', async (req, res) => {
     try {
         const modo = req.params.modo
 
-        if(modo == 'login'){
+        if(modo == 'Login'){
             res.render('login');
-        }else{
+        }
+        
+        else{
             res.render('register');
         }
        
