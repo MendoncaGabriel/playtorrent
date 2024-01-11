@@ -1,0 +1,177 @@
+<div class="m-auto max-w-screen-xl mt-10">
+    <h2 class="text-2xl text-center my-2">Comentários da comunidade:</h2>
+    <hr><br>
+</div>
+
+<section class="bg-gray-700 md:px-8 md:py-8 max-w-screen-xl m-auto">
+    
+    <!-- Mensagens -->
+    <div id="containerComments" class="p-4 h-80  max-h-96  space-y-5 overflow-auto "></div>
+        
+
+    <div class="grid md:grid-cols-10 grid-cols-4 md:py-10 py-5 gap-2  p-2 ">
+        <textarea name="" id="commitTextArea" cols="30" rows="2" placeholder="Mensagem..." class=" max-h-24 min-h-16 h-16 md:col-span-9 col-span-3 border px-4 py-2 bg-gray-50 w-full text-gray-800 focus:outline-none "></textarea>
+    
+        <button class="px-4 py-2 bg-gray-800 " onclick="enviar()">Enviar</button>
+    </div>
+
+    <script>
+        async function checkUserLoggedIn() {
+            function getCookie(name) {
+                const cookies = document.cookie.split('; ');
+                for (const cookie of cookies) {
+                    const [cookieName, cookieValue] = cookie.split('=');
+                    if (cookieName === name) {
+                        return cookieValue;
+                    }
+                }
+                return null;
+            }
+
+            const token = getCookie('tokenUser');
+
+            if (token) {
+                try {
+                    const response = await fetch('/authentication/check-token', {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ token: token })
+                    });
+
+                    if (response.ok) {
+                        console.log('Usuário está logado.');
+                        return true;
+                    } else {
+                        console.log('Erro ao verificar o token.');
+                        return false;
+                    }
+                } catch (error) {
+                    console.error('Erro na requisição:', error);
+                    return false;
+                }
+            } else {
+                console.log('Usuário não está logado.');
+                return false;
+            }
+        }
+
+
+        function obterDataFormatada() {
+            const agora = new Date();
+
+            const dia = agora.getDate().toString().padStart(2, '0');
+            const mes = (agora.getMonth() + 1).toString().padStart(2, '0'); // Lembre-se que os meses começam do zero
+            const ano = agora.getFullYear();
+
+            const hora = agora.getHours().toString().padStart(2, '0');
+            const minuto = agora.getMinutes().toString().padStart(2, '0');
+
+            return `${dia}/${mes}/${ano} - ${hora}:${minuto}`;
+        }
+
+
+        async function enviar() {
+            const commit = document.querySelector('#commitTextArea');
+
+            if (commit.value.length > 0) {
+                try {
+                    const login = await checkUserLoggedIn();
+                    
+                    if (login) {
+                        const id = '<%= id %>';
+
+                        fetch('/services/chat', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ commit: commit.value, id: id, user: localStorage.userName, date: obterDataFormatada() }),
+                        })
+                        .then(res => res.json())
+                        .then((response) => {
+                            if (response && response.success) {
+                                commit.value = '';
+                                console.log('Comentário enviado!');
+                                console.log(response.commit); // Acesse o commit enviado pelo servidor
+                                getComments()
+                            } else {
+                                console.error('Erro ao enviar o comentário:', response && response.error);
+                                alert('Não foi possível enviar seu comentário!');
+                            }
+                        })
+
+                        .catch((erro)=>{
+                            console.error('Erro ao enviar o comentário:', response.statusText);
+                            alert('Não foi possível enviar seu comentário!')
+                        })
+                    } else {
+                        alert('Por favor, faça login ou registre-se');
+                    }
+                } catch (error) {
+                    console.error('Erro na execução do código:', error);
+                    alert('Ocorreu um erro. Tente novamente mais tarde.');
+                }
+            } else {
+                alert('Sem comentário para ser enviado!');
+            }
+        }
+
+
+
+        document.getElementById('commitTextArea').addEventListener('keydown', (event)=>{
+            if(event.keyCode === 13){
+                enviar()
+            }
+        })
+
+    </script>
+
+<script>
+   //pegar comentarios
+
+   function getComments(){
+    const idd = '<%= id %>';
+    fetch('/services/comments/'+idd, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(res => res.json())
+    .then((response) => {
+        console.log(response.comments)
+
+
+        if(response.comments){
+            document.getElementById('containerComments').innerHTML = ''
+            response.comments.forEach(element => {
+                document.getElementById('containerComments').innerHTML += `
+                <div class="flex items-start bg-gray-800 px-4 py-2 gap-4 relative">
+                    <div class="flex-shrink-0">
+                        <img 
+                            src="https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png" 
+                            alt="foto de perfil do usuario"
+                            class="w-12 h-12 rounded-full object-cover"
+                        >
+                    </div>
+                
+                    <div class="flex flex-col w-full bg-white p-4 rounded-md shadow-md">
+                        <h2 class="text-lg font-semibold mb-2 text-gray-800">${element.user}</h2>
+                        <p class="text-gray-700">
+                            ${element.commit}
+                        </p>
+                        <p class="text-sm text-gray-500 mt-2">${element.date}</p>
+                    </div>
+                </div>
+                `
+
+            });
+        }
+    })
+   }
+  getComments()
+</script>
+
+</section>

@@ -56,7 +56,6 @@
         </div>
     </header>
 
-
     <!-- Descrição -->
     <article class="p-4  m-auto max-w-screen-lg">
         <div class="space-y-5">
@@ -118,11 +117,12 @@
         </button>
     </section>
 
-
     <!-- Carrosel mais recomendados -->
     <%- include('./components/carousel.ejs', {title: 'Veja também, recomendados:', dataCarousel: recomend})%>
      
-
+    <!-- Chats -->
+    <%- include('./components/chat.ejs', {id: data._id}) %>
+     
     <!-- Palavras chaves -->
     <%- include('./components/keywords.ejs', {name: data.name}) %>
 

@@ -16,6 +16,7 @@ const gameSchema = new mongoose.Schema({
     type: String,
     download: Number,
     views: Number,
+    comments: Array
 });
 
 // Crie um índice no campo 'name'
