@@ -3,17 +3,21 @@ const express = require('express');
 const router = express.Router();
 const Game = require('../model/gameSchema.js')
 const checkToken = require('../services/checkToken.js')
+const filterProfanity = require('../services/filterProfanity.js')
 
 router.use(express.json());
-
 router.post('/chat', checkToken, async (req, res) => {
     try {
         const data = req.body;
         const gameId = data.id;
 
+
+        const comentario = filterProfanity(data.commit)
+        
+
         const updatedGame = await Game.findByIdAndUpdate(
             gameId,
-            { $push: { comments: { commit: data.commit, user: data.user, date: data.date } } },
+            { $push: { comments: { commit: comentario, user: data.user, date: data.date } } },
             { new: true }
         );
 
