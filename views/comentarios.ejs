@@ -23,6 +23,8 @@
                         <% console.log(jogo.comments) %>
 
                         <li class="border p-2 bg-gray-300">
+                            <strong>ID:</strong> <%= jogo._id %>
+                            <br>
                             <strong>Nome do Jogo:</strong> <%= jogo.name %>
                             <br>
                             <strong>Ultimo comentario:</strong> <%= jogo.comments[jogo.comments.length-1].date %>
