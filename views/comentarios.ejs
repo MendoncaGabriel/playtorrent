@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comentários dos Jogos</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
     <h1>Comentários dos Jogos</h1>
@@ -13,7 +14,7 @@
     <% if (array.length === 0) { %>
         <p>Nenhum jogo com comentários encontrado.</p>
     <% } else { %>
-        <ul>
+        <ul class="p-5">
             <% array.forEach(jogo => { %>
                 <li>
                     <strong>Nome do Jogo:</strong> <%= jogo.name %> <!-- Substitua "nome" pelo campo correto em seu esquema de dados -->
@@ -23,7 +24,7 @@
                     <strong>Comentários:</strong>
                     <ul>
                         <% jogo.comments.forEach(comentario => { %>
-                            <li><%= comentario.commit %></li>
+                            <li class="ml-10"><span class="bg-yellow-500"><%= comentario.user %>:</span> <%= comentario.commit %></li>
                         <% }); %>
                     </ul>
                 </li>

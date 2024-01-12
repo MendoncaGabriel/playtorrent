@@ -33,8 +33,8 @@
 
 
         <div>
-            <label for="email">Usuario:</label><br>
-            <input id="email" type="text" placeholder="Usuario" class="border px-4 py-2 w-full bg-gray-50">
+            <label for="name">Usuario:</label><br>
+            <input id="name" type="text" placeholder="Usuario" class="border px-4 py-2 w-full bg-gray-50">
         </div>
         <div>
             <label for="password">Senha:</label><br>
@@ -43,7 +43,7 @@
 
         <button onclick="login()" class="bg-blue-500 hover:bg-blue-600 hover:shadow-md w-full py-2 text-white text-xl">Entrar</button>
 
-        <p class="text-center">Não tem uma conta?  <a href="/auth/register" class="text-blue-500">Criar conta</a></p>
+        <p class="text-center">Não tem uma conta?  <a href="/auth/registrar" class="text-blue-500">Criar conta</a></p>
     </div>
 
 </body>
@@ -53,11 +53,19 @@
 <script src="/js/saveCookie.js"></script>
 <script>
     function login() {
+        
         let data = {
-            email: document.getElementById('email').value,
+            name: document.getElementById('name').value,
             password: document.getElementById('password').value
         };
 
+        if(!data.name){
+            return alert('Digite seu nome de usuario')
+        }
+        else if (!data.password){
+            return alert('Digite sua senha')
+        }
+      
         fetch('/authentication/login', {
             method: "POST",
             headers: {
@@ -65,20 +73,23 @@
             },
             body: JSON.stringify(data)
         })
-        .then(response => {
-            if (response.status === 200) {
-                // A resposta foi bem-sucedida, agora você pode manipular os dados em responseData
-                return response.json();
-            } else {
-                throw new Error(`Erro na requisição: ${response.status}`);
+        .then(response => response.json())
+        .then((response) => {
+            if(response.ok){
+                console.log(response)
+                saveCookie('tokenUser', response.token, 30)
+                window.open('/');
+            }else{
+                console.log('erro: ' + response.msg)
+                if(response.msg == 'usuario não encontrado!'){
+                    alert('Usuário não encontrado!')
+                }
+                if(response.msg == 'Senha invalida'){
+                    alert('Senha invalida!')
+                }
             }
+        
         })
-        .then(responseData => {
-            saveCookie('tokenUser', responseData.token, 30)
-            window.open('/');
-        })
-        .catch(error => {
-            console.error(error);
-        });
+
     }
 </script>

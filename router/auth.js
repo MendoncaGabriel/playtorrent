@@ -9,25 +9,27 @@ const User = require('../model/user.js')
 
 //Registrar usuario
 router.use(express.json());
+
 router.post('/register', async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, password } = req.body;
+    console.log(name, password)
 
     // validação
     if (!name) {
         return res.status(422).json({ field: 'name', msg: 'O nome é obrigatório' });
     }
-    if (!email) {
-        return res.status(422).json({ field: 'email', msg: 'O email é obrigatório' });
-    }
     if (!password) {
         return res.status(422).json({ field: 'password', msg: 'A senha é obrigatória' });
     }
+    console.log('vaidado informações')
 
     // verificar se o usuário já existe
-    const userExists = await User.findOne({ email: email });
+    const userExists = await User.findOne({ name: name });
     if (userExists) {
-        return res.status(422).json({ field: 'email', msg: 'Por favor, utilize outro email' });
+        console.log('usuario ja existe')
+        return res.status(422).json({ field: 'name', msg: 'Por favor, utilize outro nome' });
     }
+    console.log('usuario novo!')
 
     // criar senha hash
     const salt = await bcrypt.genSalt(12);
@@ -36,12 +38,13 @@ router.post('/register', async (req, res) => {
     // criar usuário
     const user = new User({
         name,
-        email,
         password: passwordHash,
     });
 
+    console.log('uSALVAR USUARIO')
     try {
         await user.save();
+        console.log('usuario salvo')
 
         // criar e assinar token
         const secret = process.env.SECRET;
@@ -56,18 +59,18 @@ router.post('/register', async (req, res) => {
 
 //fazer login
 router.post('/login', async (req, res)=>{
-	const {email, password} = req.body
+	const {name, password} = req.body
 
 	//validações
-	if(!email){
-		return res.status(422).json({msg: 'O email obrigatorio!'})
+	if(!name){
+		return res.status(422).json({msg: 'O name obrigatorio!'})
 	}	
 	if(!password){
 		return res.status(422).json({msg: 'A senha obrigatorio!'})
 	}	
 
 	//checar se usuario existe
-	const user = await User.findOne({email: email})
+	const user = await User.findOne({name: name})
 
 	if(!user){
 		return res.status(404).json({msg: 'usuario não encontrado!'})

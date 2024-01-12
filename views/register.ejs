@@ -35,10 +35,7 @@
             <label for="userName">Usuario:</label><br>
             <input id="userName" type="text" placeholder="Usuario" class="border px-4 py-2 w-full bg-gray-50">
         </div>
-        <div>
-            <label for="email">Email:</label><br>
-            <input id="email" type="text" placeholder="Email@email.com" class="border px-4 py-2 w-full bg-gray-50">
-        </div>
+
         <div>
             <label for="password">Senha:</label><br>
             <input id="password" type="text" placeholder="Usuario" class="border px-4 py-2 w-full bg-gray-50">
@@ -50,7 +47,7 @@
 
         <button onclick="register()" class="bg-blue-500 hover:bg-blue-600 hover:shadow-md w-full py-2 text-white text-xl">Entrar</button>
 
-        <p class="text-center">Ja tem uma conta?  <a href="/auth/login" class="text-blue-500">Fazer login</a></p>
+        <p class="text-center">Ja tem uma conta?  <a href="/auth/entrar" class="text-blue-500">Fazer login</a></p>
 
     </div>
 </body>
@@ -62,9 +59,14 @@
     function register() {
         let data = {
             name: document.getElementById('userName').value,
-            email: document.getElementById('email').value,
             password: document.getElementById('password').value
         };
+        if(!data.name){
+            return alert('Digite seu nome de usuario')
+        }
+        else if (!data.password){
+            return alert('Digite sua senha')
+        }
 
         fetch('/authentication/register', {
             method: "POST",
@@ -75,12 +77,15 @@
         })
         .then(response => response.json())
         .then(responseData => {
-            saveCookie('tokenUser', responseData.token, 30)
-            window.open('/');
+            if(responseData.ok){
+                saveCookie('tokenUser', responseData.token, 30)
+                window.open('/');
+            }else{
+                alert('Ops, erro ao criar conta!')
+            }
+
         })
-        .catch(error => {
-            console.log(error);
-        });
+
     }
 </script>
 

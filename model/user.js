@@ -8,7 +8,8 @@ const User = mongoose.model('User', {
 	},
 	email: {
 		type: String,
-		required: true
+		required: false,
+		default: ''
 	},
 	password: {
 		type: String,
