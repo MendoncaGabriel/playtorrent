@@ -20,8 +20,11 @@
                     <% array.forEach(jogo => { %>
                         <li class="border p-2 bg-gray-300">
                             <strong>Nome do Jogo:</strong> <%= jogo.name %> <!-- Substitua "nome" pelo campo correto em seu esquema de dados -->
+                            <!-- <br>
+                            <strong>ID do Jogo:</strong> <%= jogo._id %> -->
                             <br>
-                            <strong>ID do Jogo:</strong> <%= jogo._id %>
+                            <a href="/download/<%= jogo.name.replace(/ /g, '-').toLowerCase() %>"><strong >Ir para Página:</strong > <span class="text-blue-500"><%= jogo.name %></span></a>
+                            
                             <br>
                             <strong>Comentários:</strong>
                             <ul>
