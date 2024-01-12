@@ -34,14 +34,14 @@
                     return alert('Por favor, faça login para, comentar!')
                 }
                 const id = '<%= id %>';
-
+                const nameUser = getCookie('nameUser')
                 fetch('/services/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'authorization': 'Bearer ' + cookie
                     },
-                    body: JSON.stringify({ commit: commit.value, id: id, user: localStorage.userName, date: dateNow() }),
+                    body: JSON.stringify({ commit: commit.value, id: id, user: nameUser, date: dateNow() }),
                 })
                 .then(res => res.json())
                 .then((response) => {
