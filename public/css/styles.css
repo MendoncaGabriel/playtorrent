@@ -665,6 +665,10 @@ video {
   margin-bottom: 1rem;
 }
 
+.ml-10 {
+  margin-left: 2.5rem;
+}
+
 .ml-4 {
   margin-left: 1rem;
 }
@@ -687,14 +691,6 @@ video {
 
 .mt-5 {
   margin-top: 1.25rem;
-}
-
-.ml-5 {
-  margin-left: 1.25rem;
-}
-
-.ml-10 {
-  margin-left: 2.5rem;
 }
 
 .block {
@@ -823,6 +819,10 @@ video {
 
 .max-w-screen-lg {
   max-width: 1024px;
+}
+
+.max-w-screen-md {
+  max-width: 768px;
 }
 
 .max-w-screen-sm {

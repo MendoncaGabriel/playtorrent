@@ -9,27 +9,30 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <h1>Comentários dos Jogos</h1>
+    <main class="m-auto max-w-screen-md">
 
-    <% if (array.length === 0) { %>
-        <p>Nenhum jogo com comentários encontrado.</p>
-    <% } else { %>
-        <ul class="p-5">
-            <% array.forEach(jogo => { %>
-                <li>
-                    <strong>Nome do Jogo:</strong> <%= jogo.name %> <!-- Substitua "nome" pelo campo correto em seu esquema de dados -->
-                    <br>
-                    <strong>ID do Jogo:</strong> <%= jogo._id %>
-                    <br>
-                    <strong>Comentários:</strong>
-                    <ul>
-                        <% jogo.comments.forEach(comentario => { %>
-                            <li class="ml-10"><span class="bg-yellow-500"><%= comentario.user %>:</span> <%= comentario.commit %></li>
-                        <% }); %>
-                    </ul>
-                </li>
-            <% }); %>
-        </ul>
-    <% } %>
+        <h1 class="text-center text-2xl py-5">Comentários dos Jogos</h1>
+        
+        <% if (array.length === 0) { %>
+            <p>Nenhum jogo com comentários encontrado.</p>
+            <% } else { %>
+                <ul class="p-5 space-y-5">
+                    <% array.forEach(jogo => { %>
+                        <li class="border p-2 bg-gray-300">
+                            <strong>Nome do Jogo:</strong> <%= jogo.name %> <!-- Substitua "nome" pelo campo correto em seu esquema de dados -->
+                            <br>
+                            <strong>ID do Jogo:</strong> <%= jogo._id %>
+                            <br>
+                            <strong>Comentários:</strong>
+                            <ul>
+                                <% jogo.comments.forEach(comentario => { %>
+                                    <li class="ml-10"><span class="bg-yellow-500"><%= comentario.user %>:</span> <%= comentario.commit %></li>
+                                <% }); %>
+                            </ul>
+                        </li>
+                    <% }); %>
+                </ul>
+            <% } %>
+    </main>
 </body>
 </html>
