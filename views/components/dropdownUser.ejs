@@ -1,0 +1,61 @@
+
+<div id="dropdownUserId" class="flex items-center justify-center space-x-2 relative">
+    <img src="/icons/icons8-usuário-96.png" class="w-7 h-7" alt="home">
+
+    <img src="/icons/icons8-ordem-descendente-96.png" alt="icone seta" class="w-4">
+
+    <div id="dropdownUserIdUl" class="shadow-md overflow-auto  bg-white flex-col p-2 rounded-md text-black absolute top-[100%] w-auto z-50 hidden space-2 " style="max-height: 200px; height: auto;">
+        <a id="entrarLink" href="/auth/entrar" class="hover:bg-gray-300 w-full px-4 py-2 flex items-center">ENTRAR</a>
+        <a id="registrarLink" href="/auth/registrar" class="hover:bg-gray-300 w-full px-4 py-2 flex items-center">REGISTRAR</a>
+        <button id="btnSair" onclick="sair()" class="hover:bg-gray-300 w-full px-4 py-2 flex items-center">SAIR</button>
+     
+    </div>
+</div>
+
+
+
+<script src="/js/removeCookie.js"></script>
+<script src="/js/getCookie.js"></script>
+<script>
+
+    const cookieUser = getCookie('tokenUser')
+    if(cookieUser){
+        console.log('usuario logado')
+        document.getElementById('registrarLink').style.display = 'none'
+        document.getElementById('entrarLink').style.display = 'none'
+        document.getElementById('btnSair').style.display = 'block'
+    }else{
+        console.log('usuario nao logado!')
+        document.getElementById('registrarLink').style.display = 'block'
+        document.getElementById('entrarLink').style.display = 'block'
+        document.getElementById('btnSair').style.display = 'none'
+    }
+
+
+    function sair() {
+        console.log('sair')
+        removeCookie('tokenUser')
+        localStorage.removeItem('userName');
+        location.reload();
+    }
+
+
+
+    document.getElementById('dropdownUserId').addEventListener('mouseover', () => {
+        document.getElementById("dropdownUserIdUl").classList.remove('hidden');
+    });
+
+    document.getElementById("dropdownUserId").addEventListener('mouseout', () => {
+        document.getElementById("dropdownUserIdUl").classList.add('hidden');
+    });
+
+    // Adicionando um evento ao dropdown para mantê-lo visível ao passar o mouse sobre ele
+    document.getElementById("dropdownUserIdUl").addEventListener('mouseover', () => {
+        document.getElementById("dropdownUserIdUl").classList.remove('hidden');
+    });
+
+    // Adicionando um evento ao dropdown para ocultá-lo ao tirar o mouse dele
+    document.getElementById("dropdownUserIdUl").addEventListener('mouseout', () => {
+        document.getElementById("dropdownUserIdUl").classList.add('hidden');
+    });
+</script>

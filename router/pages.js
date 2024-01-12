@@ -274,24 +274,45 @@ router.get('/plataforma/:plataforma/:pg', async (req, res)=>{
 })
 
 
-router.get('/auth/:modo', async (req, res) => {
-    try {
-        const modo = req.params.modo
 
-        if(modo == 'Login'){
-            res.render('login');
-        }
-        
-        else{
-            res.render('register');
-        }
-       
-        
+//autenticação
+router.get('/auth/entrar', async (req, res) => {
+    try {
+    
+        res.render('login');
     } catch (error) {
         console.error('Erro: ' + error);
+        res.render('404');
        
     }
 });
+
+router.get('/auth/registrar', async (req, res) => {
+    try {
+    
+        res.render('register');
+    } catch (error) {
+        console.error('Erro: ' + error);
+        res.render('404');
+       
+    }
+});
+
+
+// Rota para obter jogos com pelo menos um comentário
+router.get('/comentarios', async (req, res) => {
+    try {
+        // Encontrar jogos que tenham pelo menos um comentário
+        const jogosComComentarios = await Game.find({ comments: { $exists: true, $not: { $size: 0 } } });
+
+        // Retornar a lista de jogos
+        res.render('comentarios', {array: jogosComComentarios});
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar jogos com comentários' });
+    }
+});
+
+
 
 
 // Lista de paginas sem capas

@@ -12,7 +12,6 @@
             <span class="material-symbols-outlined text-gray-600  px-2 text-2xl duration-300 hover:scale-125">
                 <img onclick="search()" src="/icons/icons8-lupa-100.png" class="w-8 " alt="">
             </span>
-      
         </div>
         
         <ul class=" md:p-4 w-full md:w-auto space-x-4 text-white  flex items-center justify-around pt-4 md:pt-auto " style="margin: 0;">
@@ -28,7 +27,6 @@
                 <%- include('./dropdown.ejs',  {title: 'GENERO', array: generoArry, pg: '1'}) %>
             </li>
 
-
             <!-- Home -->
             <li>
                 <a href="/">
@@ -40,8 +38,7 @@
 
             <!-- USUARIO -->
             <li>
-                <% const generoAuth = ['Login', 'Registrar', 'Sair'] %>
-                <%- include('./dropdown.ejs',  {title: 'AUTH', img:'/icons/icons8-usuário-96.png', array: generoAuth}) %>
+                <%- include('./dropdownUser.ejs') %>
             </li>
 
             <li>
@@ -53,83 +50,33 @@
                     }
                 </script>
             </li>
-
-
-    
         </ul>
-
-
     </div>
-
-    
-    
-   
 </nav>
 
 
 
 <script>
-const inputPesquisa = document.getElementById('inputPesquisa');
+    const inputPesquisa = document.getElementById('inputPesquisa');
 
-function search() {
-    const valorDoInput = inputPesquisa.value;
+    function search() {
+        const valorDoInput = inputPesquisa.value;
 
-    // Verifica se o valor do input não está vazio
-    if (valorDoInput.trim() !== "") {
-        // Redireciona para a página desejada
-        window.location.href = "/search/" + encodeURIComponent(valorDoInput);
-    } else {
-        // Lida com o caso em que o valor do input está vazio
-        alert("Por favor, insira um termo de pesquisa válido.");
-    }
-}
-
-
-inputPesquisa.addEventListener('keyup', (event) => {
-    if(event.keyCode == 13){
-        search();
-    }
-});
-
-
-</script>
-
-
-
-
-<script>
-    function checkUserLoggedIn() {
-        function getCookie(name) {
-            const cookies = document.cookie.split('; ');
-            for (const cookie of cookies) {
-                const [cookieName, cookieValue] = cookie.split('=');
-                if (cookieName === name) {
-                    return cookieValue;
-                }
-            }
-            return null;
-        }
-        const token = getCookie('tokenUser');
-
-        if (token) {
-            console.log('Usuário está com token.');
-
-            fetch('/authentication/check-token', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({token: token})
-            })
-            .then(res => res.json())
-            .then((response)=>{
-                console.log(response)
-                localStorage.userName = response.userName
-            })
+        // Verifica se o valor do input não está vazio
+        if (valorDoInput.trim() !== "") {
+            // Redireciona para a página desejada
+            window.location.href = "/search/" + encodeURIComponent(valorDoInput);
         } else {
-            // Token não existe, usuário não está logado
-            console.log('Usuário não está logado.');
+            // Lida com o caso em que o valor do input está vazio
+            alert("Por favor, insira um termo de pesquisa válido.");
         }
-    }checkUserLoggedIn();
+    }
 
+
+    inputPesquisa.addEventListener('keyup', (event) => {
+        if(event.keyCode == 13){
+            search();
+        }
+    });
 </script>
+

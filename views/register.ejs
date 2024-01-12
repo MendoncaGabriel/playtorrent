@@ -24,9 +24,6 @@
 
 </head>
 <body class="bg-gray-900 flex items-center justify-center h-screen">
-    
-
-
     <div  class="bg-white p-8 md:w-96 rounded-md shadow-md space-y-8">
 
         <div class=" flex items-center justify-center space-x-5">
@@ -56,50 +53,35 @@
         <p class="text-center">Ja tem uma conta?  <a href="/auth/login" class="text-blue-500">Fazer login</a></p>
 
     </div>
-
-    <script>
-function register() {
-    let data = {
-        name: document.getElementById('userName').value,
-        email: document.getElementById('email').value,
-        password: document.getElementById('password').value
-    };
-
-    fetch('/authentication/register', {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (response.status === 200) {
-            // A resposta foi bem-sucedida, agora você pode manipular os dados em responseData
-            return response.json();
-        } else {
-            throw new Error(`Erro na requisição: ${response.status}`);
-        }
-    })
-    .then(responseData => {
-        console.log(responseData);
-        document.cookie = `tokenUser=${responseData.token}; path=/`;
-        window.open('/');
-    })
-    .catch(error => {
-        console.log(error);
-        c
-        // Lida com erros na requisição aqui
-    });
-}
-
-
-    </script>
-
 </body>
 </html>
 
 
+<script src="/js/saveCookie.js"></script>
+<script>
+    function register() {
+        let data = {
+            name: document.getElementById('userName').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value
+        };
 
-
+        fetch('/authentication/register', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(responseData => {
+            saveCookie('tokenUser', responseData.token, 30)
+            window.open('/');
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+</script>
 
 

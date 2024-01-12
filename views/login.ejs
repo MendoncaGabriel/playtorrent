@@ -49,38 +49,36 @@
 </body>
 </html>
 
+
+<script src="/js/saveCookie.js"></script>
 <script>
     function login() {
-    let data = {
-        email: document.getElementById('email').value,
-        password: document.getElementById('password').value
-    };
+        let data = {
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value
+        };
 
-    fetch('/authentication/login', {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (response.status === 200) {
-            // A resposta foi bem-sucedida, agora você pode manipular os dados em responseData
-            return response.json();
-        } else {
-            throw new Error(`Erro na requisição: ${response.status}`);
-        }
-    })
-    .then(responseData => {
-        document.cookie = `tokenUser=${responseData.token}; path=/`;
-        window.open('/');
-    })
-    .catch(error => {
-        console.error(error);
-        // Lida com erros na requisição aqui
-    });
-}
-
-
-    </script>
+        fetch('/authentication/login', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.status === 200) {
+                // A resposta foi bem-sucedida, agora você pode manipular os dados em responseData
+                return response.json();
+            } else {
+                throw new Error(`Erro na requisição: ${response.status}`);
+            }
+        })
+        .then(responseData => {
+            saveCookie('tokenUser', responseData.token, 30)
+            window.open('/');
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
 </script>

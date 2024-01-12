@@ -2,94 +2,39 @@
 <% const idUl = title.toLowerCase().replace(/ /g, '-') + 'idUl'; %>
 
 <div id="<%= id %>" class="flex items-center justify-center space-x-2 relative">
-
-    <!-- IMAGEM OU TEXTO -->
-    <% if (typeof img !== 'undefined' && img) { %>
-       
-        <img src="<%= img %>" class="w-7 h-7" alt="home">
-      
-    <% } else { %>
-        <h2><%= title %></h2>
-    <% } %>
-
+    <h2><%= title %></h2>
     <img src="/icons/icons8-ordem-descendente-96.png" alt="icone seta" class="w-4">
 
     <div id="<%= idUl %>" class="shadow-md overflow-auto  bg-white flex-col p-2 rounded-md text-black absolute top-[100%] w-auto z-50 hidden space-y-2 " style="max-height: 200px; height: auto;">
         
         <% for( let i = 0; i < array.length; i++ ) { %>
-            <% if (array[i] === 'Sair') { %>
-                <button id="btnSair" onclick="sair()" class="hover:bg-gray-300 w-full px-4 py-2 flex items-center"><%= array[i].replace('_', ' ') %></button>
-            <% } else if (typeof pg !== 'undefined' && pg) { %>
+            <% if (typeof pg !== 'undefined' && pg) { %>
                 <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center" href="/<%= title.toLowerCase() %>/<%= array[i] %>/<%= pg %>"><%= array[i].replace('_', ' ') %></a>
             <% } else { %> 
                 <a class="hover:bg-gray-300 w-full px-4 py-2 flex items-center" href="/<%= title.toLowerCase() %>/<%= array[i] %>"><%= array[i].replace('_', ' ') %></a>
             <% } %>
             
         <%}%>    
-        
     </div>
-
-
-
-    <script>
-
-
-
-        function checkSair() {
-            function getCookie(name) {
-                const cookies = document.cookie.split('; ');
-                for (const cookie of cookies) {
-                    const [cookieName, cookieValue] = cookie.split('=');
-                    if (cookieName === name) {
-                        return cookieValue;
-                    }
-                }
-                return null;
-            }
-
-            const userName = getCookie('tokenUser');
-
-            if (userName == null) {
-                document.getElementById('btnSair').style.display = 'none';
-                console.log('ocultar');
-            }
-        }
-        document.addEventListener('DOMContentLoaded', checkSair);
-
-        function sair() {
-            // Remover o cookie tokenUser
-            document.cookie = "tokenUser=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-            // Remover userName do localStorage
-            localStorage.removeItem('userName');
-
-            // Recarregar a página
-            location.reload();
-        }
-
-
-
-    </script>
-
-    <script>
-
-
-        document.getElementById("<%= id %>").addEventListener('mouseover', () => {
-            document.getElementById("<%= idUl %>").classList.remove('hidden');
-        });
-
-        document.getElementById("<%= id %>").addEventListener('mouseout', () => {
-            document.getElementById("<%= idUl %>").classList.add('hidden');
-        });
-
-        // Adicionando um evento ao dropdown para mantê-lo visível ao passar o mouse sobre ele
-        document.getElementById("<%= idUl %>").addEventListener('mouseover', () => {
-            document.getElementById("<%= idUl %>").classList.remove('hidden');
-        });
-
-        // Adicionando um evento ao dropdown para ocultá-lo ao tirar o mouse dele
-        document.getElementById("<%= idUl %>").addEventListener('mouseout', () => {
-            document.getElementById("<%= idUl %>").classList.add('hidden');
-        });
-    </script>
 </div>
+
+
+<script>
+    document.getElementById("<%= id %>").addEventListener('mouseover', () => {
+        document.getElementById("<%= idUl %>").classList.remove('hidden');
+    });
+
+    document.getElementById("<%= id %>").addEventListener('mouseout', () => {
+        document.getElementById("<%= idUl %>").classList.add('hidden');
+    });
+
+    // Adicionando um evento ao dropdown para mantê-lo visível ao passar o mouse sobre ele
+    document.getElementById("<%= idUl %>").addEventListener('mouseover', () => {
+        document.getElementById("<%= idUl %>").classList.remove('hidden');
+    });
+
+    // Adicionando um evento ao dropdown para ocultá-lo ao tirar o mouse dele
+    document.getElementById("<%= idUl %>").addEventListener('mouseout', () => {
+        document.getElementById("<%= idUl %>").classList.add('hidden');
+    });
+</script>

@@ -17,107 +17,47 @@
         <button class="px-4 py-2 bg-gray-800 " onclick="enviar()">Enviar</button>
     </div>
 
+    <script src="/js/getCookie.js"></script>
+    <script src="/js/dateNow.js"></script>
+
     <script>
-        async function checkUserLoggedIn() {
-            function getCookie(name) {
-                const cookies = document.cookie.split('; ');
-                for (const cookie of cookies) {
-                    const [cookieName, cookieValue] = cookie.split('=');
-                    if (cookieName === name) {
-                        return cookieValue;
-                    }
-                }
-                return null;
-            }
-
-            const token = getCookie('tokenUser');
-
-            if (token) {
-                try {
-                    const response = await fetch('/authentication/check-token', {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ token: token })
-                    });
-
-                    if (response.ok) {
-                        console.log('Usuário está logado.');
-                        return true;
-                    } else {
-                        console.log('Erro ao verificar o token.');
-                        return false;
-                    }
-                } catch (error) {
-                    console.error('Erro na requisição:', error);
-                    return false;
-                }
-            } else {
-                console.log('Usuário não está logado.');
-                return false;
-            }
-        }
 
 
-        function obterDataFormatada() {
-            const agora = new Date();
-
-            const dia = agora.getDate().toString().padStart(2, '0');
-            const mes = (agora.getMonth() + 1).toString().padStart(2, '0'); // Lembre-se que os meses começam do zero
-            const ano = agora.getFullYear();
-
-            const hora = agora.getHours().toString().padStart(2, '0');
-            const minuto = agora.getMinutes().toString().padStart(2, '0');
-
-            return `${dia}/${mes}/${ano} - ${hora}:${minuto}`;
-        }
 
 
         async function enviar() {
             const commit = document.querySelector('#commitTextArea');
 
             if (commit.value.length > 0) {
-                try {
-                    const login = await checkUserLoggedIn();
-                    
-                    if (login) {
-                        const id = '<%= id %>';
-
-                        fetch('/services/chat', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ commit: commit.value, id: id, user: localStorage.userName, date: obterDataFormatada() }),
-                        })
-                        .then(res => res.json())
-                        .then((response) => {
-                            if (response && response.success) {
-                                commit.value = '';
-                                console.log('Comentário enviado!');
-                                console.log(response.commit); // Acesse o commit enviado pelo servidor
-                                getComments()
-                            } else {
-                                console.error('Erro ao enviar o comentário:', response && response.error);
-                                alert('Não foi possível enviar seu comentário!');
-                            }
-                        })
-
-                        .catch((erro)=>{
-                            console.error('Erro ao enviar o comentário:', response.statusText);
-                            alert('Não foi possível enviar seu comentário!')
-                        })
-                    } else {
-                        alert('Por favor, faça login ou registre-se');
-                    }
-                } catch (error) {
-                    console.error('Erro na execução do código:', error);
-                    alert('Ocorreu um erro. Tente novamente mais tarde.');
+                const cookie = getCookie('tokenUser')
+                if(!cookie){
+                    return alert('Por favor, faça login para, comentar!')
                 }
-            } else {
-                alert('Sem comentário para ser enviado!');
+                const id = '<%= id %>';
+
+                fetch('/services/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authorization': 'Bearer ' + cookie
+                    },
+                    body: JSON.stringify({ commit: commit.value, id: id, user: localStorage.userName, date: dateNow() }),
+                })
+                .then(res => res.json())
+                .then((response) => {
+                    if (response) {
+                        commit.value = '';
+                        console.log('Comentário enviado!');
+                        getComments()
+                    }
+                })
+                .catch((erro)=>{
+                    console.error('Erro ao enviar o comentário');
+                    alert('Não foi possível enviar seu comentário!')
+                })
+
             }
+
         }
 
 
