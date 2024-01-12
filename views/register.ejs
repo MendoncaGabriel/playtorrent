@@ -77,13 +77,13 @@
         })
         .then(response => response.json())
         .then(responseData => {
-            if(responseData.ok){
+
+            if(responseData.msg == 'Por favor, utilize outro nome'){
+                alert('Por favor, utilize outro nome!')
+            }else{
                 saveCookie('tokenUser', responseData.token, 30)
                 window.open('/');
-            }else{
-                alert('Ops, erro ao criar conta!')
             }
-
         })
 
     }

@@ -75,20 +75,15 @@
         })
         .then(response => response.json())
         .then((response) => {
-            if(response.ok){
-                console.log(response)
+            if(response.msg == 'usuario não encontrado!'){
+                alert('Usuário não encontrado!')
+            }
+            else if(response.msg == 'Senha invalida'){
+                alert('Senha invalida!')
+            }else{
                 saveCookie('tokenUser', response.token, 30)
                 window.open('/');
-            }else{
-                console.log('erro: ' + response.msg)
-                if(response.msg == 'usuario não encontrado!'){
-                    alert('Usuário não encontrado!')
-                }
-                if(response.msg == 'Senha invalida'){
-                    alert('Senha invalida!')
-                }
             }
-        
         })
 
     }
