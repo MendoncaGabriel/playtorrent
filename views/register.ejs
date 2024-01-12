@@ -77,15 +77,19 @@
         })
         .then(response => response.json())
         .then(responseData => {
-
-            if(responseData.msg == 'Por favor, utilize outro nome'){
-                alert('Por favor, utilize outro nome!')
-            }else{
-                saveCookie('tokenUser', responseData.token, 30)
-                saveCookie('nameUser', data.name, 30)
+            if (responseData.msg === 'Por favor, utilize outro nome') {
+                alert('Por favor, utilize outro nome!');
+            } else {
+                saveCookie('tokenUser', responseData.token, 30);
+                saveCookie('nameUser', data.name, 30);
                 window.open('/');
             }
         })
+        .catch(error => {
+            console.error('Erro ao processar a solicitação:', error);
+            alert('Aconteceu um erro ao processar a solicitação. Tente novamente mais tarde.');
+        });
+
 
     }
 </script>

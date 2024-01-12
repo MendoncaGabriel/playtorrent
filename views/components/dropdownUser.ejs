@@ -32,11 +32,15 @@
     }
 
 
-    function sair() {
+    async function sair() {
         console.log('sair')
-        removeCookie('tokenUser')
-        removeCookie('userName')
-        location.reload();
+        await removeCookie('tokenUser')
+        await removeCookie('userName')
+
+        setTimeout(() => {
+            location.reload();
+            
+        }, 1000);
     }
 
 
