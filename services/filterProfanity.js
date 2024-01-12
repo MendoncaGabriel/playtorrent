@@ -389,9 +389,12 @@ const profanityList = [
 ];
   
 function filterProfanity(text) {
-    const urlRegex = /(?:https?|ftp):\/\/[\n\S]+/gi; // Expressão regular para URLs
-    const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/gi; // Expressão regular para emails
-    const phoneRegex = /\b\d{10,}\b/g; // Expressão regular para números de telefone (pode precisar ser ajustada conforme necessário)
+    const urlRegex = /(?:https?|http|ftp):\/\/[\n\S]+/gi; 
+    const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/gi; 
+
+    const phoneRegex = /\b\d{10,}\b/g; 
+    const phoneRegex2 = /\b\d{9,}\b/g; 
+    const phoneRegex3 = /\b\d{8,}\b/g; 
 
     let lowercasedText = text.toLowerCase();
 
@@ -409,7 +412,14 @@ function filterProfanity(text) {
 
     // Substitui números de telefone
     lowercasedText = lowercasedText.replace(phoneRegex, '***TELEFONE***');
+    lowercasedText = lowercasedText.replace(phoneRegex2, '***TELEFONE***');
+    lowercasedText = lowercasedText.replace(phoneRegex3, '***TELEFONE***');
 
+
+    // Proíbe strings com .com ou .br
+    const forbiddenStringRegex = /\b\.com\b|\b\.br\b/gi;
+    lowercasedText = lowercasedText.replace(forbiddenStringRegex, '***PROIBIDO***');
+ 
     return lowercasedText;
 }
 
