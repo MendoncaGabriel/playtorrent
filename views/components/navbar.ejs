@@ -42,9 +42,10 @@
             </li>
 
             <li>
+                <script src="/js/getCookie.js"></script>
                 <h2 id="Username" class="text-white"></h2>
                 <script>
-                    const userName = localStorage.userName
+                    const userName = getCookie('nameUser')
                     if(userName && userName !== 'undefined'){
                         document.getElementById('Username').innerText = userName
                     }

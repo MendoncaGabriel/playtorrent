@@ -82,6 +82,7 @@
                 alert('Por favor, utilize outro nome!')
             }else{
                 saveCookie('tokenUser', responseData.token, 30)
+                saveCookie('nameUser', data.name, 30)
                 window.open('/');
             }
         })
