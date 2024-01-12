@@ -12,7 +12,6 @@ router.use(express.json());
 
 router.post('/register', async (req, res) => {
     const { name, password } = req.body;
-    console.log(name, password)
 
     // validação
     if (!name) {
@@ -21,7 +20,7 @@ router.post('/register', async (req, res) => {
     if (!password) {
         return res.status(422).json({ field: 'password', msg: 'A senha é obrigatória' });
     }
-    console.log('vaidado informações')
+
 
     // verificar se o usuário já existe
     const userExists = await User.findOne({ name: name });
@@ -29,7 +28,6 @@ router.post('/register', async (req, res) => {
         console.log('usuario ja existe')
         return res.status(422).json({ field: 'name', msg: 'Por favor, utilize outro nome' });
     }
-    console.log('usuario novo!')
 
     // criar senha hash
     const salt = await bcrypt.genSalt(12);
@@ -41,12 +39,9 @@ router.post('/register', async (req, res) => {
         password: passwordHash,
     });
 
-    console.log('uSALVAR USUARIO')
+   
     try {
         await user.save();
-        console.log('usuario salvo')
-
-        // criar e assinar token
         const secret = process.env.SECRET;
         const token = jwt.sign({ id: user._id, name: name }, secret);
 
