@@ -5,6 +5,7 @@ const Game = require('../model/gameSchema.js')
 const checkToken = require('../services/checkToken.js')
 const filterProfanity = require('../services/filterProfanity.js')
 
+
 router.use(express.json());
 router.post('/chat', checkToken, async (req, res) => {
     try {
@@ -13,11 +14,11 @@ router.post('/chat', checkToken, async (req, res) => {
 
 
         const comentario = filterProfanity(data.commit)
-        
+        const sanitizedMessage = req.sanitize(comentario);
 
         const updatedGame = await Game.findByIdAndUpdate(
             gameId,
-            { $push: { comments: { commit: comentario, user: data.user, date: data.date } } },
+            { $push: { comments: { commit: sanitizedMessage, user: data.user, date: data.date } } },
             { new: true }
         ).lean();
 

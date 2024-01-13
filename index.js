@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const app = express();
+const expressSanitizer = require('express-sanitizer');
+const helmet = require('helmet');
 const server = http.createServer(app);
 require("dotenv").config(); 
 require('./connect/MongoDB.js');
@@ -15,12 +17,15 @@ const PUBLIC_PATH = path.join(__dirname, 'public');
 const SITEMAP_PATH = path.join(PUBLIC_PATH, 'sitemap.xml');
 const ROBOTS_PATH = path.join(PUBLIC_PATH, 'robots.txt');
 
+
 // configurações
 server.timeout = 60000
 app.set('view engine', 'ejs');
 app.set('views', VIEWS_PATH);
 app.use(express.static(PUBLIC_PATH));
 app.use(express.json());
+app.use(expressSanitizer());
+app.use(helmet());
 
 
 

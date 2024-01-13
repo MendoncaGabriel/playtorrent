@@ -85,7 +85,9 @@
             } else {
                 saveCookie('tokenUser', responseData.token, 30);
                 saveCookie('nameUser', data.name, 30);
-                window.open('/');
+          
+                window.open('/', '_self');
+
             }
         })
         .catch(error => {
