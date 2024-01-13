@@ -1,0 +1,26 @@
+<div id="popUpChat" class="md:px-4 md:py-2 p-1  duration-500 bg-white fixed top-4 -left-full hidden   border md:text-xl text-sm md:w-[500px] w-[90%]  rounded-md items-center justify-center space-x-3">
+    <button onclick="fecharPopUpChat()" class="md:w-10 md:h-10 w-7 h-7 p-0 leading-none  bg-red-500 text-white font-semibold absolute -top-2 -right-2">x</button>
+    <p class="text-gray-800">
+        Explore nosso novo sistema de chat! Comente e faça parte da nossa comunidade de jogos. <strong>Seja o primeiro a deixar sua opinião em uma página!</strong> Estamos ansiosos para ouvir você.
+    </p>
+    <img src="/gif/thumbs-up-nice.gif" alt="gif like" class="md:h-full h-16 aspect-square object-cover">
+</div>
+
+<script>
+   const popUpChat  =document.getElementById('popUpChat')
+   popUpChat.style.display = 'flex'
+   setTimeout(() => {
+       popUpChat.style.left = '1rem'
+
+       setTimeout(() => {
+        fecharPopUpChat()
+       }, 5500);
+    }, 100);
+
+    function fecharPopUpChat(){
+        popUpChat.style.left = '-100%'
+        setTimeout(() => {
+            popUpChat.style.display = 'none'
+        }, 600);
+    }
+</script>
