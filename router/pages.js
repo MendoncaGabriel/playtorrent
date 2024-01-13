@@ -48,7 +48,6 @@ async function isImageValid(teste) {
         return false;
     }
 }
-
 async function TopViewr(){
     try {
         const data = await Game.find().lean()
@@ -59,14 +58,13 @@ async function TopViewr(){
         console.log('Erro ao caregar topViews :' + data)
     }
 }
-
 async function Recomendation(generoDaPaginaAtual, nomeDoJogo){
     try {
         console.log(nomeDoJogo);
 
         const data = await Game.find({
             "class": { $in: generoDaPaginaAtual }
-        }).limit(11);
+        }).limit(11).lean()
 
         if (data) {
             // Encontrar e remover o jogo com o mesmo nome da lista
@@ -77,7 +75,6 @@ async function Recomendation(generoDaPaginaAtual, nomeDoJogo){
         console.log('Erro ao caregar Recomendation :' + data)
     }
 }
-
 async function TopDownload(){
     try {
         const data = await Game.find().lean()
@@ -125,8 +122,7 @@ router.get('/', async (req, res) => {
         console.error('Erro ao buscar dados:', error);
         return res.status(500).render('500', { msg: 'Erro interno do servidor' });
     }
-});
-
+})
 router.get('/page/:pg', async (req, res) => {
     try {
         const pg = req.params.pg;
@@ -145,7 +141,7 @@ router.get('/page/:pg', async (req, res) => {
         console.log('NO CACHE')
 
         // Data is not in the cache, fetch it from the database
-        const data = await Game.find().skip(pg * pageSize).limit(pageSize);
+        const data = await Game.find().skip(pg * pageSize).limit(pageSize).lean();
 
         // Store the data in the cache for future use
         cache.put(cacheKey, { title: 'Home', data, page: pg }, cacheTime);
@@ -157,9 +153,7 @@ router.get('/page/:pg', async (req, res) => {
         console.error(error);
         return res.status(404).render('404', { msg: 'Erro na pagina!' });
     }
-});
-
-
+})
 router.get('/download/:name', async (req, res) => {
     
     try {
@@ -197,7 +191,6 @@ router.get('/download/:name', async (req, res) => {
   
     }
 })
-
 router.get('/search/:name', async (req, res) => {
 
     try {
@@ -208,7 +201,7 @@ router.get('/search/:name', async (req, res) => {
         if (!termoPesquisa) {
             return res.status(422).json({ msg: "Envie por parametro name" });
         }
-        const data = await Game.find({ name: { $regex: new RegExp(`${nameTratad}`, 'i') } }).limit(10);
+        const data = await Game.find({ name: { $regex: new RegExp(`${nameTratad}`, 'i') } }).limit(10).lean();
         res.render('search', { data: data, title: "Resultados para: " + nameTratad });
 
     } catch (erro) {
@@ -219,7 +212,6 @@ router.get('/search/:name', async (req, res) => {
 
   
 })
-
 router.get('/genero/:genero/:pg', async (req, res)=>{
     try {
         const genero = req.params.genero;
@@ -231,11 +223,11 @@ router.get('/genero/:genero/:pg', async (req, res)=>{
 
         const totalResults = await Game.find({
             "class": { $in: genero }
-        }).countDocuments();
+        }).countDocuments().lean();
 
         const data = await Game.find({
             "class": { $in: genero }
-        }).skip(pg * 20).limit(20);
+        }).skip(pg * 20).limit(20).lean();
 
         const titulo = 'GÊNERO: ' + genero.toUpperCase()
         const n = (totalResults/20).toFixed(0)
@@ -246,7 +238,6 @@ router.get('/genero/:genero/:pg', async (req, res)=>{
         return  res.status(404).render('404',{msg: 'erro ao buscar game por id!', erro: erro});
     }
 })
-
 router.get('/plataforma/:plataforma/:pg', async (req, res)=>{
     try {
         const plataforma = req.params.plataforma;
@@ -258,11 +249,11 @@ router.get('/plataforma/:plataforma/:pg', async (req, res)=>{
 
         const totalResults = await Game.find({
             "platform": { $in: plataforma }
-        }).countDocuments();
+        }).countDocuments().lean();
 
         const data = await Game.find({
             "platform": { $in: plataforma }
-        }).skip(pg * 20).limit(20)
+        }).skip(pg * 20).limit(20).lean()
 
         const titulo = 'PLATAFORMA: ' + plataforma.toUpperCase()
         const n = (totalResults/20).toFixed(0)
@@ -286,8 +277,7 @@ router.get('/auth/entrar', async (req, res) => {
         res.render('404');
        
     }
-});
-
+})
 router.get('/auth/registrar', async (req, res) => {
     try {
     
@@ -297,14 +287,14 @@ router.get('/auth/registrar', async (req, res) => {
         res.render('404');
        
     }
-});
+})
 
 
 // Rota para obter jogos com pelo menos um comentário
 router.get('/comentarios', async (req, res) => {
     try {
         // Encontrar jogos que tenham pelo menos um comentário
-        const jogosComComentarios = await Game.find({ comments: { $exists: true, $not: { $size: 0 } } });
+        const jogosComComentarios = await Game.find({ comments: { $exists: true, $not: { $size: 0 } } }).lean();
 
         // Retornar a lista de jogos
         res.render('comentarios', {array: jogosComComentarios});
@@ -314,12 +304,10 @@ router.get('/comentarios', async (req, res) => {
 });
 
 
-
-
 // Lista de paginas sem capas
 router.get('/checkImage', async (req, res) => {
     try {
-        const data = await Game.find({});
+        const data = await Game.find({}).lean();
         let imgfaltando = [];
         for (const e of data) {
             let validation = await isImageValid(e.img);
@@ -332,10 +320,6 @@ router.get('/checkImage', async (req, res) => {
         return  res.status(500).render('404',{msg: 'Erro no teste de imagem: ' + error});
     }
 })
-
-
-
-
 router.get('/topDownloads', async (req, res)=>{
     try {
         const cacheKey = req.originalUrl || req.url;

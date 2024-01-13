@@ -7,7 +7,7 @@ const Game = require('./model/gameSchema.js');
  
 
 //Portas e Caminhos
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const VIEWS_PATH = path.join(process.cwd(), 'views');
 const PUBLIC_PATH = path.join(__dirname, 'public');
 const SITEMAP_PATH = path.join(PUBLIC_PATH, 'sitemap.xml');
@@ -18,6 +18,7 @@ app.set('timeout', 15000); // Define tempo máximo de carregamento em 15s // Imp
 app.set('view engine', 'ejs');
 app.set('views', VIEWS_PATH);
 app.use(express.static(PUBLIC_PATH));
+app.use(express.json());
 
 
 
@@ -32,11 +33,13 @@ app.use('/authentication', auth)
 
 
 
+
+
 //rotas-------------
 app.patch('/downloadCont/:id', async (req, res) => {
   try {
       const id = req.params.id;
-      const game = await Game.findById(id);
+      const game = await Game.findById(id).lean();
 
       if (!game) {
           return res.status(404).json({ msg: 'Jogo não encontrado' });
@@ -47,7 +50,7 @@ app.patch('/downloadCont/:id', async (req, res) => {
       // Se `download` não existe, não tente definir diretamente
       // o MongoDB cuidará disso automaticamente com `$inc`
       
-      const newUpdate = await Game.findByIdAndUpdate(id, update, { new: true });
+      const newUpdate = await Game.findByIdAndUpdate(id, update, { new: true }).lean();
 
       return res.status(200).json({
           msg: newUpdate.download === 1 ? 'Primeiro download contado com sucesso' : 'Download contado com sucesso',
@@ -82,11 +85,16 @@ app.use((req, res, next) => {
 });
 
 
-
-
 // Middleware para lidar com rotas não encontradas
 app.use((req, res) => {
   return res.status(404).render('404');
+});
+
+
+
+app.use((err, req, res, next) => {
+  console.error('Erro interno:', err);
+  res.status(500).send('Erro interno no servidor');
 });
 
 

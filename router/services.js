@@ -19,7 +19,7 @@ router.post('/chat', checkToken, async (req, res) => {
             gameId,
             { $push: { comments: { commit: comentario, user: data.user, date: data.date } } },
             { new: true }
-        );
+        ).lean();
 
         if (updatedGame) {
             console.log('Comentário adicionado com sucesso:');
@@ -38,7 +38,7 @@ router.get('/comments/:id', async (req, res) => {
     try {
         const gameId = req.params.id;
 
-        const game = await Game.findById(gameId);
+        const game = await Game.findById(gameId).lean();
 
         if (game) {
             const comments = game.comments || [];
