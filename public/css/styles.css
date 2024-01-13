@@ -897,6 +897,10 @@ video {
   width: 90;
 }
 
+.w-\[95\%\] {
+  width: 95%;
+}
+
 .max-w-72 {
   max-width: 18rem;
 }
@@ -1584,6 +1588,10 @@ video {
 
   .md\:pt-10 {
     padding-top: 2.5rem;
+  }
+
+  .md\:pb-0 {
+    padding-bottom: 0px;
   }
 
   .md\:text-5xl {
