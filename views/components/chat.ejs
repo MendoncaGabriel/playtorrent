@@ -21,6 +21,60 @@
     <script src="/js/dateNow.js"></script>
 
     <script>
+        function opneEdit(commentId, txt){
+            document.querySelector('#commitTextArea').value = txt
+            alert('em construção....')
+        }
+
+        async function deletMsg(userId, commit){
+            var resultado =  confirm("Você deseja apagar?");
+
+            if (resultado) {
+                // Código a ser executado se o usuário clicar em "OK" (ou "Sim")
+                console.log("Usuário clicou em 'OK' ou 'Sim'");
+
+
+                const IdCookie = getCookie('idUser')
+            const idd = '<%= id %>';
+            const cookie = getCookie('tokenUser')
+            console.log(idd, IdCookie)
+
+
+
+            if(userId == IdCookie){
+                fetch('/services/chat', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authorization': 'Bearer ' + cookie
+                    },
+                    body: JSON.stringify({idGame: idd, commentId: userId, commit: commit})
+                })
+                .then(res => res.json())
+                .then((response) => {
+                    if(response.success){
+                        getComments()
+                      
+                    }
+              
+                })
+            }else{
+                alert('Esse comentario não e seu!')
+                console.log(`userId: ${userId}`)
+                
+
+                
+            }
+            } else {
+                // Código a ser executado se o usuário clicar em "Cancelar" (ou "Não")
+                console.log("Usuário clicou em 'Cancelar' ou 'Não'");
+            }
+
+            
+        }
+    </script>
+
+    <script>
 
 
 
@@ -30,6 +84,7 @@
 
             if (commit.value.length > 0) {
                 const cookie = getCookie('tokenUser')
+            const idUser = getCookie('idUser')
                 if(!cookie){
                     return alert('Por favor, faça login para, comentar!')
                 }
@@ -41,7 +96,7 @@
                         'Content-Type': 'application/json',
                         'authorization': 'Bearer ' + cookie
                     },
-                    body: JSON.stringify({ commit: commit.value, id: id, user: nameUser, date: dateNow() }),
+                    body: JSON.stringify({ commit: commit.value, id: id, commentId: idUser, user: nameUser, date: dateNow() }),
                 })
                 .then(res => res.json())
                 .then((response) => {
@@ -88,32 +143,70 @@
 
         if(response.comments.length > 0){
             document.getElementById('containerComments').innerHTML = ''
+            const idUser = getCookie('idUser')
+
+            response.comments.reverse();
+
             response.comments.forEach(element => {
-                document.getElementById('containerComments').innerHTML += `
-                <div class="flex items-start bg-gray-800 px-4 py-2 gap-4 relative">
-                    <div class="flex-shrink-0">
-                        <img 
-                            src="https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png" 
-                            alt="foto de perfil do usuario"
-                            class="w-12 h-12 rounded-full object-cover"
-                        >
+                //Comentario do usuario
+                if(element.commentId && element.commentId == idUser){
+                    document.getElementById('containerComments').innerHTML += `
+                    <div class=" bg-green-800 px-4 py-2 gap-4 relative">
+                        <div class="flex items-start gap-4 px-4 py-2">
+
+                            <div class="flex-shrink-0">
+                                <img 
+                                src="https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png" 
+                                alt="foto de perfil do usuario"
+                                class="w-12 h-12 rounded-full object-cover"
+                                >
+                            </div>
+                            
+                            <div class="flex flex-col w-full bg-white p-4 rounded-md shadow-md">
+                                <h2 class="text-lg font-semibold mb-2 text-gray-800">${element.user}</h2>
+                                <p class="text-gray-700">
+                                    ${element.commit}
+                                </p>
+                                <p class="text-sm text-gray-500 mt-2">${element.date}</p>
+                            </div>
+                        </div>
+                        <div class=" flex justify-end space-x-4 pt-4">
+                            <button class="px-4 py-2 bg-blue-500" onclick="opneEdit('${element.commentId}', '${element.commit}')">Editar</button>
+                            <button class="px-4 py-2 bg-red-500" onclick="deletMsg('${element.commentId}', '${element.commit}')">Deletar</button>
+                        </div>  
+
+            
                     </div>
-                
-                    <div class="flex flex-col w-full bg-white p-4 rounded-md shadow-md">
-                        <h2 class="text-lg font-semibold mb-2 text-gray-800">${element.user}</h2>
-                        <p class="text-gray-700">
-                            ${element.commit}
-                        </p>
-                        <p class="text-sm text-gray-500 mt-2">${element.date}</p>
-                    </div>
-                </div>
-                `
+                    `
+                }
+                //Comentario de outro usuario
+                else{
+                    document.getElementById('containerComments').innerHTML += `
+                        <div class="flex items-start bg-gray-800 px-4 py-2 gap-4 relative">
+                            <div class="flex-shrink-0">
+                                <img 
+                                    src="https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png" 
+                                    alt="foto de perfil do usuario"
+                                    class="w-12 h-12 rounded-full object-cover"
+                                >
+                            </div>
+                        
+                            <div class="flex flex-col w-full bg-white p-4 rounded-md shadow-md">
+                                <h2 class="text-lg font-semibold mb-2 text-gray-800">${element.user}</h2>
+                                <p class="text-gray-700">
+                                    ${element.commit}
+                                </p>
+                                <p class="text-sm text-gray-500 mt-2">${element.date}</p>
+                            </div>
+                        </div>
+                    `
+                }
 
             });
         }
     })
    }
-  getComments()
+   getComments()
 </script>
 
 </section>

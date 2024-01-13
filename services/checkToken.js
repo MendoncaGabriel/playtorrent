@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 function checkToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-  console.log(token)
   //# o token do header bem mais ou menos assim "Bearer token..." o codigo acima separa um do outro e pega apenas o token
 
   if (!token) {

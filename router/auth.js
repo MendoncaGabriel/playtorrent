@@ -45,7 +45,7 @@ router.post('/register', async (req, res) => {
         const secret = process.env.SECRET;
         const token = jwt.sign({ id: user._id, name: name }, secret);
 
-        res.status(200).json({ msg: 'Autenticação realizada com sucesso!', token });
+        res.status(200).json({ msg: 'Autenticação realizada com sucesso!', id: user._id, token });
     } catch (error) {
         res.status(500).json({ msg: 'Aconteceu um erro no servidor, tente novamente mais tarde!' });
     }
@@ -86,11 +86,10 @@ router.post('/login', async (req, res)=>{
 			}, secret
 		)
 
-	res.status(200).json({msg: 'Autenticação realizada com sucesso!', token})
-	//# No front end salve o token no localstorage para usalo posteriormente
-	
-		
-	}catch(erro){
+        res.status(200).json({msg: 'Autenticação realizada com sucesso!', id: user._id, token})
+        //# No front end salve o token no localstorage para usalo posteriormente
+	}
+    catch(erro){
 		console.log(erro)
 		res.status(500).json({msg: 'Aconteceu um erro no servidor, tente novamente mais tarde!'})
 	}

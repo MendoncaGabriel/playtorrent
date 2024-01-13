@@ -18,7 +18,7 @@ router.post('/chat', checkToken, async (req, res) => {
 
         const updatedGame = await Game.findByIdAndUpdate(
             gameId,
-            { $push: { comments: { commit: sanitizedMessage, user: data.user, date: data.date } } },
+            { $push: { comments: { commit: sanitizedMessage, user: data.user, commentId:data.commentId, date: data.date } } },
             { new: true }
         ).lean();
 
@@ -32,6 +32,36 @@ router.post('/chat', checkToken, async (req, res) => {
     } catch (error) {
         console.error('Erro ao processar a solicitação:', error);
         res.status(500).json({ success: false, error: 'Erro interno no servidor' });
+    }
+});
+
+router.delete('/chat', checkToken, async (req, res) => {
+    try {
+        const idGame = req.body.idGame;
+        const commentIdToRemove = req.body.commentId;
+        const commit = req.body.commit;
+
+        const updatedGame = await Game.findByIdAndUpdate(
+            idGame,
+            {
+                $pull: {
+                    comments: {
+                        commentId: commentIdToRemove,
+                        commit: commit
+                    }
+                }
+            },
+            { new: true }
+        );
+
+        if (!updatedGame) {
+            return res.status(404).json({ error: 'Jogo não encontrado' });
+        }
+
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erro interno do servidor' });
     }
 });
 

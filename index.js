@@ -3,7 +3,7 @@ const path = require('path');
 const http = require('http');
 const app = express();
 const expressSanitizer = require('express-sanitizer');
-const helmet = require('helmet');
+
 const server = http.createServer(app);
 require("dotenv").config(); 
 require('./connect/MongoDB.js');
@@ -25,7 +25,7 @@ app.set('views', VIEWS_PATH);
 app.use(express.static(PUBLIC_PATH));
 app.use(express.json());
 app.use(expressSanitizer());
-app.use(helmet());
+
 
 
 
