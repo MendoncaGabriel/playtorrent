@@ -5,7 +5,7 @@ async function enviar() {
 
   if (comment.value.length > 0) {
     const cookie = getCookie("tokenUser");
-    const idUser = getCookie("idUser");
+    const userId = getCookie("userId");
    
     if (!cookie) {
       return alert("Por favor, faça login para, comentar!");
@@ -19,8 +19,8 @@ async function enviar() {
       },
       body: JSON.stringify({
         comment: comment.value,
-        idUser: idUser,
-        idPage: id,
+        userId: userId,
+        pageId: id,
         userName: getCookie('nameUser'),
         date: dateNow()
       }),
@@ -48,7 +48,7 @@ function deleteMsg(id){
   if (resultado) {
     console.log('deletando: ' + id)
     const cookie = getCookie("tokenUser");
-    const userId = getCookie("idUser");
+    const userId = getCookie("userId");
   
     fetch('/services/chat', {
       method: 'DELETE',
@@ -83,17 +83,18 @@ function getComments() {
   })
   .then((res) => res.json())
   .then((response) => {
+    console.log('Comenarios GET: ' + response.length)
  
 
     if (response.length !== 0 && response.length !== null && response.length !== 'undefined') {
-      const idUser = getCookie("idUser");
+      const userId = getCookie("userId");
       document.getElementById("containerComments").innerHTML = "";
       // response.comments.reverse();
 
       response.forEach((element) => {
 
         //Comentario do usuario
-        if (element.idUser && element.idUser == idUser) {
+        if (element.userId && element.userId == userId) {
           document.getElementById("containerComments").innerHTML += `
                   <div class=" bg-green-800 px-4 py-2 gap-4 relative">
                       <div class="flex items-start gap-4 px-4 py-2">
@@ -172,7 +173,7 @@ function uptadeMsg(commentId, comment) {
 function sendUpdateMsg(commentId) {
   const commitTextArea = document.getElementById('commitTextArea');
   const cookie = getCookie("tokenUser");
-  const userId = getCookie("idUser");
+  const userId = getCookie("userId");
   console.log('enviando atualização');
 
 

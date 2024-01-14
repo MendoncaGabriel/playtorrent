@@ -6,18 +6,13 @@ const User = mongoose.model('User', {
 		type: String,
 		required: true
 	},
-	email: {
-		type: String,
-		required: false,
-		default: ''
-	},
 	password: {
 		type: String,
 		required: true
 	},
 	comments: [
 		{
-		  idPage: {
+		pageId: {
 			type: String,
 			required: true
 		  },

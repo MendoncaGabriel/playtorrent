@@ -4,13 +4,13 @@ const chatSchema = new mongoose.Schema({
     comment:{
         type: String
     },
-    idUser:{
+    userId:{
         type: String
     },
     userName:{
         type: String
     },
-    idPage:{
+    pageId:{
         type: String
     },
     date: {

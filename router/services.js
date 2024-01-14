@@ -15,16 +15,16 @@ router.use(express.json());
 router.post('/chat', checkToken, async (req, res) => {
     try {
         const comment = req.body.comment
-        const idUser = req.body.idUser
-        const idPage = req.body.idPage
+        const userId = req.body.userId
+        const pageId = req.body.pageId
         const userName = req.body.userName
         const date =  req.body.date
         
         const savedComment = new Chat({
             comment: comment,
-            idUser: idUser,
+            userId: userId,
             userName: userName,
-            idPage: idPage,
+            pageId: pageId,
             date: date
         });
           
@@ -32,14 +32,14 @@ router.post('/chat', checkToken, async (req, res) => {
 
         // Atualiza o usuário com a referência ao novo comentário
         const updatedUser = await User.findByIdAndUpdate(
-            idUser,
+            userId,
             {
-                $push: { comments: { idPage: idPage, idComment: savedComment._id } }
+                $push: { comments: { pageId: pageId, idComment: savedComment._id } }
             },
             { new: true }
         );
 
-        console.log('Usuário atualizado com a referência ao comentário:', updatedUser);
+        console.log('Usuário atualizado com a referência ao comentário!');
         res.status(200).json({ success: true });
         
         
@@ -52,10 +52,10 @@ router.post('/chat', checkToken, async (req, res) => {
 
 router.get('/chat/:id', async (req, res)=>{
     try {
-        const idPage = req.params.id
-        console.log('idPage: ' + idPage)
+        const pageId = req.params.id
+        console.log('pageID: ' + pageId)
+        const comment = await Chat.find({ pageId: pageId });
 
-        const comment = await Chat.find({ idPage: idPage });
         if (comment) {
             console.log('Comentário encontrado:', comment.length);
         } else {
