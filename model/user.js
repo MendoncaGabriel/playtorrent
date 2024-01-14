@@ -15,6 +15,18 @@ const User = mongoose.model('User', {
 		type: String,
 		required: true
 	},
+	comments: [
+		{
+		  idPage: {
+			type: String,
+			required: true
+		  },
+		  idComment: {
+			type: String,
+			required: true
+		  }
+		}
+	]
 
 })
 

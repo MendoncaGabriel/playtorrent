@@ -121,10 +121,10 @@
     <%- include('./components/carousel.ejs', {title: 'Veja também, recomendados:', dataCarousel: recomend})%>
      
     <!-- Chat -->
-    <%- include('./components/chat.ejs', {id: data._id}) %>
+    <%- include('./components/chat.ejs', { data: data }) %>
      
     <!-- Palavras chaves -->
-    <%- include('./components/keywords.ejs', {name: data.name}) %>
+    <%- include('./components/keywords.ejs', data) %>
 
     <!-- Btn Up -->
     <%- include('./components/btnUp.ejs') %>
