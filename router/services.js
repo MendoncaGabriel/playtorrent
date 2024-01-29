@@ -38,13 +38,8 @@ router.post('/chat', checkToken, async (req, res) => {
             },
             { new: true }
         );
-
-        console.log('Usuário atualizado com a referência ao comentário!');
         res.status(200).json({ success: true });
-        
-        
     } catch (error) {
-        console.error('Erro ao processar a solicitação:', error);
         res.status(500).json({ success: false, error: 'Erro interno no servidor' });
     }
 });
@@ -53,19 +48,12 @@ router.post('/chat', checkToken, async (req, res) => {
 router.get('/chat/:id', async (req, res)=>{
     try {
         const pageId = req.params.id
-        console.log('pageID: ' + pageId)
         const comment = await Chat.find({ pageId: pageId });
-
         if (comment) {
-            console.log('Comentário encontrado:', comment.length);
         } else {
             console.log('Comentário não encontrado.');
         }
-  
-
         res.status(200).json(comment)
-
-
     } catch (error) {
         
     }
@@ -91,7 +79,6 @@ router.patch('/chat', checkToken, async (req, res) => {
         
         
     } catch (error) {
-        console.error('Erro ao processar a solicitação:', error);
         res.status(500).json({ success: false, error: 'Erro interno no servidor' });
     }
 });
@@ -114,7 +101,6 @@ router.delete('/chat', checkToken, async (req, res) => {
         
         
     } catch (error) {
-        console.error('Erro ao processar a solicitação:', error);
         res.status(500).json({ success: false, error: 'Erro interno no servidor' });
     }
 });

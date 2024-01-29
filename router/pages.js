@@ -3,7 +3,7 @@ const router = express.Router();
 const cache = require('memory-cache');
 const http = require('http');
 const https = require('https');
-const cacheTime = 24 * 60 * 60 * 1000
+const cacheTime = 7* 24 * 60 * 60 * 1000 //7 dias
 
 
 
@@ -44,7 +44,6 @@ async function isImageValid(teste) {
     
         return true;
     } catch (error) {
-        console.error('Erro ao verificar a imagem:', error.message);
         return false;
     }
 }
@@ -55,13 +54,10 @@ async function TopViewr(){
         .limit(10); // Limita a busca a 10 documentos
         return data
     } catch (error) {
-        console.log('Erro ao caregar topViews :' + data)
     }
 }
 async function Recomendation(generoDaPaginaAtual, nomeDoJogo){
     try {
-        console.log(nomeDoJogo);
-
         const data = await Game.find({
             "class": { $in: generoDaPaginaAtual }
         }).limit(11).lean()
@@ -96,11 +92,9 @@ router.get('/', async (req, res) => {
         if (cachedData) {
             const { data, topViewr, topDownload } = cachedData;
             if (!data && !topViewr && !topDownload) {
-                console.error('Dados ausentes ou inválidos no cache.');
+              
                 return res.status(500).send('Erro interno do servidor');
             }
-
-            console.log('Página com cache!');
             return res.render('home', { data, topViewr, topDownload });
         }
 
@@ -115,11 +109,8 @@ router.get('/', async (req, res) => {
         }
 
         cache.put(cacheKey, { data, topViewr, topDownload }, cacheTime);
-        console.log('Sem cache, consultando banco de dados e cacheando...');
-
         res.render('home', { title: 'Home', data, page: 0, topViewr, topDownload });
     } catch (error) {
-        console.error('Erro ao buscar dados:', error);
         return res.status(500).render('500', { msg: 'Erro interno do servidor' });
     }
 })
@@ -133,12 +124,10 @@ router.get('/page/:pg', async (req, res) => {
         const cachedData = cache.get(cacheKey);
 
         if (cachedData) {
-            console.log('CACHE')
             // Data is available in the cache, use it
             const { title, data, page } = cachedData;
             return res.render('page', { title, data, page });
         }
-        console.log('NO CACHE')
 
         // Data is not in the cache, fetch it from the database
         const data = await Game.find().skip(pg * pageSize).limit(pageSize).lean();
@@ -150,7 +139,6 @@ router.get('/page/:pg', async (req, res) => {
         res.render('page', { title: 'Home', data, page: pg });
 
     } catch (error) {
-        console.error(error);
         return res.status(404).render('404', { msg: 'Erro na pagina!' });
     }
 })
@@ -161,14 +149,10 @@ router.get('/download/:name', async (req, res) => {
         const cachedData = cache.get(nameTratado);
 
         if (cachedData) {
-            console.log('CACHE')
             const { data, recomend } = cachedData;
             res.render('game', { data: data, recomend: recomend });
-            
         }
         else{
-            console.log('NO CACHE!')
-        
             const [data] = await Promise.all([
                 Game.findOne({ name: { $regex: new RegExp(`^${nameTratado}$`, 'i') } }).lean(),
             ]);
@@ -186,7 +170,6 @@ router.get('/download/:name', async (req, res) => {
             }
         }
     } catch (err) {
-        console.error(err);
         return  res.status(404).render('404',{msg: "Erro ao carregar a página!"});
   
     }
@@ -270,38 +253,18 @@ router.get('/plataforma/:plataforma/:pg', async (req, res)=>{
 //autenticação
 router.get('/auth/entrar', async (req, res) => {
     try {
-    
         res.render('login');
     } catch (error) {
-        console.error('Erro: ' + error);
         res.render('404');
-       
     }
 })
 router.get('/auth/registrar', async (req, res) => {
     try {
-    
         res.render('register');
     } catch (error) {
-        console.error('Erro: ' + error);
         res.render('404');
-       
     }
 })
-
-
-// Rota para obter jogos com pelo menos um comentário
-router.get('/comentarios', async (req, res) => {
-    try {
-        // Encontrar jogos que tenham pelo menos um comentário
-        const jogosComComentarios = await Game.find({ comments: { $exists: true, $not: { $size: 0 } } }).lean();
-
-        // Retornar a lista de jogos
-        res.render('comentarios', {array: jogosComComentarios});
-    } catch (error) {
-        res.status(500).json({ error: 'Erro ao buscar jogos com comentários' });
-    }
-});
 
 
 // Lista de paginas sem capas
@@ -327,19 +290,14 @@ router.get('/topDownloads', async (req, res)=>{
 
         if(cachedData){
             const { data } = cachedData;
-            console.log('topDownloads com cache')
             res.status(200).json(data)
         }else{
-            console.log('topDownloads sem cache')
             const data = await Game.find()
             .sort({ download: -1 }) 
             .limit(10); 
-            
             cache.put(cacheKey, { data }, cacheTime);
             res.status(200).json(data)
         }
-        
-
     } catch (error) {
         res.status(404).json({msg: 'Erro ao caregar topDownloads :' + data})
     }
