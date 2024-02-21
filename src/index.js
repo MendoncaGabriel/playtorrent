@@ -12,7 +12,7 @@ const Game = require('./model/gameSchema.js');
 
 //Portas e Caminhos
 const PORT = process.env.PORT || 3000;
-const VIEWS_PATH = path.join(process.cwd(), 'views');
+const VIEWS_PATH = path.join(process.cwd(), '/src/views');
 const PUBLIC_PATH = path.join(__dirname, 'public');
 const SITEMAP_PATH = path.join(PUBLIC_PATH, 'sitemap.xml');
 const ROBOTS_PATH = path.join(PUBLIC_PATH, 'robots.txt');
