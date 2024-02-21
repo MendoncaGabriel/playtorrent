@@ -12,7 +12,6 @@
     "nodemon": "^3.0.2"
   },
   "scripts": {
-    "build": "pkg ./src/index.js --output output.exe --target node14-win-x64",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "lint:ejs": "ejs-lint views/**/*.ejs"
