@@ -12,7 +12,7 @@
       "dest": "/storage/$1"
     },
     {
-      "src": "/src*", 
+      "src": "/.*", 
       "dest": "/index.js"
     }
   ]
