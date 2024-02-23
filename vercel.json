@@ -8,13 +8,12 @@
   ],
   "routes": [
     {
-      "src": "/storage/(.*)",
-      "dest": "/storage/$1"
+      "src": "/views/(.*)",
+      "dest": "src/views/$1"
     },
     {
       "src": "/.*", 
-      "dest": "/index.js"
+      "dest": "src/index.js"
     }
   ]
 }
-
