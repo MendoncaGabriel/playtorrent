@@ -78,7 +78,7 @@ async function TopDownload(){
         .limit(10); // Limita a busca a 10 documentos
         return data
     } catch (error) {
-        console.log('Erro ao caregar topDownload :' + data)
+        console.log('Erro ao caregar topDownload :' + error)
     }
 }
 
@@ -111,6 +111,7 @@ router.get('/', async (req, res) => {
         cache.put(cacheKey, { data, topViewr, topDownload }, cacheTime);
         res.render('home', { title: 'Home', data, page: 0, topViewr, topDownload });
     } catch (error) {
+        console.log(error)
         return res.status(500).render('500', { msg: 'Erro interno do servidor' });
     }
 })

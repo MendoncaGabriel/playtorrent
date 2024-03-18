@@ -17,7 +17,6 @@ const PUBLIC_PATH = path.join(__dirname, 'public');
 const SITEMAP_PATH = path.join(PUBLIC_PATH, 'sitemap.xml');
 const ROBOTS_PATH = path.join(PUBLIC_PATH, 'robots.txt');
 
-
 // configurações
 server.timeout = 60000
 app.set('view engine', 'ejs');
@@ -26,10 +25,6 @@ app.use(express.static(PUBLIC_PATH));
 app.use(express.json());
 app.use(expressSanitizer());
 
-
-
-
-
 //rotas
 const routesPages = require('./router/pages.js');
 const services = require('./router/services.js')
@@ -37,10 +32,6 @@ const auth = require('./router/auth.js')
 app.use('/', routesPages);
 app.use('/services', services);
 app.use('/authentication', auth)
-
-
-
-
 
 //rotas-------------
 app.patch('/downloadCont/:id', async (req, res) => {
@@ -76,7 +67,6 @@ app.get('/sitemap.xml', (req, res) => {
   res.sendFile(SITEMAP_PATH);
 });
 
-
 // Rota para o robots.txt
 app.get('/robots.txt', (req, res) => {
   res.header('Content-Type', 'text/plain');
@@ -84,26 +74,10 @@ app.get('/robots.txt', (req, res) => {
 });
 
 
-// Middleware para configurar a política de permissões
-app.use((req, res, next) => {
-  res.setHeader('Set-Cookie', 'cookieName=cookieValue; SameSite=None; Secure');
-  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), interest-cohort=(), sync-xhr=(), storage=(* "self")');
-  next();
-});
-
-
 // Middleware para lidar com rotas não encontradas
 app.use((req, res) => {
   return res.status(404).render('404');
 });
-
-
-
-app.use((err, req, res, next) => {
-  console.error('Erro interno:', err);
-  res.status(500).send('Erro interno no servidor');
-});
-
 
 app.listen(PORT, ()=>{
   console.log('http://localhost:3000')
