@@ -3,12 +3,14 @@ const path = require('path');
 const http = require('http');
 const app = express();
 const expressSanitizer = require('express-sanitizer');
+const compression = require('compression');
+app.use(compression());
 
 const server = http.createServer(app);
 require("dotenv").config(); 
 require('./connect/MongoDB.js');
 const Game = require('./model/gameSchema.js');
- 
+
 
 //Portas e Caminhos
 const PORT = process.env.PORT || 3000;
@@ -22,6 +24,7 @@ server.timeout = 60000
 app.set('view engine', 'ejs');
 app.set('views', VIEWS_PATH);
 app.use(express.static(PUBLIC_PATH));
+
 app.use(express.json());
 app.use(expressSanitizer());
 

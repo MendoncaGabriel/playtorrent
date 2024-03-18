@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express-sanitizer": "^1.0.6",
