@@ -75,7 +75,8 @@ async function TopDownload(){
     try {
         const data = await Game.find().lean()
         .sort({ download: -1 }) // Ordena as views do maior para o menor
-        .limit(10); // Limita a busca a 10 documentos
+        .limit(10)// Limita a busca a 10 documentos
+        .maxTimeMS(20000); 
         return data
     } catch (error) {
         console.log('Erro ao caregar topDownload :' + error)
