@@ -1,20 +1,22 @@
-const mongoose = require('mongoose');
+// Carrega as variáveis de ambiente do arquivo .env
 require("dotenv").config();
 
+const mongoose = require('mongoose');
 
-const MONGODB_URI = process.env.MONGODB_URI2
+// Obtém o URI do MongoDB a partir da variável de ambiente
+const MONGODB_URI = process.env.MONGODB_URI2;
 
-function MongoDB(){
-    mongoose.connect(MONGODB_URI)
-    .then(()=>{
-        console.log('Conectado ao MongoDB')
-    })
-    .catch((erro)=>{
-        console.log('Erro ao se conectar no banco de dados!' + erro)
-
-    })
+function connectToMongoDB() {
+    mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+        .then(() => {
+            console.log('Conectado ao MongoDB');
+        })
+        .catch((error) => {
+            console.error('Erro ao se conectar no banco de dados!', error);
+        });
 }
-module.exports = MongoDB()
 
+// Exporta a função para que ela possa ser chamada em outro lugar do seu código
+module.exports = connectToMongoDB;
 
 
