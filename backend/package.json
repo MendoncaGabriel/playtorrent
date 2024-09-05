@@ -1,0 +1,26 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/app.ts",
+    "build": "tsup src --out-dir build",
+    "start": "node build/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "fastify": "^4.28.1",
+    "mongoose": "^8.6.1",
+    "tsup": "^8.2.4",
+    "tsx": "^4.19.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.5.4"
+  }
+}
