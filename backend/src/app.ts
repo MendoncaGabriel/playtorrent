@@ -1,11 +1,15 @@
 import Fastify from 'fastify';
-import { IndexRoutes } from './routes/Home/HomePage';
+import { IndexRoutes } from './routes/game/GameRoutes';
 import "dotenv/config";
 import "./config/database/mongodb";
+import { errorHandler } from './error/errorHandle';
 
 const app = Fastify({
     logger: false
 });
+
+app.setErrorHandler(errorHandler);
+
 
 
 app.register(IndexRoutes, { prefix: "/" });

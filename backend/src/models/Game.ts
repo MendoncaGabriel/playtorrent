@@ -1,6 +1,23 @@
-import mongoose from 'mongoose'
+import mongoose, { Document, Schema } from 'mongoose';
 
-const gameSchema = new mongoose.Schema({
+// Definindo a interface para o documento do MongoDB
+export interface IGame extends Document {
+    name: string;
+    img: string;
+    video: string;
+    description: string;
+    information: string;
+    class: string[];
+    link: string;
+    platform: string;
+    type: string;
+    download: number;
+    views: number;
+    comments: string[];
+}
+
+// Definindo o esquema usando Mongoose
+const gameSchema = new Schema<IGame>({
     name: {
         type: String,
         required: true,
@@ -10,19 +27,25 @@ const gameSchema = new mongoose.Schema({
     video: String,
     description: String,
     information: String,
-    class: Array,
+    class: [String], // Especificando que é um array de strings
     link: String,
     platform: String,
     type: String,
-    download: Number,
-    views: Number,
-    comments: Array
+    download: {
+        type: Number,
+        default: 0
+    },
+    views: {
+        type: Number,
+        default: 0
+    },
+    comments: [String] // Especificando que é um array de strings
 });
 
-gameSchema.index({ name: 1 });
-gameSchema.index({ views: 1 });
-gameSchema.index({ download: 1 });
+gameSchema.index({ name: 'text', description: 'text', information: 'text' });
 
-const Game = mongoose.model('Game', gameSchema);
+
+// Criando o modelo tipado usando a interface IGame
+const Game = mongoose.model<IGame>('Game', gameSchema);
 
 export default Game;
