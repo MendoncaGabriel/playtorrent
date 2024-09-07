@@ -12,8 +12,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@fastify/static": "^7.0.4",
     "dotenv": "^16.4.5",
     "fastify": "^4.28.1",
+    "fastify-static": "^4.7.0",
     "mongoose": "^8.6.1",
     "tsup": "^8.2.4",
     "tsx": "^4.19.0",
